@@ -130,8 +130,9 @@ body {
 /* Hero */
 .hero {
   position: relative;
-  height: 58vh;
-  min-height: 380px;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: var(--bg-darker);
   overflow: hidden;
 }
 
@@ -142,16 +143,15 @@ body {
 
 .slide {
   position: absolute; inset: 0;
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
   background-position: center;
   opacity: 0;
-  transform: scale(1.08);
-  transition: opacity 1.4s ease, transform 6s ease;
+  transition: opacity 1.4s ease;
 }
 
 .slide.active {
   opacity: 1;
-  transform: scale(1);
 }
 
 .hero-bottom-fade {
@@ -570,7 +570,6 @@ body {
 }
 
 @media (max-width: 700px) {
-  .hero { height: 48svh; min-height: 280px; }
   .countdown-section { padding: 32px 0 40px; }
   .countdown { gap: 4px; flex-wrap: nowrap; justify-content: center; }
   .countdown-unit { min-width: 56px; padding: 8px 4px; border-radius: 12px; }
