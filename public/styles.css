@@ -130,7 +130,8 @@ body {
 /* Hero */
 .hero {
   position: relative;
-  height: 100vh;
+  height: 58vh;
+  min-height: 380px;
   overflow: hidden;
 }
 
@@ -156,7 +157,7 @@ body {
 .hero-bottom-fade {
   position: absolute;
   left: 0; right: 0; bottom: 0;
-  height: 160px;
+  height: 90px;
   z-index: 1;
   background: linear-gradient(180deg, rgba(10,6,18,0) 0%, rgba(10,6,18,0.9) 100%);
   pointer-events: none;
@@ -569,8 +570,8 @@ body {
 }
 
 @media (max-width: 700px) {
-  .hero { height: 100svh; }
-  .countdown-section { padding: 50px 0 60px; }
+  .hero { height: 48svh; min-height: 280px; }
+  .countdown-section { padding: 32px 0 40px; }
   .countdown { gap: 4px; flex-wrap: nowrap; justify-content: center; }
   .countdown-unit { min-width: 56px; padding: 8px 4px; border-radius: 12px; }
   .countdown-value { font-size: clamp(24px, 7vw, 38px); }
