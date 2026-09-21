@@ -36,8 +36,16 @@
     <div class="slide" style="background-image:url('images/banner-causeway-sunset.jpg')"></div>
     <div class="slide" style="background-image:url('images/banner-causeway-day.jpg')"></div>
   </div>
-  <div class="hero-gradient"></div>
-  <div class="container hero-content hero-content-center">
+  <div class="hero-bottom-fade"></div>
+  <div class="slider-controls">
+    <button class="slider-arrow prev" aria-label="Imagen anterior">&#10094;</button>
+    <div class="slider-dots" id="slider-dots"></div>
+    <button class="slider-arrow next" aria-label="Siguiente imagen">&#10095;</button>
+  </div>
+</section>
+
+<section class="countdown-section">
+  <div class="container hero-content-center">
     <p class="eyebrow center">Cuenta regresiva para el estreno</p>
     <div class="countdown" id="countdown" data-target="2026-11-19T00:00:00">
       <div class="countdown-unit">
@@ -54,18 +62,17 @@
         <span class="countdown-value" id="cd-minutes">00</span>
         <span class="countdown-label">Minutos</span>
       </div>
+      <div class="countdown-sep">:</div>
+      <div class="countdown-unit">
+        <span class="countdown-value" id="cd-seconds">00</span>
+        <span class="countdown-label">Segundos</span>
+      </div>
     </div>
     <div class="hero-actions">
       <a href="#trailer" class="btn btn-primary">Ver Tráiler</a>
       <a href="#preorder" class="btn btn-outline">Reservar Ahora</a>
     </div>
   </div>
-  <div class="slider-controls">
-    <button class="slider-arrow prev" aria-label="Imagen anterior">&#10094;</button>
-    <div class="slider-dots" id="slider-dots"></div>
-    <button class="slider-arrow next" aria-label="Siguiente imagen">&#10095;</button>
-  </div>
-  <div class="scroll-cue">Desliza <span>↓</span></div>
 </section>
 
 <section id="trailer" class="section trailer-section">

@@ -5,6 +5,7 @@ if (countdownEl) {
   const daysEl = document.getElementById('cd-days');
   const hoursEl = document.getElementById('cd-hours');
   const minutesEl = document.getElementById('cd-minutes');
+  const secondsEl = document.getElementById('cd-seconds');
 
   function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -14,15 +15,18 @@ if (countdownEl) {
       daysEl.textContent = '00';
       hoursEl.textContent = '00';
       minutesEl.textContent = '00';
+      secondsEl.textContent = '00';
       clearInterval(countdownTimer);
       return;
     }
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
     const minutes = Math.floor((diff / (1000 * 60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
     daysEl.textContent = pad(days);
     hoursEl.textContent = pad(hours);
     minutesEl.textContent = pad(minutes);
+    secondsEl.textContent = pad(seconds);
   }
 
   updateCountdown();
