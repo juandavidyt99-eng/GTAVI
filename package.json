@@ -1,9 +1,16 @@
 {
   "name": "gtavi-landing",
   "version": "1.0.0",
-  "description": "Landing page tematica de GTA VI (Vice City)",
+  "description": "Aplicacion web tematica de GTA VI (Vice City)",
   "private": true,
+  "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
-    "start": "npx serve ."
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
   }
 }
