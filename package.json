@@ -1,0 +1,9 @@
+{
+  "name": "gtavi-landing",
+  "version": "1.0.0",
+  "description": "Landing page tematica de GTA VI (Vice City)",
+  "private": true,
+  "scripts": {
+    "start": "npx serve ."
+  }
+}
