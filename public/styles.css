@@ -131,6 +131,7 @@ body {
 .hero {
   position: relative;
   width: 100%;
+  margin-top: 72px;
   aspect-ratio: 16 / 9;
   background: var(--bg-darker);
   overflow: hidden;
