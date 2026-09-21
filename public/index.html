@@ -12,7 +12,7 @@
 
 <div class="noise-overlay"></div>
 
-<header class="navbar">
+<header class="navbar" id="navbar">
   <div class="container navbar-inner">
     <a href="#home" class="logo">GTA<span>VI</span></a>
     <nav class="nav-links">
@@ -29,9 +29,14 @@
 </header>
 
 <section id="home" class="hero">
-  <div class="hero-bg"></div>
+  <div class="slider" id="hero-slider">
+    <div class="slide active" style="background-image:url('images/banner-keyart-logo.jpg')"></div>
+    <div class="slide" style="background-image:url('images/banner-sunset-mansions.jpg')"></div>
+    <div class="slide" style="background-image:url('images/banner-yacht-nightcity.jpg')"></div>
+    <div class="slide" style="background-image:url('images/banner-causeway-sunset.jpg')"></div>
+    <div class="slide" style="background-image:url('images/banner-causeway-day.jpg')"></div>
+  </div>
   <div class="hero-gradient"></div>
-  <div class="palm-silhouette"></div>
   <div class="container hero-content">
     <p class="eyebrow">Rockstar Games presenta</p>
     <h1 class="hero-title">GRAND THEFT<br><span class="pink">AUTO VI</span></h1>
@@ -44,6 +49,11 @@
       <span>Lanzamiento</span>
       <strong>2026</strong>
     </div>
+  </div>
+  <div class="slider-controls">
+    <button class="slider-arrow prev" aria-label="Imagen anterior">&#10094;</button>
+    <div class="slider-dots" id="slider-dots"></div>
+    <button class="slider-arrow next" aria-label="Siguiente imagen">&#10095;</button>
   </div>
   <div class="scroll-cue">Desliza <span>↓</span></div>
 </section>
