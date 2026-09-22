@@ -100,11 +100,6 @@ document.querySelectorAll('.nav-links a').forEach(link => {
   });
 });
 
-// Play button placeholder interaction
-document.querySelector('.play-btn')?.addEventListener('click', () => {
-  alert('Aquí se reproduciría el tráiler oficial de GTA VI.');
-});
-
 // Fade-in on scroll
 const revealEls = document.querySelectorAll('.section, .hero-content');
 const observer = new IntersectionObserver((entries) => {
