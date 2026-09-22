@@ -41,13 +41,12 @@ const updateNavbar = () => {
 window.addEventListener('scroll', updateNavbar, { passive: true });
 updateNavbar();
 
-// Hero image slider
-const slider = document.getElementById('hero-slider');
-if (slider) {
-  const slides = Array.from(slider.querySelectorAll('.slide'));
-  const dotsWrap = document.getElementById('slider-dots');
-  const prevBtn = document.querySelector('.slider-arrow.prev');
-  const nextBtn = document.querySelector('.slider-arrow.next');
+// Hero image sliders (desktop + mobile tracks, each independent)
+function initSlider(track) {
+  const slides = Array.from(track.querySelectorAll('.slide'));
+  const dotsWrap = track.querySelector('.slider-dots');
+  const prevBtn = track.querySelector('.slider-arrow.prev');
+  const nextBtn = track.querySelector('.slider-arrow.next');
   let current = 0;
   let timer;
 
@@ -81,6 +80,8 @@ if (slider) {
   prevBtn?.addEventListener('click', prev);
   resetTimer();
 }
+
+document.querySelectorAll('.hero-track').forEach(initSlider);
 
 // Navbar mobile toggle
 const menuToggle = document.querySelector('.menu-toggle');
