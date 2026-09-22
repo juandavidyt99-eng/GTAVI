@@ -50,9 +50,9 @@
     <a href="#home" class="logo">GTA<span>VI</span></a>
     <nav class="nav-links">
       <a href="#noticias">Noticias</a>
-      <a href="#trailer">Tráilers</a>
-      <a href="#world">Mundo</a>
-      <a href="#characters">Personajes</a>
+      <a href="#trailers">Tráilers</a>
+      <a href="#leonida">Leonida</a>
+      <a href="#protagonistas">Protagonistas</a>
       <a href="comunidad.html">Comunidad <span class="nav-tag">Pronto</span></a>
       <a href="clips.html">Clips <span class="nav-tag">Pronto</span></a>
     </nav>
@@ -158,7 +158,7 @@
     </div>
 
     <div class="hero-actions">
-      <a href="#trailer" class="btn btn-primary btn-icon">
+      <a href="#trailers" class="btn btn-primary btn-icon">
         <svg class="btn-icon-left" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
         <span>Ver Tráiler</span>
         <svg class="btn-icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -173,290 +173,320 @@
   </div>
 </section>
 
-<section id="noticias" class="section news-section">
+<div class="ticker" role="region" aria-label="Última hora">
+  <span class="ticker-label"><span class="ticker-dot"></span>Última hora</span>
+  <div class="ticker-track">
+    <div class="ticker-items">
+      <span>Rockstar confirma: GTA VI sale el 19 de noviembre de 2026</span>
+      <span>La precarga se abre el 12 de noviembre</span>
+      <span>«GTA VI: The Album» llega con 34 temas originales</span>
+      <span>«Welcome to Vice City» aparece en el Kaseya Center de Miami</span>
+      <span>Sin microtransacciones en la campaña</span>
+      <span>El «Extended Look» de 26 minutos ya está en YouTube</span>
+      <span aria-hidden="true">Rockstar confirma: GTA VI sale el 19 de noviembre de 2026</span>
+      <span aria-hidden="true">La precarga se abre el 12 de noviembre</span>
+      <span aria-hidden="true">«GTA VI: The Album» llega con 34 temas originales</span>
+      <span aria-hidden="true">«Welcome to Vice City» aparece en el Kaseya Center de Miami</span>
+      <span aria-hidden="true">Sin microtransacciones en la campaña</span>
+      <span aria-hidden="true">El «Extended Look» de 26 minutos ya está en YouTube</span>
+    </div>
+  </div>
+</div>
+
+<section id="noticias" class="block">
   <div class="container">
-    <div class="section-head">
-      <p class="eyebrow">Actualizado · Septiembre 2026</p>
-      <h2 class="section-title">Noticias y <span class="pink">Filtraciones</span></h2>
-      <p class="section-sub">Todo lo confirmado por Rockstar Games y lo que circula sin confirmar, separado y con su fuente.</p>
-    </div>
+    <header class="block-head">
+      <div>
+        <span class="kicker">Noticias</span>
+        <h2 class="block-title">Lo último de <em>GTA VI</em></h2>
+      </div>
+      <p class="block-note">Rockstar Newswire, Kotaku, GameSpot, PC Gamer, Billboard, Forbes y más.</p>
+    </header>
 
-    <div class="news-filters" id="news-filters">
-      <button class="news-filter active" data-filter="all">Todas</button>
-      <button class="news-filter" data-filter="oficial">Oficial</button>
-      <button class="news-filter" data-filter="filtracion">Filtraciones y rumores</button>
-    </div>
-
-    <article class="news-featured" data-category="oficial">
-      <div class="news-featured-img" style="background-image:url('images/banner-causeway-sunset.jpg')"></div>
-      <div class="news-featured-body">
-        <div class="news-meta">
-          <span class="news-badge badge-oficial">Oficial</span>
-          <time datetime="2026-11-19">Fecha confirmada</time>
+    <div class="news-top">
+      <a class="lead-story" href="https://www.rockstargames.com/newswire/article/ak3ak31a49a221/grand-theft-auto-vi-is-now-set-to-launch-november-19-2026" target="_blank" rel="noopener">
+        <img src="images/lead-keyart.jpg" alt="Jason y Lucia frente al skyline de Vice City">
+        <div class="lead-body">
+          <div class="story-meta"><span class="tag tag-oficial">Oficial</span><span class="outlet">Rockstar Newswire</span></div>
+          <h3>GTA VI llega el 19 de noviembre de 2026</h3>
+          <p>Rockstar fijó la fecha definitiva en PlayStation 5 y Xbox Series X|S. Según el estudio, los meses extra sirven para terminar el juego con el nivel de pulido que los jugadores esperan.</p>
+          <time datetime="2025-11-06">6 nov 2025</time>
         </div>
-        <h3>GTA VI se lanza el 19 de noviembre de 2026</h3>
-        <p>Rockstar Games confirmó la fecha definitiva tras tres aplazamientos: primero otoño de 2025, después el 26 de mayo de 2026 y finalmente el 19 de noviembre de 2026. El juego se desbloquea a medianoche hora local en cada región, exclusivamente para PlayStation 5 y Xbox Series X|S. Take-Two justificó el retraso alegando que Rockstar necesitaba más tiempo para alcanzar el nivel de acabado esperado.</p>
-        <a class="news-link" href="https://www.latercera.com/tendencias/noticia/gta-6-retrasa-su-lanzamiento-a-noviembre-de-2026-esta-es-la-nueva-fecha-oficial/" target="_blank" rel="noopener">Ver fuente
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+
+      <div class="side-stories">
+        <a class="side-story" href="https://www.rockstargames.com/newswire/article/4k138k8okkk483/grand-theft-auto-vi-an-extended-look-now-playing" target="_blank" rel="noopener">
+          <img src="images/thumbs/jason-lucia.jpg" alt="" loading="lazy">
+          <div>
+            <div class="story-meta"><span class="tag tag-oficial">Oficial</span><span class="outlet">Rockstar Newswire</span></div>
+            <h4>El «Extended Look» ya se puede ver: 26 minutos de juego</h4>
+            <time datetime="2026-08-27">27 ago 2026</time>
+          </div>
+        </a>
+        <a class="side-story" href="https://www.pcgamer.com/games/grand-theft-auto/rockstar-responds-to-gta-6-leaks-this-is-not-how-we-intended-for-you-see-the-game-after-all-this-time/" target="_blank" rel="noopener">
+          <img src="images/thumbs/helicopter.jpg" alt="" loading="lazy">
+          <div>
+            <div class="story-meta"><span class="tag tag-filtracion">Filtración</span><span class="outlet">PC Gamer</span></div>
+            <h4>Rockstar responde a las filtraciones: «Así no queríamos que vieran el juego»</h4>
+            <time datetime="2026-08-26">26 ago 2026</time>
+          </div>
+        </a>
+        <a class="side-story" href="https://www.rockstargames.com/newswire/article/7599a881942544/announcing-grand-theft-auto-vi-the-album-coming-november-19" target="_blank" rel="noopener">
+          <img src="images/thumbs/yacht-couple.jpg" alt="" loading="lazy">
+          <div>
+            <div class="story-meta"><span class="tag tag-oficial">Oficial</span><span class="outlet">Rockstar Newswire</span></div>
+            <h4>Anunciado «GTA VI: The Album», con 34 temas originales</h4>
+            <time datetime="2026-09">Sep 2026</time>
+          </div>
+        </a>
+        <a class="side-story" href="https://www.gamespot.com/articles/gta-6-is-taking-over-miami-one-airlifted-letter-at-a-time/" target="_blank" rel="noopener">
+          <img src="images/thumbs/neon-towers.jpg" alt="" loading="lazy">
+          <div>
+            <div class="story-meta"><span class="tag tag-oficial">Oficial</span><span class="outlet">GameSpot</span></div>
+            <h4>«Welcome to Vice City»: GTA VI se toma el Kaseya Center de Miami</h4>
+            <time datetime="2026-09">Sep 2026</time>
+          </div>
         </a>
       </div>
-    </article>
+    </div>
 
-    <div class="news-grid" id="news-grid">
-      <article class="news-card" data-category="oficial">
-        <div class="news-meta">
-          <span class="news-badge badge-oficial">Oficial</span>
+    <div class="feed-head">
+      <h3>Más noticias</h3>
+      <div class="feed-filters" id="news-filters" role="group" aria-label="Filtrar noticias">
+        <button class="feed-filter active" data-filter="all">Todo</button>
+        <button class="feed-filter" data-filter="oficial">Oficial</button>
+        <button class="feed-filter" data-filter="filtracion">Filtraciones</button>
+      </div>
+    </div>
+
+    <div class="news-feed" id="news-feed">
+      <a class="story-card" data-category="oficial" href="https://www.gamespot.com/articles/gta-6s-big-reveal-all-the-things-we-learned/" target="_blank" rel="noopener">
+        <div class="story-img"><img src="images/thumbs/car-headlight.jpg" alt="" loading="lazy"></div>
+        <div class="story-body">
+          <div class="story-meta"><span class="tag tag-oficial">Oficial</span><span class="outlet">GameSpot</span></div>
+          <h4>Sin microtransacciones ni IA generativa en la campaña</h4>
+          <p>Rockstar confirmó que el modo historia no tendrá micropagos y que no usó IA generativa para crear el juego.</p>
           <time datetime="2026-08-27">27 ago 2026</time>
         </div>
-        <h3>26 minutos de gameplay en el "Extended Look" de Netflix</h3>
-        <p>Rockstar emitió un especial de 26 minutos que reveló la mayor parte del gameplay y la dinámica entre los dos protagonistas, Jason y Lucia.</p>
-        <a class="news-link" href="https://beebom.com/gta-6/" target="_blank" rel="noopener">Ver fuente
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </article>
+      </a>
 
-      <article class="news-card" data-category="oficial">
-        <div class="news-meta">
-          <span class="news-badge badge-oficial">Oficial</span>
-          <time datetime="2026-06-25">25 jun 2026</time>
+      <a class="story-card" data-category="oficial" href="https://kotaku.com/grand-theft-auto-6-looks-incredible-in-netflixs-big-gameplay-reveal-2000728933" target="_blank" rel="noopener">
+        <div class="story-img"><img src="images/thumbs/speedboat.jpg" alt="" loading="lazy"></div>
+        <div class="story-body">
+          <div class="story-meta"><span class="tag tag-oficial">Oficial</span><span class="outlet">Kotaku</span></div>
+          <h4>Podrás cambiar entre Jason y Lucia en plena persecución</h4>
+          <p>Conduces como Jason y un segundo después disparas desde el copiloto como Lucia. El combate recuerda a Max Payne 3.</p>
+          <time datetime="2026-08-27">27 ago 2026</time>
         </div>
-        <h3>Precios y ediciones: 79,99 y 99,99 dólares</h3>
-        <p>La edición estándar cuesta 79,99 USD y la Ultimate Edition 99,99 USD. No hay edición de coleccionista. Las reservas abrieron el 25 de junio con el Vintage Vice City Pack de regalo.</p>
-        <a class="news-link" href="https://variety.com/2026/gaming/news/gta-6-price-single-player-pre-orders-1236789407/" target="_blank" rel="noopener">Ver fuente
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </article>
+      </a>
 
-      <article class="news-card" data-category="oficial">
-        <div class="news-meta">
-          <span class="news-badge badge-oficial">Oficial</span>
-          <time datetime="2026-11-12">12 nov 2026</time>
+      <a class="story-card" data-category="oficial" href="https://variety.com/2026/gaming/news/gta-6-price-single-player-pre-orders-1236789407/" target="_blank" rel="noopener">
+        <div class="story-img"><img src="images/thumbs/mansions-pool.jpg" alt="" loading="lazy"></div>
+        <div class="story-body">
+          <div class="story-meta"><span class="tag tag-oficial">Oficial</span><span class="outlet">Variety</span></div>
+          <h4>Precio confirmado: 79,99 USD la estándar y 99,99 USD la Ultimate</h4>
+          <p>No habrá edición de coleccionista. Las reservas abrieron el 25 de junio con el Vintage Vice City Pack de regalo.</p>
+          <time datetime="2026-06">Jun 2026</time>
         </div>
-        <h3>La precarga arranca una semana antes</h3>
-        <p>El preload queda habilitado el 12 de noviembre, siete días antes del estreno. Se espera que la descarga supere los 100 GB entre historia, mapa y misiones.</p>
-        <a class="news-link" href="https://www.gameshub.com/news/news/gta-6-pre-load-dates/" target="_blank" rel="noopener">Ver fuente
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </article>
+      </a>
 
-      <article class="news-card" data-category="oficial">
-        <div class="news-meta">
-          <span class="news-badge badge-oficial">Oficial</span>
-          <time datetime="2026-06-25">Confirmado</time>
+      <a class="story-card" data-category="oficial" href="https://www.billboard.com/music/music-news/grand-theft-auto-vi-the-album-videogame-soundtrack-1236342337/" target="_blank" rel="noopener">
+        <div class="story-img"><img src="images/thumbs/vice-skyline.jpg" alt="" loading="lazy"></div>
+        <div class="story-body">
+          <div class="story-meta"><span class="tag tag-oficial">Oficial</span><span class="outlet">Billboard</span></div>
+          <h4>Travis Scott, Keith Richards y Rauw Alejandro, en la banda sonora</h4>
+          <p>Ya salieron seis adelantos del álbum, con Morgan Wallen, PinkPantheress, Fred again.. y Yung Lean entre otros.</p>
+          <time datetime="2026-09">Sep 2026</time>
         </div>
-        <h3>Solo un jugador en el lanzamiento</h3>
-        <p>GTA VI sale como experiencia exclusivamente para un jugador. El componente en línea no estará disponible el día uno: todo el foco está puesto en la campaña.</p>
-        <a class="news-link" href="https://variety.com/2026/gaming/news/gta-6-price-single-player-pre-orders-1236789407/" target="_blank" rel="noopener">Ver fuente
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </article>
+      </a>
 
-      <article class="news-card" data-category="oficial">
-        <div class="news-meta">
-          <span class="news-badge badge-oficial">Oficial</span>
-          <time datetime="2026-09-01">Sistema de relación</time>
+      <a class="story-card" data-category="oficial" href="https://kotaku.com/grand-theft-auto-6-gta6-soundtrack-vinyl-cd-pre-order-2000735270" target="_blank" rel="noopener">
+        <div class="story-img"><img src="images/thumbs/mansions-boat.jpg" alt="" loading="lazy"></div>
+        <div class="story-body">
+          <div class="story-meta"><span class="tag tag-oficial">Oficial</span><span class="outlet">Kotaku</span></div>
+          <h4>Sin disco de juego, pero con banda sonora en vinilo y CD</h4>
+          <p>La edición física del juego será un código en caja; el álbum sí llega en CD, vinilo y una edición limitada.</p>
+          <time datetime="2026-09">Sep 2026</time>
         </div>
-        <h3>El vínculo entre Jason y Lucia afecta la historia</h3>
-        <p>Existe un sistema de relación entre ambos protagonistas que influye en la trama y en parte del gameplay, aunque Rockstar pide no sobredimensionarlo: cada jugador decide cuánto profundizar.</p>
-        <a class="news-link" href="https://beebom.com/gta-6/" target="_blank" rel="noopener">Ver fuente
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </article>
+      </a>
 
-      <article class="news-card" data-category="oficial">
-        <div class="news-meta">
-          <span class="news-badge badge-oficial">Oficial</span>
-          <time datetime="2026-09-10">10 sep 2026</time>
+      <a class="story-card" data-category="oficial" href="https://www.pcgamer.com/games/grand-theft-auto/the-pc-platform-is-becoming-more-and-more-important-take-two-chief-says-as-we-continue-to-wonder-when-were-going-to-get-gta-6/" target="_blank" rel="noopener">
+        <div class="story-img"><img src="images/thumbs/keys-bridge-plane.jpg" alt="" loading="lazy"></div>
+        <div class="story-body">
+          <div class="story-meta"><span class="tag tag-oficial">Oficial</span><span class="outlet">PC Gamer</span></div>
+          <h4>Take-Two: «El PC es cada vez más importante»… pero no hay GTA VI para PC</h4>
+          <p>El jefe de Take-Two volvió a esquivar la pregunta; por ahora el juego sigue siendo exclusivo de consolas.</p>
+          <time datetime="2026-09">Sep 2026</time>
         </div>
-        <h3>Sony presenta el DualSense de edición limitada</h3>
-        <p>PlayStation mostró el mando DualSense temático de GTA VI. La variante negra se vende únicamente a través de PlayStation Direct.</p>
-        <a class="news-link" href="https://beebom.com/gta-6/" target="_blank" rel="noopener">Ver fuente
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </article>
+      </a>
 
-      <article class="news-card" data-category="oficial">
-        <div class="news-meta">
-          <span class="news-badge badge-oficial">Oficial</span>
-          <time datetime="2026-09-01">Reparto</time>
+      <a class="story-card" data-category="filtracion" href="https://www.pcgamer.com/games/grand-theft-auto/gta-6-video-leak-analysis-august-2026/" target="_blank" rel="noopener">
+        <div class="story-img"><img src="images/thumbs/keys-island.jpg" alt="" loading="lazy"></div>
+        <div class="story-body">
+          <div class="story-meta"><span class="tag tag-filtracion">Filtración</span><span class="outlet">PC Gamer</span></div>
+          <h4>15 detalles de los vídeos filtrados: moralidad y barra de resistencia</h4>
+          <p>El análisis de las filtraciones de agosto apunta a un posible sistema de moralidad y a un medidor de resistencia.</p>
+          <time datetime="2026-08">Ago 2026</time>
         </div>
-        <h3>Stephen Root interpretará a Brian Heder</h3>
-        <p>El actor confirmó su papel: un narcotraficante implicado directamente en la trama principal de Leonida.</p>
-        <a class="news-link" href="https://sundayguardianlive.com/tech-news/gta-6-latest-news-who-does-stephen-root-play-check-release-date-preload-time-price-editions-platforms-brian-heders-role-284806/" target="_blank" rel="noopener">Ver fuente
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </article>
+      </a>
 
-      <article class="news-card" data-category="filtracion">
-        <div class="news-meta">
-          <span class="news-badge badge-filtracion">Filtración</span>
-          <time datetime="2026-08-18">18 ago 2026</time>
+      <a class="story-card" data-category="filtracion" href="https://kotaku.com/a-bunch-of-old-gta-6-leaks-turned-out-to-be-true-2000730608" target="_blank" rel="noopener">
+        <div class="story-img"><img src="images/thumbs/causeway-bridges.jpg" alt="" loading="lazy"></div>
+        <div class="story-body">
+          <div class="story-meta"><span class="tag tag-filtracion">Filtración</span><span class="outlet">Kotaku</span></div>
+          <h4>Varias filtraciones antiguas de GTA VI resultaron ser ciertas</h4>
+          <p>El «Extended Look» confirmó detalles que llevaban tiempo circulando como filtraciones.</p>
+          <time datetime="2026-09">Sep 2026</time>
         </div>
-        <h3>"Cyberleek" publica clips y el supuesto mapa completo</h3>
-        <p>Días antes del Extended Look, una cuenta difundió clips y capturas que mostrarían todo el mapa de Leonida, pidiendo dinero a cambio. Todo apunta a material de una build temprana y Rockstar no ha confirmado nada.</p>
-        <a class="news-link" href="https://vandal.elespanol.com/noticia/1350792371/un-grupo-filtra-nuevo-gameplay-de-gta-6-su-mapa-nuevas-imagenes-y-pide-dinero-a-los-jugadores-para-financiarse/" target="_blank" rel="noopener">Ver fuente
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </article>
+      </a>
 
-      <article class="news-card" data-category="filtracion">
-        <div class="news-meta">
-          <span class="news-badge badge-rumor">Rumor</span>
-          <time datetime="2026-09-01">Sin confirmar</time>
+      <a class="story-card" data-category="filtracion" href="https://www.forbes.com/sites/paultassi/2026/09/18/the-gta-6-online-release-year-has-been-revealed-it-seems/" target="_blank" rel="noopener">
+        <div class="story-img"><img src="images/thumbs/keys-seaplane.jpg" alt="" loading="lazy"></div>
+        <div class="story-body">
+          <div class="story-meta"><span class="tag tag-rumor">Rumor</span><span class="outlet">Forbes</span></div>
+          <h4>¿Ya se sabe cuándo llega GTA 6 Online?</h4>
+          <p>Forbes apunta a que se habría revelado su año de lanzamiento. Rockstar solo confirma que no estará el día del estreno.</p>
+          <time datetime="2026-09-18">18 sep 2026</time>
         </div>
-        <h3>Se habla de más de 700 interiores sin pantallas de carga</h3>
-        <p>El análisis de la comunidad y el GTA 6 Mapping Project apuntan a un mapa más grande y denso que el de GTA V, con cientos de interiores accesibles. Rockstar no lo ha confirmado.</p>
-        <a class="news-link" href="https://www.notebookcheck.net/Community-GTA-6-map-uses-Netflix-trailer-and-leaks-to-accurately-chart-Leonida.1390940.0.html" target="_blank" rel="noopener">Ver fuente
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </a>
-      </article>
+      </a>
     </div>
 
-    <p class="news-disclaimer">Las filtraciones y rumores no están confirmados por Rockstar Games. Se publican identificados como tales y siempre con su fuente original.</p>
+    <p class="news-disclaimer">Las filtraciones y rumores no están confirmados por Rockstar Games. Cada nota enlaza a su fuente original.</p>
   </div>
 </section>
 
-<section id="trailer" class="section trailer-section">
+<section id="ficha" class="spec-bar" aria-label="Ficha técnica">
+  <div class="container spec-grid">
+    <div class="spec"><span>Lanzamiento</span><strong>19.11.2026</strong></div>
+    <div class="spec"><span>Plataformas</span><strong>PS5 · Xbox Series X|S</strong></div>
+    <div class="spec"><span>Precio</span><strong>Desde 79,99 USD</strong></div>
+    <div class="spec"><span>Precarga</span><strong>12.11.2026</strong></div>
+    <div class="spec"><span>Modo</span><strong>Un jugador</strong></div>
+    <div class="spec"><span>Estudio</span><strong>Rockstar Games</strong></div>
+  </div>
+</section>
+
+<section id="trailers" class="block block-alt">
   <div class="container">
-    <h2 class="section-title">Mira los <span class="pink">Tráilers Oficiales</span></h2>
-    <div class="trailers-grid">
-      <div class="video-frame">
-        <div class="video-frame-label">Tráiler 1</div>
-        <iframe src="https://www.youtube.com/embed/g7jtqwUi9U0" title="Grand Theft Auto VI - Tráiler Oficial 1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
+    <header class="block-head">
+      <div>
+        <span class="kicker">Vídeos</span>
+        <h2 class="block-title">Tráilers <em>oficiales</em></h2>
       </div>
-      <div class="video-frame">
-        <div class="video-frame-label">Tráiler 2</div>
-        <iframe src="https://www.youtube.com/embed/VQRLujxTm3c" title="Grand Theft Auto VI - Tráiler Oficial 2" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen loading="lazy"></iframe>
-      </div>
-    </div>
-  </div>
-</section>
+      <p class="block-note">Directamente del canal de YouTube de Rockstar Games.</p>
+    </header>
 
-<section id="world" class="section world-section">
-  <div class="container world-grid">
-    <div class="world-text">
-      <p class="eyebrow">Bienvenido a</p>
-      <h2 class="section-title">Leonida</h2>
-      <p class="world-desc">Un estado ficticio inspirado en Florida, con playas infinitas, pantanos peligrosos y la ciudad de neón que nunca duerme: Vice City. Rockstar ha confirmado seis regiones que conforman el mapa más ambicioso de la saga.</p>
-      <ul class="region-list">
-        <li>Vice City</li>
-        <li>Leonida Keys</li>
-        <li>Grassrivers</li>
-        <li>Port Gellhorn</li>
-        <li>Hamlet</li>
-        <li>Kelly County</li>
-      </ul>
-      <p class="world-note">Seis regiones confirmadas oficialmente por Rockstar Games.</p>
-    </div>
-    <div class="world-images">
-      <img src="images/banner-causeway-day.jpg" alt="Vista aérea de los cayos de Leonida con puentes y agua turquesa">
-      <img src="images/banner-yacht-nightcity.jpg" alt="Vice City de noche con luces de neón desde el agua">
-    </div>
-  </div>
-</section>
-
-<section id="ficha" class="section facts-section">
-  <div class="container">
-    <div class="section-head">
-      <p class="eyebrow">Datos confirmados</p>
-      <h2 class="section-title">Ficha <span class="pink">Técnica</span></h2>
-    </div>
-    <div class="facts-grid">
-      <div class="fact-item">
-        <span class="fact-label">Lanzamiento</span>
-        <strong class="fact-value">19 nov 2026</strong>
-        <span class="fact-note">Medianoche hora local</span>
-      </div>
-      <div class="fact-item">
-        <span class="fact-label">Plataformas</span>
-        <strong class="fact-value">PS5 · Xbox Series</strong>
-        <span class="fact-note">Sin versión de PC anunciada</span>
-      </div>
-      <div class="fact-item">
-        <span class="fact-label">Precio estándar</span>
-        <strong class="fact-value">79,99 USD</strong>
-        <span class="fact-note">Ultimate: 99,99 USD</span>
-      </div>
-      <div class="fact-item">
-        <span class="fact-label">Precarga</span>
-        <strong class="fact-value">12 nov 2026</strong>
-        <span class="fact-note">Más de 100 GB estimados</span>
-      </div>
-      <div class="fact-item">
-        <span class="fact-label">Modo</span>
-        <strong class="fact-value">Un jugador</strong>
-        <span class="fact-note">Sin componente en línea al inicio</span>
-      </div>
-      <div class="fact-item">
-        <span class="fact-label">Protagonistas</span>
-        <strong class="fact-value">Jason y Lucia</strong>
-        <span class="fact-note">Historia dual entrelazada</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="characters" class="section characters-section">
-  <div class="container">
-    <p class="eyebrow center">Conoce a</p>
-    <h2 class="section-title center">Los Protagonistas</h2>
-    <div class="characters-grid">
-      <article class="character-card">
-        <div class="character-img" style="background-image:url('images/character-lucia.jpg')"></div>
-        <h3>Lucia</h3>
-        <p>Astuta, ambiciosa y dispuesta a todo por escapar de su pasado. Una nueva era de protagonistas llega a GTA.</p>
+    <div class="video-grid">
+      <article class="video-item">
+        <button class="video-card" data-video-id="g7jtqwUi9U0" aria-label="Reproducir el Tráiler 1 de Grand Theft Auto VI">
+          <img src="images/banner-yacht-nightcity.jpg" alt="Lancha frente al skyline de neón de Vice City" loading="lazy">
+          <span class="play-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+        </button>
+        <div class="video-info">
+          <span class="video-num">01</span>
+          <div>
+            <h3>Tráiler 1</h3>
+            <time datetime="2023-12-05">5 dic 2023</time>
+          </div>
+        </div>
       </article>
-      <article class="character-card">
-        <div class="character-img" style="background-image:url('images/character-jason.jpg')"></div>
-        <h3>Jason</h3>
-        <p>Un compañero leal atrapado entre la lealtad y la supervivencia en las calles de Vice City.</p>
+      <article class="video-item">
+        <button class="video-card" data-video-id="VQRLujxTm3c" aria-label="Reproducir el Tráiler 2 de Grand Theft Auto VI">
+          <img src="images/banner-causeway-sunset.jpg" alt="Puentes sobre el agua turquesa de los cayos con una avioneta" loading="lazy">
+          <span class="play-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+        </button>
+        <div class="video-info">
+          <span class="video-num">02</span>
+          <div>
+            <h3>Tráiler 2</h3>
+            <time datetime="2025-05-06">6 may 2025</time>
+          </div>
+        </div>
       </article>
     </div>
   </div>
 </section>
 
-<section id="features" class="section features-section">
+<section id="leonida" class="block">
+  <div class="container leonida-grid">
+    <figure class="leonida-img">
+      <img src="images/banner-sunset-mansions.jpg" alt="Isla de los Leonida Keys con un hidroavión amarillo" loading="lazy">
+      <figcaption>Leonida · Inspirado en Florida</figcaption>
+    </figure>
+    <div class="leonida-body">
+      <span class="kicker">El mapa</span>
+      <h2 class="block-title">Bienvenido a <em>Leonida</em></h2>
+      <p class="leonida-intro">El estado donde transcurre GTA VI, con el regreso a una Vice City moderna. Estas son las regiones que Rockstar ha presentado:</p>
+      <ol class="region-rows">
+        <li><span class="region-num">01</span><div><strong>Vice City</strong><span>La metrópolis de neón: Little Cuba, Ocean Beach, el puerto y el mercadillo Tisha-Wocka.</span></div></li>
+        <li><span class="region-num">02</span><div><strong>Leonida Keys</strong><span>La «puerta al paraíso»: un archipiélago de fiestas en barco y bares como The Rusty Anchor.</span></div></li>
+        <li><span class="region-num">03</span><div><strong>Grassrivers</strong><span>Los humedales del estado, territorio de caimanes con peligros bajo la superficie.</span></div></li>
+        <li><span class="region-num">04</span><div><strong>Port Gellhorn</strong><span>Un pueblo costero olvidado, lleno de centros comerciales vacíos.</span></div></li>
+        <li><span class="region-num">05</span><div><strong>Ambrosia</strong><span>La refinería de azúcar da los empleos; la banda de moteros, casi todo lo demás.</span></div></li>
+        <li><span class="region-num">06</span><div><strong>Mount Kalaga</strong><span>Parque nacional para pescar, cazar y conducir fuera de pista.</span></div></li>
+      </ol>
+      <a class="source-link" href="https://www.rockstargames.com/VI/only-in-leonida" target="_blank" rel="noopener">Descripciones según la web oficial de Rockstar Games</a>
+    </div>
+  </div>
+</section>
+
+<section id="protagonistas" class="block block-alt">
   <div class="container">
-    <h2 class="section-title center">Qué <span class="pink">Esperar</span></h2>
-    <div class="features-grid">
-      <div class="feature-card">
-        <svg class="feature-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c4-3 7-6.5 7-10.5A7 7 0 0 0 5 10.5C5 14.5 8 18 12 21Z"/><circle cx="12" cy="10" r="2.4"/></svg>
-        <h3>Seis regiones</h3>
-        <p>Vice City, Leonida Keys, Grassrivers, Port Gellhorn, Hamlet y Kelly County en un mismo estado.</p>
+    <header class="block-head">
+      <div>
+        <span class="kicker">Protagonistas</span>
+        <h2 class="block-title">Jason <em>&amp;</em> Lucia</h2>
       </div>
-      <div class="feature-card">
-        <svg class="feature-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><circle cx="16.5" cy="9.5" r="2.6"/><path d="M3.5 19.5c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M15 14.8c2.2.3 3.8 2 4.3 4.7"/></svg>
-        <h3>Historia dual</h3>
-        <p>Jason y Lucia comparten protagonismo y su relación influye en la trama y parte del gameplay.</p>
-      </div>
-      <div class="feature-card">
-        <svg class="feature-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16l1.5-5A2 2 0 0 1 7.4 9.5h9.2A2 2 0 0 1 18.5 11L20 16"/><rect x="2.5" y="16" width="19" height="4" rx="1.5"/><circle cx="7" cy="20" r="1.2"/><circle cx="17" cy="20" r="1.2"/></svg>
-        <h3>Generación actual</h3>
-        <p>Construido solo para PS5 y Xbox Series X|S. Los tráilers se capturaron íntegramente en PlayStation 5.</p>
-      </div>
-      <div class="feature-card">
-        <svg class="feature-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/><circle cx="12" cy="12" r="3.2"/></svg>
-        <h3>Campaña primero</h3>
-        <p>Sale como experiencia de un jugador: toda la atención está en la historia, sin modo en línea al lanzamiento.</p>
+      <p class="block-note">Biografías oficiales publicadas por Rockstar Games.</p>
+    </header>
+
+    <div class="duo-layout">
+      <figure class="duo-img">
+        <img src="images/duo-portrait.jpg" alt="Lucia Caminos y Jason Duval frente a Vice City" loading="lazy">
+      </figure>
+      <div class="duo-bios">
+        <article class="duo-bio">
+          <span class="duo-kicker">Protagonista</span>
+          <h3>Lucia Caminos</h3>
+          <p>Su padre le enseñó a pelear en cuanto aprendió a caminar. Luchar por su familia la llevó a la Penitenciaría de Leonida y salió por pura suerte. Ahora solo quiere jugadas inteligentes y la buena vida que su madre soñaba desde Liberty City.</p>
+        </article>
+        <article class="duo-bio">
+          <span class="duo-kicker">Protagonista</span>
+          <h3>Jason Duval</h3>
+          <p>Quiere una vida fácil, pero todo se le complica. Creció entre estafadores y, tras pasar por el Ejército, acabó en los Keys trabajando para narcotraficantes locales. Conocer a Lucia puede ser lo mejor o lo peor que le ha pasado.</p>
+        </article>
       </div>
     </div>
   </div>
 </section>
 
-<footer class="footer">
-  <div class="container footer-inner">
-    <div class="logo">GTA<span>VI</span></div>
-    <nav class="footer-links">
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <a href="#home" class="logo">GTA<span>VI</span></a>
+      <p>Noticias, filtraciones y cuenta regresiva de Grand Theft Auto VI.</p>
+    </div>
+    <nav class="footer-col" aria-label="Secciones">
+      <h4>Secciones</h4>
       <a href="#noticias">Noticias</a>
-      <a href="#trailer">Tráilers</a>
-      <a href="#world">Mundo</a>
-      <a href="#characters">Personajes</a>
-      <a href="#ficha">Ficha técnica</a>
-      <a href="comunidad.html">Comunidad</a>
-      <a href="clips.html">Clips</a>
+      <a href="#trailers">Tráilers</a>
+      <a href="#leonida">Leonida</a>
+      <a href="#protagonistas">Protagonistas</a>
     </nav>
-    <p>Sitio de fans no oficial. Grand Theft Auto VI es una marca de Rockstar Games. Este sitio no está afiliado ni respaldado por Rockstar Games ni Take-Two Interactive.</p>
-    <p class="footer-copy">&copy; 2026 gtavivicecity.com</p>
+    <nav class="footer-col" aria-label="Comunidad">
+      <h4>Comunidad</h4>
+      <a href="comunidad.html">Chat en vivo <span class="nav-tag">Pronto</span></a>
+      <a href="clips.html">Clips <span class="nav-tag">Pronto</span></a>
+    </nav>
+    <nav class="footer-col" aria-label="Fuentes oficiales">
+      <h4>Fuentes oficiales</h4>
+      <a href="https://www.rockstargames.com/newswire" target="_blank" rel="noopener">Rockstar Newswire</a>
+      <a href="https://www.rockstargames.com/VI" target="_blank" rel="noopener">Web oficial de GTA VI</a>
+    </nav>
+  </div>
+  <div class="container footer-bottom">
+    <p>Sitio de fans no oficial. Grand Theft Auto VI es una marca de Rockstar Games. Este sitio no está afiliado ni respaldado por Rockstar Games ni por Take-Two Interactive.</p>
+    <p>&copy; 2026 gtavivicecity.com</p>
   </div>
 </footer>
 

@@ -100,14 +100,15 @@ document.querySelectorAll('.nav-links a').forEach(link => {
   });
 });
 
-// News category filter
+// News feed category filter
 const newsFilters = document.getElementById('news-filters');
-if (newsFilters) {
-  const items = document.querySelectorAll('[data-category]');
+const newsFeed = document.getElementById('news-feed');
+if (newsFilters && newsFeed) {
+  const items = newsFeed.querySelectorAll('[data-category]');
   newsFilters.addEventListener('click', (e) => {
-    const btn = e.target.closest('.news-filter');
+    const btn = e.target.closest('.feed-filter');
     if (!btn) return;
-    newsFilters.querySelectorAll('.news-filter').forEach(b => b.classList.remove('active'));
+    newsFilters.querySelectorAll('.feed-filter').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     const filter = btn.dataset.filter;
     items.forEach(item => {
@@ -117,20 +118,35 @@ if (newsFilters) {
   });
 }
 
-// Fade-in on scroll
-const revealEls = document.querySelectorAll('.section, .hero-content');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.style.opacity = '1';
-      entry.target.style.transform = 'translateY(0)';
-    }
+// Trailers: load the YouTube player only when clicked
+document.querySelectorAll('.video-card[data-video-id]').forEach(card => {
+  card.addEventListener('click', () => {
+    const live = document.createElement('div');
+    live.className = 'video-live';
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube.com/embed/${card.dataset.videoId}?autoplay=1&rel=0`;
+    iframe.title = card.getAttribute('aria-label');
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    iframe.allowFullscreen = true;
+    live.appendChild(iframe);
+    card.replaceWith(live);
   });
-}, { threshold: 0.15 });
-
-revealEls.forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(30px)';
-  el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-  observer.observe(el);
 });
+
+// Fade-in on scroll
+const revealEls = document.querySelectorAll('.block-head, .news-top, .feed-head, .story-card, .video-item, .leonida-grid, .duo-img, .duo-bio, .spec');
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
+
+  revealEls.forEach(el => {
+    el.classList.add('reveal');
+    observer.observe(el);
+  });
+}
