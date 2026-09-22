@@ -100,6 +100,23 @@ document.querySelectorAll('.nav-links a').forEach(link => {
   });
 });
 
+// News category filter
+const newsFilters = document.getElementById('news-filters');
+if (newsFilters) {
+  const items = document.querySelectorAll('[data-category]');
+  newsFilters.addEventListener('click', (e) => {
+    const btn = e.target.closest('.news-filter');
+    if (!btn) return;
+    newsFilters.querySelectorAll('.news-filter').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    items.forEach(item => {
+      const show = filter === 'all' || item.dataset.category === filter;
+      item.classList.toggle('news-hidden', !show);
+    });
+  });
+}
+
 // Fade-in on scroll
 const revealEls = document.querySelectorAll('.section, .hero-content');
 const observer = new IntersectionObserver((entries) => {
