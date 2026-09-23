@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Comunidad y Chat en Vivo | GTA VI Vice City</title>
-<meta name="description" content="El chat en vivo y la comunidad de GTA VI Vice City están en construcción. Pronto podrás hablar en tiempo real con otros jugadores sobre Grand Theft Auto VI.">
-<meta name="robots" content="noindex, follow">
+<meta name="description" content="Chat en vivo de la comunidad de GTA VI Vice City: habla en tiempo real con otros jugadores sobre Grand Theft Auto VI, las noticias y las filtraciones.">
 <meta name="theme-color" content="#0a0612">
+<link rel="canonical" href="https://gtavivicecity.com/comunidad.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik+Spray+Paint&family=Bebas+Neue&family=Archivo+Black&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
-<body class="page-construction">
+<body class="page-inner">
 
 <div class="noise-overlay"></div>
 
@@ -24,7 +24,7 @@
       <a href="index.html#trailers">Tráilers</a>
       <a href="index.html#leonida">Leonida</a>
       <a href="index.html#protagonistas">Protagonistas</a>
-      <a href="comunidad.html" class="active">Comunidad <span class="nav-tag">Pronto</span></a>
+      <a href="comunidad.html" class="active">Comunidad <span class="nav-tag nav-tag-beta">Beta</span></a>
       <a href="clips.html">Clips <span class="nav-tag">Pronto</span></a>
     </nav>
     <button class="menu-toggle" aria-label="Abrir menú">
@@ -33,53 +33,123 @@
   </div>
 </header>
 
-<main class="construction-wrap">
-  <div class="construction-bg" style="background-image:url('images/banner-yacht-nightcity.jpg')"></div>
-  <div class="construction-overlay"></div>
+<main class="community">
+  <div class="community-bg" style="background-image:url('images/banner-yacht-nightcity.jpg')"></div>
 
-  <div class="container construction-content">
-    <span class="construction-badge">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
-      En construcción
-    </span>
+  <div class="container">
+    <header class="community-head">
+      <div>
+        <span class="kicker">Comunidad</span>
+        <h1 class="block-title">Chat <em>en vivo</em></h1>
+        <p class="community-sub">Habla de GTA VI con la comunidad mientras llega el 19 de noviembre.</p>
+      </div>
+      <div class="online-pill" id="online-pill" hidden>
+        <span class="live-dot"></span><strong id="online-count">0</strong>&nbsp;en línea
+      </div>
+    </header>
 
-    <h1 class="construction-title">
-      <span class="line-silver">Comunidad</span>
-      <span class="line-pink">Chat en Vivo</span>
-    </h1>
+    <section class="community-disabled" id="chat-disabled" hidden>
+      <span class="construction-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+        En preparación
+      </span>
+      <h2>El chat abre muy pronto</h2>
+      <p>Estamos terminando de conectar el chat. Vuelve en unos días para hablar de GTA VI en tiempo real con toda la comunidad.</p>
+      <a href="index.html#noticias" class="btn btn-primary">Ver las últimas noticias</a>
+    </section>
 
-    <p class="construction-sub">Estamos montando un chat en tiempo real para que la comunidad hable de GTA VI mientras llega el 19 de noviembre. Todavía no está disponible.</p>
-
-    <ul class="construction-list">
-      <li>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/></svg>
-        <div>
-          <strong>Chat global en tiempo real</strong>
-          <span>Un canal para toda la comunidad, sin salas separadas.</span>
+    <div class="community-grid" id="chat-app" hidden>
+      <section class="chat-panel" aria-label="Chat general">
+        <div class="chat-panel-head">
+          <span class="chat-channel"># general</span>
+          <span class="chat-status" id="chat-status" data-state="connecting">Conectando…</span>
         </div>
-      </li>
-      <li>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <div>
-          <strong>Cuentas de usuario</strong>
-          <span>Registro con usuario y contraseña para guardar tu identidad.</span>
-        </div>
-      </li>
-      <li>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg>
-        <div>
-          <strong>Moderación</strong>
-          <span>Reglas claras para mantener la conversación sana.</span>
-        </div>
-      </li>
-    </ul>
 
-    <a href="index.html" class="btn btn-primary btn-icon construction-back">
-      <svg class="btn-icon-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
-      <span>Volver al inicio</span>
-    </a>
+        <ol class="chat-messages" id="chat-messages" aria-live="polite"></ol>
+        <p class="chat-empty" id="chat-empty" hidden>Todavía no hay mensajes. ¡Escribe el primero!</p>
+
+        <form class="chat-composer" id="chat-composer" hidden>
+          <input id="chat-input" type="text" maxlength="500" autocomplete="off" placeholder="Escribe un mensaje…" aria-label="Mensaje">
+          <label class="spoiler-toggle" title="Oculta el mensaje hasta que alguien lo toque">
+            <input type="checkbox" id="chat-spoiler">
+            <span>Spoiler</span>
+          </label>
+          <button type="submit" class="chat-send" id="chat-send" aria-label="Enviar mensaje">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <p class="chat-error" id="chat-error" role="alert"></p>
+        </form>
+
+        <div class="chat-guest" id="chat-guest" hidden>
+          <p>Inicia sesión para escribir en el chat.</p>
+          <div class="chat-guest-actions">
+            <button type="button" class="btn btn-primary" data-open-auth="login">Entrar</button>
+            <button type="button" class="btn btn-outline" data-open-auth="register">Crear cuenta</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="community-side">
+        <div class="side-card">
+          <h2>Tu cuenta</h2>
+          <div id="account-guest">
+            <p class="side-text">Crea una cuenta gratis para participar en el chat.</p>
+            <div class="side-actions">
+              <button type="button" class="btn btn-primary" data-open-auth="register">Crear cuenta</button>
+              <button type="button" class="btn-link" data-open-auth="login">Ya tengo cuenta</button>
+            </div>
+          </div>
+          <div id="account-user" hidden>
+            <div class="account-row">
+              <span class="avatar avatar-lg" id="account-avatar"></span>
+              <div>
+                <strong id="account-name"></strong>
+                <span class="account-state">Conectado</span>
+              </div>
+            </div>
+            <button type="button" class="btn-link" id="logout-btn">Cerrar sesión</button>
+          </div>
+        </div>
+
+        <div class="side-card">
+          <h2>Normas</h2>
+          <ol class="rules">
+            <li>Respeto ante todo: nada de insultos ni acoso.</li>
+            <li>Marca con «Spoiler» cualquier detalle de la historia o de las filtraciones.</li>
+            <li>Sin spam, publicidad ni enlaces sospechosos.</li>
+            <li>No compartas datos personales tuyos ni de otros.</li>
+          </ol>
+        </div>
+      </aside>
+    </div>
   </div>
 </main>
+
+<dialog class="auth-dialog" id="auth-dialog" aria-labelledby="auth-title">
+  <form method="dialog" class="auth-close-form">
+    <button class="auth-close" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </form>
+  <h2 class="auth-title" id="auth-title">Entrar</h2>
+  <div class="auth-tabs" role="tablist">
+    <button type="button" role="tab" class="auth-tab active" data-tab="login" aria-selected="true">Entrar</button>
+    <button type="button" role="tab" class="auth-tab" data-tab="register" aria-selected="false">Crear cuenta</button>
+  </div>
+  <form class="auth-form" id="auth-form" novalidate>
+    <label>
+      Usuario
+      <input name="username" type="text" autocomplete="username" maxlength="20" required>
+    </label>
+    <label>
+      Contraseña
+      <input name="password" type="password" autocomplete="current-password" maxlength="72" required>
+    </label>
+    <p class="auth-hint" id="auth-hint" hidden>Usuario: 3 a 20 letras, números o guion bajo. Contraseña: mínimo 8 caracteres.</p>
+    <p class="auth-error" id="auth-error" role="alert"></p>
+    <button type="submit" class="btn btn-primary auth-submit" id="auth-submit">Entrar</button>
+  </form>
+</dialog>
 
 <footer class="site-footer">
   <div class="container footer-grid">
@@ -96,7 +166,7 @@
     </nav>
     <nav class="footer-col" aria-label="Comunidad">
       <h4>Comunidad</h4>
-      <a href="comunidad.html">Chat en vivo <span class="nav-tag">Pronto</span></a>
+      <a href="comunidad.html">Chat en vivo <span class="nav-tag nav-tag-beta">Beta</span></a>
       <a href="clips.html">Clips <span class="nav-tag">Pronto</span></a>
     </nav>
     <nav class="footer-col" aria-label="Fuentes oficiales">
@@ -112,5 +182,7 @@
 </footer>
 
 <script src="script.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/comunidad.js"></script>
 </body>
 </html>
