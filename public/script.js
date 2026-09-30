@@ -118,15 +118,26 @@ if (newsFilters && newsFeed) {
   });
 }
 
+// Trailers: official YouTube thumbnails (maxres falls back to hq when missing)
+document.querySelectorAll('img[data-yt-thumb]').forEach(img => {
+  const id = img.dataset.ytThumb;
+  img.addEventListener('error', () => {
+    if (!img.src.includes('hqdefault')) img.src = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+  });
+  img.src = `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
+});
+
 // Trailers: load the YouTube player only when clicked
 document.querySelectorAll('.video-card[data-video-id]').forEach(card => {
   card.addEventListener('click', () => {
     const live = document.createElement('div');
     live.className = 'video-live';
     const iframe = document.createElement('iframe');
-    iframe.src = `https://www.youtube.com/embed/${card.dataset.videoId}?autoplay=1&rel=0`;
+    iframe.src = `https://www.youtube.com/embed/${card.dataset.videoId}?autoplay=1&rel=0&playsinline=1`;
     iframe.title = card.getAttribute('aria-label');
     iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    // YouTube rejects embeds that arrive without a referrer (player error 153).
+    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
     iframe.allowFullscreen = true;
     live.appendChild(iframe);
     card.replaceWith(live);
@@ -134,7 +145,7 @@ document.querySelectorAll('.video-card[data-video-id]').forEach(card => {
 });
 
 // Fade-in on scroll
-const revealEls = document.querySelectorAll('.block-head, .news-top, .feed-head, .story-card, .video-item, .leonida-grid, .duo-img, .duo-bio, .spec');
+const revealEls = document.querySelectorAll('.block-head, .news-top, .feed-head, .story-card, .video-item, .region-card, .duo-card-bio, .spec');
 if ('IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
