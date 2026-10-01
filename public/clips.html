@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik+Spray+Paint&family=Bebas+Neue&family=Archivo+Black&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="/styles.css">
 </head>
 <body class="page-inner page-construction">
 
@@ -18,23 +18,23 @@
 
 <header class="navbar scrolled" id="navbar">
   <div class="container navbar-inner">
-    <a href="index.html" class="logo">GTA<span>VI</span></a>
-    <nav class="nav-links">
-      <a href="index.html#noticias">Noticias</a>
-      <a href="index.html#trailers">Tráilers</a>
-      <a href="index.html#leonida">Leonida</a>
-      <a href="index.html#protagonistas">Protagonistas</a>
-      <a href="comunidad.html">Comunidad <span class="nav-tag nav-tag-beta">Beta</span></a>
-      <a href="clips.html" class="active">Clips <span class="nav-tag">Pronto</span></a>
+    <a href="/" class="logo">GTA<span>VI</span></a>
+    <nav class="nav-links" aria-label="Principal">
+      <a href="/noticias">Noticias</a>
+      <a href="/trailers">Tráilers</a>
+      <a href="/leonida">Leonida</a>
+      <a href="/protagonistas">Protagonistas</a>
+      <a href="/comunidad">Comunidad <span class="nav-tag nav-tag-beta">Beta</span></a>
+      <a href="/clips" class="active" aria-current="page">Clips <span class="nav-tag">Pronto</span></a>
     </nav>
-    <button class="menu-toggle" aria-label="Abrir menú">
+    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </div>
 </header>
 
 <main class="construction-wrap">
-  <div class="construction-bg" style="background-image:url('images/banner-sunset-mansions.jpg')"></div>
+  <div class="construction-bg" style="background-image:url('/images/banner-sunset-mansions.jpg')"></div>
   <div class="construction-overlay"></div>
 
   <div class="container construction-content">
@@ -74,7 +74,7 @@
       </li>
     </ul>
 
-    <a href="index.html" class="btn btn-primary btn-icon construction-back">
+    <a href="/" class="btn btn-primary btn-icon construction-back">
       <svg class="btn-icon-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
       <span>Volver al inicio</span>
     </a>
@@ -84,20 +84,20 @@
 <footer class="site-footer">
   <div class="container footer-grid">
     <div class="footer-brand">
-      <a href="index.html" class="logo">GTA<span>VI</span></a>
+      <a href="/" class="logo">GTA<span>VI</span></a>
       <p>Noticias, filtraciones y cuenta regresiva de Grand Theft Auto VI.</p>
     </div>
     <nav class="footer-col" aria-label="Secciones">
       <h4>Secciones</h4>
-      <a href="index.html#noticias">Noticias</a>
-      <a href="index.html#trailers">Tráilers</a>
-      <a href="index.html#leonida">Leonida</a>
-      <a href="index.html#protagonistas">Protagonistas</a>
+      <a href="/noticias">Noticias</a>
+      <a href="/trailers">Tráilers</a>
+      <a href="/leonida">Leonida</a>
+      <a href="/protagonistas">Protagonistas</a>
     </nav>
     <nav class="footer-col" aria-label="Comunidad">
       <h4>Comunidad</h4>
-      <a href="comunidad.html">Chat en vivo <span class="nav-tag nav-tag-beta">Beta</span></a>
-      <a href="clips.html">Clips <span class="nav-tag">Pronto</span></a>
+      <a href="/comunidad">Debates y chat <span class="nav-tag nav-tag-beta">Beta</span></a>
+      <a href="/clips">Clips <span class="nav-tag">Pronto</span></a>
     </nav>
     <nav class="footer-col" aria-label="Fuentes oficiales">
       <h4>Fuentes oficiales</h4>
@@ -111,6 +111,6 @@
   </div>
 </footer>
 
-<script src="script.js"></script>
+<script src="/script.js"></script>
 </body>
 </html>

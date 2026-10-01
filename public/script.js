@@ -87,17 +87,24 @@ document.querySelectorAll('.hero-track').forEach(initSlider);
 const menuToggle = document.querySelector('.menu-toggle');
 const navLinks = document.querySelector('.nav-links');
 
-menuToggle?.addEventListener('click', () => {
-  navLinks.classList.toggle('open');
-  menuToggle.classList.toggle('open');
-});
+function setMenu(open) {
+  navLinks.classList.toggle('open', open);
+  menuToggle.classList.toggle('open', open);
+  menuToggle.setAttribute('aria-expanded', String(open));
+  menuToggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+}
 
-// Close mobile menu after clicking a link
+menuToggle?.addEventListener('click', () => setMenu(!navLinks.classList.contains('open')));
+
+// Close mobile menu after clicking a link or pressing Escape
 document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', () => {
-    navLinks.classList.remove('open');
-    menuToggle.classList.remove('open');
-  });
+  link.addEventListener('click', () => setMenu(false));
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && navLinks?.classList.contains('open')) {
+    setMenu(false);
+    menuToggle.focus();
+  }
 });
 
 // News feed category filter
@@ -120,11 +127,10 @@ if (newsFilters && newsFeed) {
 
 // Trailers: official YouTube thumbnails (maxres falls back to hq when missing)
 document.querySelectorAll('img[data-yt-thumb]').forEach(img => {
-  const id = img.dataset.ytThumb;
   img.addEventListener('error', () => {
-    if (!img.src.includes('hqdefault')) img.src = `https://i.ytimg.com/vi/${id}/hqdefault.jpg`;
+    if (!img.src.includes('hqdefault')) img.src = `https://i.ytimg.com/vi/${img.dataset.ytThumb}/hqdefault.jpg`;
   });
-  img.src = `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
+  img.src = `https://i.ytimg.com/vi/${img.dataset.ytThumb}/maxresdefault.jpg`;
 });
 
 // Trailers: load the YouTube player only when clicked
@@ -145,7 +151,11 @@ document.querySelectorAll('.video-card[data-video-id]').forEach(card => {
 });
 
 // Fade-in on scroll
-const revealEls = document.querySelectorAll('.block-head, .news-top, .feed-head, .story-card, .video-item, .region-card, .duo-card-bio, .spec');
+const revealEls = document.querySelectorAll([
+  '.block-head, .news-top, .feed-head, .story-card, .video-item, .region-card, .duo-card-bio, .spec',
+  '.news-featured, .news-card, .trailer-note, .region-detail, .profile, .duo-fact, .cast-card',
+  '.feature-card, .soon-card, .cta-card, .hub-card',
+].join(', '));
 if ('IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {

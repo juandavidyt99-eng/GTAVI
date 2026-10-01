@@ -1,279 +1,156 @@
+// Community page: debates feed (sorting, topic filter, likes, replies)
 (() => {
-  const $ = id => document.getElementById(id);
-  const els = {
-    disabled: $('chat-disabled'),
-    app: $('chat-app'),
-    online: $('online-pill'),
-    onlineCount: $('online-count'),
-    status: $('chat-status'),
-    list: $('chat-messages'),
-    empty: $('chat-empty'),
-    composer: $('chat-composer'),
-    input: $('chat-input'),
-    spoiler: $('chat-spoiler'),
-    send: $('chat-send'),
-    chatError: $('chat-error'),
-    guest: $('chat-guest'),
-    accountGuest: $('account-guest'),
-    accountUser: $('account-user'),
-    accountName: $('account-name'),
-    accountAvatar: $('account-avatar'),
-    logout: $('logout-btn'),
-    dialog: $('auth-dialog'),
-    authTitle: $('auth-title'),
-    authForm: $('auth-form'),
-    authHint: $('auth-hint'),
-    authError: $('auth-error'),
-    authSubmit: $('auth-submit'),
+  const store = window.CommunityStore;
+  const list = document.getElementById('post-list');
+  if (!store || !list) return;
+
+  const CATEGORY = {
+    debate: { label: 'Debate', cls: 'tag-noticia' },
+    teoria: { label: 'Teoría', cls: 'tag-teoria' },
+    leonida: { label: 'Leonida', cls: 'tag-oficial' },
+    noticias: { label: 'Noticias', cls: 'tag-rumor' },
   };
+  const ICON = {
+    reply: '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/>',
+    heart: '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/>',
+  };
+  const state = { sort: 'recent', category: 'all' };
+  const rtf = new Intl.RelativeTimeFormat('es', { numeric: 'auto' });
 
-  const MAX_RENDERED = 200;
-  const timeFmt = new Intl.DateTimeFormat('es', { hour: '2-digit', minute: '2-digit' });
-  const dayFmt = new Intl.DateTimeFormat('es', { day: 'numeric', month: 'short' });
-
-  let socket = null;
-  let me = null;
-  let authMode = 'login';
-
-  async function api(path, body) {
-    const res = await fetch(path, body === undefined
-      ? { credentials: 'same-origin' }
-      : { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.error || 'Error de conexión. Inténtalo de nuevo.');
-    return data;
+  function svg(name) {
+    const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    el.setAttribute('viewBox', '0 0 24 24');
+    el.setAttribute('aria-hidden', 'true');
+    el.setAttribute('class', 'icon');
+    el.innerHTML = ICON[name];
+    return el;
   }
 
-  function avatarColor(name) {
+  function el(tag, cls, text) {
+    const node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (text !== undefined) node.textContent = text;
+    return node;
+  }
+
+  function avatar(name) {
+    const a = el('span', 'avatar', name.charAt(0).toUpperCase());
     let hash = 0;
     for (const ch of name) hash = (hash * 31 + ch.codePointAt(0)) % 360;
-    return `hsl(${hash} 70% 45%)`;
+    a.style.background = `hsl(${hash} 70% 45%)`;
+    a.setAttribute('aria-hidden', 'true');
+    return a;
   }
 
-  function fillAvatar(el, name) {
-    el.textContent = name.charAt(0).toUpperCase();
-    el.style.background = avatarColor(name);
-  }
-
-  function formatTime(value) {
-    const date = new Date(value);
-    const today = new Date().toDateString() === date.toDateString();
-    return today ? timeFmt.format(date) : `${dayFmt.format(date)} · ${timeFmt.format(date)}`;
-  }
-
-  function isNearBottom() {
-    const l = els.list;
-    return l.scrollHeight - l.scrollTop - l.clientHeight < 80;
-  }
-
-  function renderMessage(m, { scroll = true } = {}) {
-    const stick = isNearBottom();
-    const own = me && m.username.toLowerCase() === me.username.toLowerCase();
-
-    const li = document.createElement('li');
-    li.className = own ? 'msg msg-own' : 'msg';
-
-    const avatar = document.createElement('span');
-    avatar.className = 'avatar';
-    fillAvatar(avatar, m.username);
-
-    const body = document.createElement('div');
-    body.className = 'msg-body';
-
-    const head = document.createElement('div');
-    head.className = 'msg-head';
-    const name = document.createElement('strong');
-    name.textContent = m.username;
-    const time = document.createElement('time');
-    time.dateTime = new Date(m.createdAt).toISOString();
-    time.textContent = formatTime(m.createdAt);
-    head.append(name, time);
-
-    const text = document.createElement('p');
-    text.className = 'msg-text';
-    text.textContent = m.content;
-
-    if (m.spoiler) {
-      const tag = document.createElement('span');
-      tag.className = 'msg-spoiler-tag';
-      tag.textContent = 'Spoiler';
-      head.append(tag);
-      text.classList.add('spoiler');
-      text.tabIndex = 0;
-      text.setAttribute('role', 'button');
-      text.setAttribute('aria-label', 'Mensaje con spoiler. Pulsa para mostrarlo.');
-      const reveal = () => {
-        text.classList.add('revealed');
-        text.removeAttribute('role');
-        text.removeAttribute('aria-label');
-        text.removeAttribute('tabindex');
-      };
-      text.addEventListener('click', reveal, { once: true });
-      text.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); reveal(); } });
+  function ago(iso) {
+    const diff = (new Date(iso) - Date.now()) / 1000;
+    const steps = [['day', 86400], ['hour', 3600], ['minute', 60]];
+    for (const [unit, secs] of steps) {
+      if (Math.abs(diff) >= secs) return rtf.format(Math.round(diff / secs), unit);
     }
-
-    body.append(head, text);
-    li.append(avatar, body);
-    els.list.append(li);
-    els.empty.hidden = true;
-
-    while (els.list.children.length > MAX_RENDERED) els.list.firstElementChild.remove();
-    if (scroll && (stick || own)) els.list.scrollTop = els.list.scrollHeight;
+    return 'ahora';
   }
 
-  async function loadHistory() {
-    try {
-      const messages = await api('/api/chat/history');
-      els.list.replaceChildren();
-      messages.forEach(m => renderMessage(m, { scroll: false }));
-      els.empty.hidden = messages.length > 0;
-      els.list.scrollTop = els.list.scrollHeight;
-    } catch {
-      setStatus('offline', 'No se pudo cargar el historial');
-    }
-  }
+  function renderPost(post) {
+    const li = el('li', 'post');
+    li.dataset.id = post.id;
 
-  function setStatus(state, label) {
-    els.status.dataset.state = state;
-    els.status.textContent = label;
-  }
+    const main = el('div', 'post-main');
+    const head = el('div', 'post-head');
+    const name = el('strong', 'post-author', post.author.name);
+    const time = el('time', 'post-time', ago(post.createdAt));
+    time.dateTime = post.createdAt;
+    const cat = CATEGORY[post.category];
+    const tag = el('span', `tag ${cat.cls}`, cat.label);
+    head.append(name, time, tag);
+    if (post.preview) head.append(el('span', 'preview-badge', 'Vista previa'));
 
-  function showDisabled() {
-    if (socket) socket.disconnect();
-    els.app.hidden = true;
-    els.online.hidden = true;
-    els.disabled.hidden = false;
-  }
+    const title = el('h3', 'post-title', post.title);
+    const excerpt = el('p', 'post-excerpt', post.excerpt);
 
-  function connect() {
-    if (socket) socket.disconnect();
-    setStatus('connecting', 'Conectando…');
-    socket = io();
-    socket.on('connect', () => {
-      setStatus('live', 'En vivo');
-      loadHistory();
-    });
-    socket.on('disconnect', () => setStatus('connecting', 'Reconectando…'));
-    socket.on('connect_error', err => {
-      if (err.message === 'disabled') showDisabled();
-      else setStatus('offline', 'Sin conexión');
-    });
-    socket.on('chat:message', m => renderMessage(m));
-    socket.on('chat:online', count => {
-      els.onlineCount.textContent = count;
-      els.online.hidden = false;
-    });
-  }
-
-  function updateAccountUI() {
-    const logged = Boolean(me);
-    els.composer.hidden = !logged;
-    els.guest.hidden = logged;
-    els.accountGuest.hidden = logged;
-    els.accountUser.hidden = !logged;
-    if (logged) {
-      els.accountName.textContent = me.username;
-      fillAvatar(els.accountAvatar, me.username);
-    }
-  }
-
-  function setAuthMode(mode) {
-    authMode = mode;
-    const register = mode === 'register';
-    els.dialog.querySelectorAll('.auth-tab').forEach(tab => {
-      const active = tab.dataset.tab === mode;
-      tab.classList.toggle('active', active);
-      tab.setAttribute('aria-selected', String(active));
-    });
-    els.authTitle.textContent = register ? 'Crear cuenta' : 'Entrar';
-    els.authSubmit.textContent = register ? 'Crear cuenta' : 'Entrar';
-    els.authHint.hidden = !register;
-    els.authForm.password.autocomplete = register ? 'new-password' : 'current-password';
-    els.authError.textContent = '';
-  }
-
-  function openAuth(mode) {
-    setAuthMode(mode);
-    els.authForm.reset();
-    els.dialog.showModal();
-    els.authForm.username.focus();
-  }
-
-  document.querySelectorAll('[data-open-auth]').forEach(btn => {
-    btn.addEventListener('click', () => openAuth(btn.dataset.openAuth));
-  });
-  els.dialog.querySelectorAll('.auth-tab').forEach(tab => {
-    tab.addEventListener('click', () => setAuthMode(tab.dataset.tab));
-  });
-  els.dialog.addEventListener('click', e => {
-    if (e.target === els.dialog) els.dialog.close();
-  });
-
-  els.authForm.addEventListener('submit', async e => {
-    e.preventDefault();
-    els.authError.textContent = '';
-    els.authSubmit.disabled = true;
-    try {
-      const { user } = await api(`/api/auth/${authMode}`, {
-        username: els.authForm.username.value.trim(),
-        password: els.authForm.password.value,
-      });
-      me = user;
-      els.dialog.close();
-      updateAccountUI();
-      connect();
-      els.input.focus();
-    } catch (err) {
-      els.authError.textContent = err.message;
-    } finally {
-      els.authSubmit.disabled = false;
-    }
-  });
-
-  els.logout.addEventListener('click', async () => {
-    try {
-      await api('/api/auth/logout', {});
-    } finally {
-      me = null;
-      updateAccountUI();
-      connect();
-    }
-  });
-
-  els.composer.addEventListener('submit', e => {
-    e.preventDefault();
-    const text = els.input.value.trim();
-    if (!text || !socket) return;
-    els.send.disabled = true;
-    els.chatError.textContent = '';
-    socket.timeout(8000).emit('chat:send', { text, spoiler: els.spoiler.checked }, (err, res) => {
-      els.send.disabled = false;
-      if (err) {
-        els.chatError.textContent = 'No se pudo enviar. Revisa tu conexión.';
-      } else if (res && res.error) {
-        els.chatError.textContent = res.error;
-      } else {
-        els.input.value = '';
-        els.spoiler.checked = false;
+    const actions = el('div', 'post-actions');
+    const like = el('button', 'post-action like-btn');
+    like.type = 'button';
+    like.setAttribute('aria-pressed', String(post.liked));
+    like.setAttribute('aria-label', `Me gusta: ${post.title}`);
+    const likeCount = el('span', 'count', String(post.likes));
+    like.append(svg('heart'), likeCount);
+    like.addEventListener('click', async () => {
+      like.disabled = true;
+      try {
+        const res = await store.toggleLike(post.id);
+        like.setAttribute('aria-pressed', String(res.liked));
+        likeCount.textContent = String(res.likes);
+        like.classList.remove('pop');
+        void like.offsetWidth;
+        like.classList.add('pop');
+      } finally {
+        like.disabled = false;
       }
-      els.input.focus();
+    });
+
+    const repliesId = `replies-${post.id}`;
+    const toggle = el('button', 'post-action replies-btn');
+    toggle.type = 'button';
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-controls', repliesId);
+    toggle.append(svg('reply'), el('span', 'count', `${post.replyCount} respuestas`));
+
+    const replies = el('ol', 'post-replies');
+    replies.id = repliesId;
+    replies.hidden = true;
+    post.replies.forEach(r => {
+      const item = el('li', 'reply');
+      const body = el('div', 'reply-body');
+      const rh = el('div', 'post-head');
+      const rt = el('time', 'post-time', ago(r.createdAt));
+      rt.dateTime = r.createdAt;
+      rh.append(el('strong', 'post-author', r.author.name), rt);
+      body.append(rh, el('p', 'reply-text', r.text));
+      item.append(avatar(r.author.name), body);
+      replies.append(item);
+    });
+    const more = el('li', 'reply-more', 'Responder y ver el hilo completo llegará con los comentarios. Próximamente.');
+    replies.append(more);
+
+    toggle.addEventListener('click', () => {
+      const open = replies.hidden;
+      replies.hidden = !open;
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+
+    actions.append(like, toggle);
+    main.append(head, title, excerpt, actions, replies);
+    li.append(avatar(post.author.name), main);
+    return li;
+  }
+
+  async function render() {
+    list.setAttribute('aria-busy', 'true');
+    const posts = await store.listPosts(state);
+    list.replaceChildren(...posts.map(renderPost));
+    if (!posts.length) list.append(el('li', 'post-empty', 'Todavía no hay debates en este tema.'));
+    list.removeAttribute('aria-busy');
+  }
+
+  function bindGroup(selector, attr, key) {
+    const buttons = document.querySelectorAll(selector);
+    buttons.forEach(btn => btn.addEventListener('click', () => {
+      state[key] = btn.dataset[attr];
+      buttons.forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
+      render();
+    }));
+  }
+
+  bindGroup('.forum-toolbar .tab', 'sort', 'sort');
+  bindGroup('#forum-chips .chip', 'cat', 'category');
+
+  // "Teorías" feature card jumps to the feed already filtered.
+  document.querySelectorAll('[data-goto-filter]').forEach(link => {
+    link.addEventListener('click', () => {
+      document.querySelector(`#forum-chips .chip[data-cat="${link.dataset.gotoFilter}"]`)?.click();
     });
   });
 
-  async function init() {
-    let status = { enabled: false };
-    try {
-      status = await api('/api/chat/status');
-    } catch {
-      // Treated as disabled below.
-    }
-    if (!status.enabled || typeof io === 'undefined') return showDisabled();
-
-    me = status.user;
-    els.app.hidden = false;
-    updateAccountUI();
-    connect();
-  }
-
-  init();
+  render();
 })();

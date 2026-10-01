@@ -39,10 +39,20 @@ async function main() {
   app.use('/api', sessionMiddleware, createChatRouter(getStore));
   app.use('/api', (req, res) => res.status(404).json({ error: 'No encontrado.' }));
 
-  app.use(express.static(path.join(__dirname, 'public')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  const publicDir = path.join(__dirname, 'public');
+
+  const notFound = (req, res) => res.status(404).sendFile(path.join(publicDir, '404.html'));
+  app.get(['/404', '/404.html'], notFound);
+
+  // Clean URLs: /noticias.html -> /noticias, /index.html -> /
+  app.get(/^\/(.+)\.html$/, (req, res) => {
+    const name = req.params[0];
+    const query = req.originalUrl.slice(req.path.length);
+    res.redirect(301, (name === 'index' ? '/' : `/${name}`) + query);
   });
+
+  app.use(express.static(publicDir, { extensions: ['html'] }));
+  app.use(notFound);
 
   const server = http.createServer(app);
   attachChatSocket(server, sessionMiddleware, getStore);
