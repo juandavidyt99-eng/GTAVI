@@ -21,7 +21,7 @@ function cleanText(value) {
     .trim();
 }
 
-function attachChatSocket(httpServer, sessionMiddleware, getStore) {
+function attachChatSocket(httpServer, sessionMiddleware, getStore, bus) {
   const io = new Server(httpServer, {
     allowRequest: (req, callback) => callback(null, sameOrigin(req)),
   });
@@ -36,6 +36,15 @@ function attachChatSocket(httpServer, sessionMiddleware, getStore) {
     if (!getStore()) return next(new Error('disabled'));
     next();
   });
+
+  // Community feed updates (new posts, likes, comments, deletions) go to everyone.
+  if (bus) {
+    bus.on('post:new', post => io.emit('feed:new', post));
+    bus.on('post:delete', data => io.emit('feed:delete', data));
+    bus.on('post:likes', data => io.emit('feed:likes', data));
+    bus.on('comment:new', data => io.emit('feed:comment', data));
+    bus.on('comment:delete', data => io.emit('feed:comment-delete', data));
+  }
 
   io.on('connection', socket => {
     const user = socket.request.session && socket.request.session.user;

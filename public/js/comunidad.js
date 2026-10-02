@@ -1,156 +1,79 @@
-// Community page: debates feed (sorting, topic filter, likes, replies)
+// Community page: composer, live feed with sorting/filters, and the "me" sidebar card.
 (() => {
-  const store = window.CommunityStore;
-  const list = document.getElementById('post-list');
-  if (!store || !list) return;
+  const G = window.GTA;
+  const list = document.getElementById('feed');
+  if (!G || !list) return;
 
-  const CATEGORY = {
-    debate: { label: 'Debate', cls: 'tag-noticia' },
-    teoria: { label: 'Teoría', cls: 'tag-teoria' },
-    leonida: { label: 'Leonida', cls: 'tag-oficial' },
-    noticias: { label: 'Noticias', cls: 'tag-rumor' },
-  };
-  const ICON = {
-    reply: '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z"/>',
-    heart: '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/>',
-  };
-  const state = { sort: 'recent', category: 'all' };
-  const rtf = new Intl.RelativeTimeFormat('es', { numeric: 'auto' });
-
-  function svg(name) {
-    const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    el.setAttribute('viewBox', '0 0 24 24');
-    el.setAttribute('aria-hidden', 'true');
-    el.setAttribute('class', 'icon');
-    el.innerHTML = ICON[name];
-    return el;
-  }
-
-  function el(tag, cls, text) {
-    const node = document.createElement(tag);
-    if (cls) node.className = cls;
-    if (text !== undefined) node.textContent = text;
-    return node;
-  }
-
-  function avatar(name) {
-    const a = el('span', 'avatar', name.charAt(0).toUpperCase());
-    let hash = 0;
-    for (const ch of name) hash = (hash * 31 + ch.codePointAt(0)) % 360;
-    a.style.background = `hsl(${hash} 70% 45%)`;
-    a.setAttribute('aria-hidden', 'true');
-    return a;
-  }
-
-  function ago(iso) {
-    const diff = (new Date(iso) - Date.now()) / 1000;
-    const steps = [['day', 86400], ['hour', 3600], ['minute', 60]];
-    for (const [unit, secs] of steps) {
-      if (Math.abs(diff) >= secs) return rtf.format(Math.round(diff / secs), unit);
-    }
-    return 'ahora';
-  }
-
-  function renderPost(post) {
-    const li = el('li', 'post');
-    li.dataset.id = post.id;
-
-    const main = el('div', 'post-main');
-    const head = el('div', 'post-head');
-    const name = el('strong', 'post-author', post.author.name);
-    const time = el('time', 'post-time', ago(post.createdAt));
-    time.dateTime = post.createdAt;
-    const cat = CATEGORY[post.category];
-    const tag = el('span', `tag ${cat.cls}`, cat.label);
-    head.append(name, time, tag);
-    if (post.preview) head.append(el('span', 'preview-badge', 'Vista previa'));
-
-    const title = el('h3', 'post-title', post.title);
-    const excerpt = el('p', 'post-excerpt', post.excerpt);
-
-    const actions = el('div', 'post-actions');
-    const like = el('button', 'post-action like-btn');
-    like.type = 'button';
-    like.setAttribute('aria-pressed', String(post.liked));
-    like.setAttribute('aria-label', `Me gusta: ${post.title}`);
-    const likeCount = el('span', 'count', String(post.likes));
-    like.append(svg('heart'), likeCount);
-    like.addEventListener('click', async () => {
-      like.disabled = true;
-      try {
-        const res = await store.toggleLike(post.id);
-        like.setAttribute('aria-pressed', String(res.liked));
-        likeCount.textContent = String(res.likes);
-        like.classList.remove('pop');
-        void like.offsetWidth;
-        like.classList.add('pop');
-      } finally {
-        like.disabled = false;
-      }
-    });
-
-    const repliesId = `replies-${post.id}`;
-    const toggle = el('button', 'post-action replies-btn');
-    toggle.type = 'button';
-    toggle.setAttribute('aria-expanded', 'false');
-    toggle.setAttribute('aria-controls', repliesId);
-    toggle.append(svg('reply'), el('span', 'count', `${post.replyCount} respuestas`));
-
-    const replies = el('ol', 'post-replies');
-    replies.id = repliesId;
-    replies.hidden = true;
-    post.replies.forEach(r => {
-      const item = el('li', 'reply');
-      const body = el('div', 'reply-body');
-      const rh = el('div', 'post-head');
-      const rt = el('time', 'post-time', ago(r.createdAt));
-      rt.dateTime = r.createdAt;
-      rh.append(el('strong', 'post-author', r.author.name), rt);
-      body.append(rh, el('p', 'reply-text', r.text));
-      item.append(avatar(r.author.name), body);
-      replies.append(item);
-    });
-    const more = el('li', 'reply-more', 'Responder y ver el hilo completo llegará con los comentarios. Próximamente.');
-    replies.append(more);
-
-    toggle.addEventListener('click', () => {
-      const open = replies.hidden;
-      replies.hidden = !open;
-      toggle.setAttribute('aria-expanded', String(open));
-    });
-
-    actions.append(like, toggle);
-    main.append(head, title, excerpt, actions, replies);
-    li.append(avatar(post.author.name), main);
-    return li;
-  }
-
-  async function render() {
-    list.setAttribute('aria-busy', 'true');
-    const posts = await store.listPosts(state);
-    list.replaceChildren(...posts.map(renderPost));
-    if (!posts.length) list.append(el('li', 'post-empty', 'Todavía no hay debates en este tema.'));
-    list.removeAttribute('aria-busy');
-  }
-
-  function bindGroup(selector, attr, key) {
-    const buttons = document.querySelectorAll(selector);
-    buttons.forEach(btn => btn.addEventListener('click', () => {
-      state[key] = btn.dataset[attr];
-      buttons.forEach(b => b.setAttribute('aria-pressed', String(b === btn)));
-      render();
-    }));
-  }
-
-  bindGroup('.forum-toolbar .tab', 'sort', 'sort');
-  bindGroup('#forum-chips .chip', 'cat', 'category');
-
-  // "Teorías" feature card jumps to the feed already filtered.
-  document.querySelectorAll('[data-goto-filter]').forEach(link => {
-    link.addEventListener('click', () => {
-      document.querySelector(`#forum-chips .chip[data-cat="${link.dataset.gotoFilter}"]`)?.click();
-    });
+  const feed = G.createFeed({
+    list,
+    more: document.getElementById('feed-more'),
+    empty: document.getElementById('feed-empty'),
+    filter: (post, q) => !q.category || post.category === q.category,
   });
 
-  render();
+  G.createComposer(document.getElementById('composer'), {
+    onPosted: post => {
+      const q = feed.query;
+      if (q.sort === 'recent' && (!q.category || q.category === post.category)) feed.prepend(post);
+      else feed.set({ sort: 'recent', category: '' }).then(syncControls);
+    },
+  });
+
+  const tabs = document.querySelectorAll('.social-toolbar .tab');
+  const chips = document.querySelectorAll('#feed-chips .chip');
+  function syncControls() {
+    tabs.forEach(t => t.setAttribute('aria-pressed', String(t.dataset.sort === feed.query.sort)));
+    chips.forEach(c => c.setAttribute('aria-pressed', String(c.dataset.cat === (feed.query.category || ''))));
+  }
+  tabs.forEach(t => t.addEventListener('click', () => { feed.set({ sort: t.dataset.sort }); syncControls(); }));
+  chips.forEach(c => c.addEventListener('click', () => { feed.set({ category: c.dataset.cat }); syncControls(); }));
+
+  // Sidebar: who am I
+  const card = document.getElementById('me-card');
+  function renderMe(user) {
+    card.replaceChildren();
+    if (!user) {
+      card.append(
+        G.el('h2', null, 'Únete a la comunidad'),
+        G.el('p', 'side-text', 'Crea tu cuenta gratis para publicar, comentar, dar me gusta y entrar al chat.'),
+      );
+      const actions = G.el('div', 'side-actions');
+      const reg = G.el('button', 'btn btn-primary btn-sm', 'Crear cuenta');
+      reg.type = 'button';
+      reg.dataset.openAuth = 'register';
+      const log = G.el('button', 'btn-link', 'Ya tengo cuenta');
+      log.type = 'button';
+      log.dataset.openAuth = 'login';
+      actions.append(reg, log);
+      card.append(actions);
+      return;
+    }
+    const row = G.el('a', 'me-row');
+    row.href = '/perfil';
+    const info = G.el('div');
+    info.append(G.el('strong', null, user.username), G.el('span', 'me-team', user.team ? G.TEAM[user.team] : 'Sin equipo'));
+    row.append(G.avatar(user.username, user.team, 'avatar-lg'), info);
+    const stats = G.el('dl', 'me-stats');
+    [['Posts', user.stats.posts], ['Coment.', user.stats.comments], ['Me gusta', user.stats.likesReceived]].forEach(([k, v]) => {
+      const d = G.el('div');
+      d.append(G.el('dd', null, G.formatCount(v)), G.el('dt', null, k));
+      stats.append(d);
+    });
+    const link = G.el('a', 'btn btn-outline btn-sm', 'Ver mi perfil');
+    link.href = '/perfil';
+    card.append(row, stats, link);
+  }
+  G.onAuth(user => {
+    renderMe(user);
+    feed.reload();
+  });
+  G.loadMe().then(user => {
+    renderMe(user);
+    feed.reload();
+  });
+
+  // Online counter in the sidebar
+  const socket = G.getSocket();
+  const online = document.getElementById('side-online');
+  if (socket && online) socket.on('chat:online', n => { online.textContent = n; });
 })();

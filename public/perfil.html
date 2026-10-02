@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Tu perfil | Comunidad GTA VI Vice City</title>
+<meta name="description" content="Tu perfil en la comunidad de GTA 6: publicaciones, clips, equipo y estadísticas.">
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#0a0612">
+<link rel="canonical" href="https://gtavivicecity.com/perfil">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_ES">
+<meta property="og:site_name" content="GTA VI Vice City">
+<meta property="og:title" content="Perfil en la comunidad GTA VI">
+<meta property="og:description" content="Tu perfil en la comunidad de GTA 6: publicaciones, clips, equipo y estadísticas.">
+<meta property="og:url" content="https://gtavivicecity.com/perfil">
+<meta property="og:image" content="https://gtavivicecity.com/images/og-comunidad.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Perfil en la comunidad GTA VI">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Perfil en la comunidad GTA VI">
+<meta name="twitter:description" content="Tu perfil en la comunidad de GTA 6: publicaciones, clips, equipo y estadísticas.">
+<meta name="twitter:image" content="https://gtavivicecity.com/images/og-comunidad.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Spray+Paint&family=Bebas+Neue&family=Archivo+Black&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=20261002b">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Inicio",
+      "item": "https://gtavivicecity.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Perfil",
+      "item": "https://gtavivicecity.com/perfil"
+    }
+  ]
+}
+</script>
+</head>
+<body class="page-inner page-perfil">
+
+<a class="skip-link" href="#main">Saltar al contenido</a>
+<div class="noise-overlay"></div>
+<header class="navbar scrolled" id="navbar">
+  <div class="container navbar-inner">
+    <a href="/" class="logo" aria-label="GTA VI Vice City, ir a la portada">GTA<span>VI</span></a>
+    <nav class="nav-links" aria-label="Principal">
+      <a href="/noticias">Noticias</a>
+      <a href="/trailers">Tráilers</a>
+      <a href="/leonida">Leonida</a>
+      <a href="/protagonistas">Protagonistas</a>
+      <a href="/comunidad">Comunidad <span class="nav-tag nav-tag-beta">Beta</span></a>
+      <a href="/clips">Clips</a>
+      <a href="/perfil" class="active" aria-current="page">Perfil</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+<section class="profile-page">
+  <div class="profile-cover" aria-hidden="true"></div>
+  <div class="container profile-wrap">
+    <h1 class="sr-only" id="page-title">Perfil · Comunidad GTA VI</h1>
+
+    <div class="profile-loading" id="profile-loading"><span class="avatar avatar-xl avatar-guest"></span></div>
+
+    <article class="profile-card" id="profile-card" hidden>
+      <div class="pc-top">
+        <div class="pc-avatar" id="pc-avatar"></div>
+        <div class="pc-actions" id="pc-actions"></div>
+      </div>
+      <h2 class="pc-name" id="pc-name"></h2>
+      <div class="pc-meta">
+        <span id="pc-team"></span>
+        <span class="pc-joined" id="pc-joined"></span>
+      </div>
+      <p class="pc-bio" id="pc-bio"></p>
+      <dl class="pc-stats">
+        <div><dt>Posts</dt><dd id="pc-posts">0</dd></div>
+        <div><dt>Comentarios</dt><dd id="pc-comments">0</dd></div>
+        <div><dt>Me gusta</dt><dd id="pc-likes">0</dd></div>
+      </dl>
+      <div class="pc-footer" id="pc-footer"></div>
+    </article>
+
+    <form class="profile-edit" id="profile-edit" hidden novalidate>
+      <h2>Editar perfil</h2>
+      <label class="field">
+        <span>Bio</span>
+        <textarea name="bio" rows="3" maxlength="160" placeholder="Cuéntale a la comunidad quién eres y qué esperas de GTA VI"></textarea>
+        <small><span data-bio-counter>160</span> caracteres disponibles</small>
+      </label>
+      <fieldset class="field">
+        <legend>Tu equipo</legend>
+        <div class="team-pills">
+          <label class="team-pill team-pill-none"><input type="radio" name="team" value=""><span>Sin equipo</span></label>
+          <label class="team-pill team-pill-jason"><input type="radio" name="team" value="jason"><span>Equipo Jason</span></label>
+          <label class="team-pill team-pill-lucia"><input type="radio" name="team" value="lucia"><span>Equipo Lucia</span></label>
+        </div>
+      </fieldset>
+      <p class="composer-error" data-error role="alert"></p>
+      <div class="profile-edit-actions">
+        <button type="button" class="btn btn-outline btn-sm" data-cancel>Cancelar</button>
+        <button type="submit" class="btn btn-primary btn-sm">Guardar cambios</button>
+      </div>
+    </form>
+
+    <div class="profile-auth" id="profile-auth" hidden>
+      <div class="pa-intro">
+        <span class="kicker">Tu perfil</span>
+        <h2 class="block-title">Únete a la <em>comunidad</em></h2>
+        <p>Crea tu cuenta gratis en segundos. Solo necesitas un nombre de usuario y una contraseña.</p>
+        <ul class="pa-perks"><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/><path d="M8 9h8M8 13h5"/></svg>Publica debates y teorías</li><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg>Da me gusta y comenta</li><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 7.5 16 11l5 3.5Z"/><rect x="3" y="6" width="13" height="12" rx="2"/></svg>Comparte clips</li><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><circle cx="16.5" cy="9.5" r="2.6"/><path d="M3.5 19.5c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M15 14.8c2.2.3 3.8 2 4.3 4.7"/></svg>Elige equipo: Jason o Lucia</li></ul>
+      </div>
+      <form class="auth-form pa-form" id="profile-auth-form" novalidate>
+        <div class="auth-tabs" role="tablist">
+          <button type="button" role="tab" class="auth-tab" data-tab="register" aria-selected="true">Crear cuenta</button>
+          <button type="button" role="tab" class="auth-tab" data-tab="login" aria-selected="false">Entrar</button>
+        </div>
+        <label>Usuario<input name="username" type="text" autocomplete="username" maxlength="20" required spellcheck="false" autocapitalize="off"></label>
+        <label>Contraseña<input name="password" type="password" autocomplete="new-password" maxlength="72" required></label>
+        <p class="auth-hint" data-hint>Usuario: 3 a 20 letras, números o guion bajo. Contraseña: mínimo 8 caracteres.</p>
+        <p class="auth-error" role="alert"></p>
+        <button type="submit" class="btn btn-primary auth-submit">Crear cuenta</button>
+      </form>
+    </div>
+
+    <div class="profile-missing" id="profile-missing" hidden>
+      <h2>Usuario no encontrado</h2>
+      <p>Puede que el nombre esté mal escrito o que la cuenta no exista.</p>
+      <a class="btn btn-primary btn-sm" href="/comunidad">Volver a la comunidad</a>
+    </div>
+
+    <section class="profile-posts" id="profile-posts" hidden aria-labelledby="pp-title">
+      <div class="clips-head">
+        <h2 class="block-title" id="pp-title">Publicaciones</h2>
+        <div class="tabs" role="group" aria-label="Filtrar publicaciones">
+          <button type="button" class="tab" data-cat="" aria-pressed="true">Todo</button>
+          <button type="button" class="tab" data-cat="clip" aria-pressed="false">Clips</button>
+        </div>
+      </div>
+      <ol class="post-list" id="profile-feed"></ol>
+      <div class="feed-empty" id="profile-empty" hidden>
+        <svg class="feed-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/><path d="M8 9h8M8 13h5"/></svg>
+        <strong>Sin publicaciones todavía</strong>
+        <p id="profile-empty-text">Cuando publique algo, aparecerá aquí.</p>
+      </div>
+      <button type="button" class="btn btn-outline btn-sm feed-more" id="profile-more" hidden>Cargar más</button>
+    </section>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <a href="/" class="logo" aria-label="GTA VI Vice City, ir a la portada">GTA<span>VI</span></a>
+      <p>Noticias, filtraciones y cuenta regresiva de GTA 6 (Grand Theft Auto VI) en español.</p>
+    </div>
+    <nav class="footer-col" aria-label="Secciones">
+      <h4>Secciones</h4>
+      <a href="/noticias">Noticias de GTA 6</a>
+      <a href="/trailers">Tráilers oficiales</a>
+      <a href="/leonida">Mapa de Leonida</a>
+      <a href="/protagonistas">Jason y Lucia</a>
+    </nav>
+    <nav class="footer-col" aria-label="Comunidad">
+      <h4>Comunidad</h4>
+      <a href="/comunidad">Debates y chat <span class="nav-tag nav-tag-beta">Beta</span></a>
+      <a href="/clips">Clips de la comunidad</a>
+      <a href="/perfil">Tu perfil</a>
+    </nav>
+    <nav class="footer-col" aria-label="Guías">
+      <h4>Guías GTA 6</h4>
+      <a href="/cuando-sale-gta-6">¿Cuándo sale GTA 6?</a>
+      <a href="/gta-6-precio">Precio de GTA 6</a>
+      <a href="/preguntas-frecuentes">Preguntas frecuentes</a>
+    </nav>
+    <nav class="footer-col" aria-label="Fuentes oficiales">
+      <h4>Fuentes oficiales</h4>
+      <a href="https://www.rockstargames.com/newswire" target="_blank" rel="noopener">Rockstar Newswire</a>
+      <a href="https://www.rockstargames.com/VI" target="_blank" rel="noopener">Web oficial de GTA VI</a>
+    </nav>
+  </div>
+  <div class="container footer-bottom">
+    <p>Sitio de fans no oficial. Grand Theft Auto VI es una marca de Rockstar Games. Este sitio no está afiliado ni respaldado por Rockstar Games ni por Take-Two Interactive.</p>
+    <p>&copy; 2026 gtavivicecity.com</p>
+  </div>
+</footer>
+
+<nav class="bottom-nav" aria-label="Menú inferior">
+  <a href="/" class="bn-item"><span class="bn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11.5 12 5l8 6.5"/><path d="M6 10v9.5h4.5V15h3v4.5H18V10"/></svg></span><span class="bn-label">Inicio</span></a>
+  <a href="/noticias" class="bn-item"><span class="bn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h13v14H6a2 2 0 0 1-2-2V5Z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M8 9h5M8 13h5M8 17h3"/></svg></span><span class="bn-label">Noticias</span></a>
+  <a href="/clips" class="bn-item bn-center"><span class="bn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6.5v11l9-5.5-9-5.5Z" fill="currentColor"/></svg></span><span class="bn-label">Clips</span></a>
+  <a href="/comunidad" class="bn-item"><span class="bn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/><path d="M8 9h8M8 13h5"/></svg></span><span class="bn-label">Comunidad</span></a>
+  <a href="/perfil" class="bn-item" aria-current="page"><span class="bn-icon"><span class="bn-avatar" data-nav-avatar><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.8 3.6-6 7-6s6.2 2.2 7 6"/></svg></span></span><span class="bn-label">Perfil</span></a>
+</nav>
+<script src="/script.js?v=20261002b"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/social.js?v=20261002b"></script>
+<script src="/js/perfil.js?v=20261002b"></script>
+</body>
+</html>

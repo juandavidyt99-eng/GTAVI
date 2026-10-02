@@ -63,4 +63,11 @@
     <priority>0.7</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/og-comunidad.jpg</image:loc></image:image>
   </url>
+  <url>
+    <loc>https://gtavivicecity.com/clips</loc>
+    <lastmod>2026-10-02</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+    <image:image><image:loc>https://gtavivicecity.com/images/og-leonida.jpg</image:loc></image:image>
+  </url>
 </urlset>

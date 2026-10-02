@@ -18,4 +18,5 @@ Datos clave confirmados por Rockstar Games:
 - [Tráilers](https://gtavivicecity.com/trailers): Tráiler 1, Tráiler 2 y An Extended Look.
 - [Mapa de Leonida](https://gtavivicecity.com/leonida): Vice City, Leonida Keys, Grassrivers, Port Gellhorn, Ambrosia y Mount Kalaga.
 - [Jason y Lucia](https://gtavivicecity.com/protagonistas): biografías oficiales y reparto confirmado.
-- [Comunidad](https://gtavivicecity.com/comunidad): debates y chat de fans.
+- [Comunidad](https://gtavivicecity.com/comunidad): publicaciones, comentarios, me gusta y chat en vivo de fans.
+- [Clips](https://gtavivicecity.com/clips): clips de YouTube compartidos por la comunidad.

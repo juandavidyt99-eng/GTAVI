@@ -1,10 +1,11 @@
+// Live chat on the community page (shares the account and socket with the feed).
 (() => {
+  const G = window.GTA;
   const $ = id => document.getElementById(id);
+  const section = $('chat');
+  if (!G || !section) return;
+
   const els = {
-    section: $('chat'),
-    card: $('chat-card-text'),
-    cardLink: $('chat-card-link'),
-    heroState: $('hero-chat-state'),
     online: $('online-pill'),
     onlineCount: $('online-count'),
     status: $('chat-status'),
@@ -14,48 +15,19 @@
     input: $('chat-input'),
     spoiler: $('chat-spoiler'),
     send: $('chat-send'),
-    chatError: $('chat-error'),
+    error: $('chat-error'),
     guest: $('chat-guest'),
-    accountGuest: $('account-guest'),
-    accountUser: $('account-user'),
-    accountName: $('account-name'),
-    accountAvatar: $('account-avatar'),
-    logout: $('logout-btn'),
-    dialog: $('auth-dialog'),
-    authTitle: $('auth-title'),
-    authForm: $('auth-form'),
-    authHint: $('auth-hint'),
-    authError: $('auth-error'),
-    authSubmit: $('auth-submit'),
   };
+
+  const socket = G.getSocket();
+  if (!socket) {
+    section.hidden = true;
+    return;
+  }
 
   const MAX_RENDERED = 200;
   const timeFmt = new Intl.DateTimeFormat('es', { hour: '2-digit', minute: '2-digit' });
   const dayFmt = new Intl.DateTimeFormat('es', { day: 'numeric', month: 'short' });
-
-  let socket = null;
-  let me = null;
-  let authMode = 'login';
-
-  async function api(path, body) {
-    const res = await fetch(path, body === undefined
-      ? { credentials: 'same-origin' }
-      : { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.error || 'Error de conexión. Inténtalo de nuevo.');
-    return data;
-  }
-
-  function avatarColor(name) {
-    let hash = 0;
-    for (const ch of name) hash = (hash * 31 + ch.codePointAt(0)) % 360;
-    return `hsl(${hash} 70% 45%)`;
-  }
-
-  function fillAvatar(el, name) {
-    el.textContent = name.charAt(0).toUpperCase();
-    el.style.background = avatarColor(name);
-  }
 
   function formatTime(value) {
     const date = new Date(value);
@@ -70,36 +42,20 @@
 
   function renderMessage(m, { scroll = true } = {}) {
     const stick = isNearBottom();
-    const own = me && m.username.toLowerCase() === me.username.toLowerCase();
+    const own = G.me && m.username.toLowerCase() === G.me.username.toLowerCase();
 
-    const li = document.createElement('li');
-    li.className = own ? 'msg msg-own' : 'msg';
-
-    const avatar = document.createElement('span');
-    avatar.className = 'avatar';
-    fillAvatar(avatar, m.username);
-
-    const body = document.createElement('div');
-    body.className = 'msg-body';
-
-    const head = document.createElement('div');
-    head.className = 'msg-head';
-    const name = document.createElement('strong');
-    name.textContent = m.username;
-    const time = document.createElement('time');
+    const li = G.el('li', own ? 'msg msg-own' : 'msg');
+    const body = G.el('div', 'msg-body');
+    const head = G.el('div', 'msg-head');
+    const name = G.el('a', null, m.username);
+    name.href = `/u/${encodeURIComponent(m.username)}`;
+    const time = G.el('time', null, formatTime(m.createdAt));
     time.dateTime = new Date(m.createdAt).toISOString();
-    time.textContent = formatTime(m.createdAt);
     head.append(name, time);
 
-    const text = document.createElement('p');
-    text.className = 'msg-text';
-    text.textContent = m.content;
-
+    const text = G.el('p', 'msg-text', m.content);
     if (m.spoiler) {
-      const tag = document.createElement('span');
-      tag.className = 'msg-spoiler-tag';
-      tag.textContent = 'Spoiler';
-      head.append(tag);
+      head.append(G.el('span', 'msg-spoiler-tag', 'Spoiler'));
       text.classList.add('spoiler');
       text.tabIndex = 0;
       text.setAttribute('role', 'button');
@@ -115,7 +71,7 @@
     }
 
     body.append(head, text);
-    li.append(avatar, body);
+    li.append(G.avatar(m.username, null), body);
     els.list.append(li);
     els.empty.hidden = true;
 
@@ -123,9 +79,14 @@
     if (scroll && (stick || own)) els.list.scrollTop = els.list.scrollHeight;
   }
 
+  function setStatus(state, label) {
+    els.status.dataset.state = state;
+    els.status.textContent = label;
+  }
+
   async function loadHistory() {
     try {
-      const messages = await api('/api/chat/history');
+      const messages = await G.api('/api/chat/history');
       els.list.replaceChildren();
       messages.forEach(m => renderMessage(m, { scroll: false }));
       els.empty.hidden = messages.length > 0;
@@ -135,156 +96,47 @@
     }
   }
 
-  function setStatus(state, label) {
-    els.status.dataset.state = state;
-    els.status.textContent = label;
-  }
-
-  // Without a database the chat stays hidden and the page keeps working.
-  function showDisabled() {
-    if (socket) socket.disconnect();
-    els.section.hidden = true;
-    els.online.hidden = true;
-    els.cardLink.hidden = true;
-  }
-
-  function showEnabled() {
-    els.section.hidden = false;
-    els.cardLink.hidden = false;
-    els.card.textContent = 'Habla de GTA VI en tiempo real con el resto de la comunidad.';
-    const label = els.heroState.lastChild;
-    if (label && label.nodeType === Node.TEXT_NODE) label.textContent = 'Chat en vivo: abierto';
-  }
-
-  function connect() {
-    if (socket) socket.disconnect();
-    setStatus('connecting', 'Conectando…');
-    socket = io();
-    socket.on('connect', () => {
-      setStatus('live', 'En vivo');
-      loadHistory();
-    });
-    socket.on('disconnect', () => setStatus('connecting', 'Reconectando…'));
-    socket.on('connect_error', err => {
-      if (err.message === 'disabled') showDisabled();
-      else setStatus('offline', 'Sin conexión');
-    });
-    socket.on('chat:message', m => renderMessage(m));
-    socket.on('chat:online', count => {
-      els.onlineCount.textContent = count;
-      els.online.hidden = false;
-    });
-  }
-
-  function updateAccountUI() {
-    const logged = Boolean(me);
-    els.composer.hidden = !logged;
-    els.guest.hidden = logged;
-    els.accountGuest.hidden = logged;
-    els.accountUser.hidden = !logged;
-    if (logged) {
-      els.accountName.textContent = me.username;
-      fillAvatar(els.accountAvatar, me.username);
-    }
-  }
-
-  function setAuthMode(mode) {
-    authMode = mode;
-    const register = mode === 'register';
-    els.dialog.querySelectorAll('.auth-tab').forEach(tab => {
-      const active = tab.dataset.tab === mode;
-      tab.classList.toggle('active', active);
-      tab.setAttribute('aria-selected', String(active));
-    });
-    els.authTitle.textContent = register ? 'Crear cuenta' : 'Entrar';
-    els.authSubmit.textContent = register ? 'Crear cuenta' : 'Entrar';
-    els.authHint.hidden = !register;
-    els.authForm.password.autocomplete = register ? 'new-password' : 'current-password';
-    els.authError.textContent = '';
-  }
-
-  function openAuth(mode) {
-    setAuthMode(mode);
-    els.authForm.reset();
-    els.dialog.showModal();
-    els.authForm.username.focus();
-  }
-
-  document.querySelectorAll('[data-open-auth]').forEach(btn => {
-    btn.addEventListener('click', () => openAuth(btn.dataset.openAuth));
+  socket.on('connect', () => {
+    setStatus('live', 'En vivo');
+    loadHistory();
   });
-  els.dialog.querySelectorAll('.auth-tab').forEach(tab => {
-    tab.addEventListener('click', () => setAuthMode(tab.dataset.tab));
+  socket.on('disconnect', () => setStatus('connecting', 'Reconectando…'));
+  socket.on('connect_error', err => {
+    if (err.message === 'disabled') section.hidden = true;
+    else setStatus('offline', 'Sin conexión');
   });
-  els.dialog.addEventListener('click', e => {
-    if (e.target === els.dialog) els.dialog.close();
+  socket.on('chat:message', m => renderMessage(m));
+  socket.on('chat:online', count => {
+    els.onlineCount.textContent = count;
+    els.online.hidden = false;
   });
+  if (socket.connected) {
+    setStatus('live', 'En vivo');
+    loadHistory();
+  }
 
-  els.authForm.addEventListener('submit', async e => {
-    e.preventDefault();
-    els.authError.textContent = '';
-    els.authSubmit.disabled = true;
-    try {
-      const { user } = await api(`/api/auth/${authMode}`, {
-        username: els.authForm.username.value.trim(),
-        password: els.authForm.password.value,
-      });
-      me = user;
-      els.dialog.close();
-      updateAccountUI();
-      connect();
-      els.input.focus();
-    } catch (err) {
-      els.authError.textContent = err.message;
-    } finally {
-      els.authSubmit.disabled = false;
-    }
-  });
-
-  els.logout.addEventListener('click', async () => {
-    try {
-      await api('/api/auth/logout', {});
-    } finally {
-      me = null;
-      updateAccountUI();
-      connect();
-    }
-  });
+  function updateAccount(user) {
+    els.composer.hidden = !user;
+    els.guest.hidden = Boolean(user);
+  }
+  G.onAuth(updateAccount);
+  G.loadMe().then(updateAccount);
 
   els.composer.addEventListener('submit', e => {
     e.preventDefault();
     const text = els.input.value.trim();
-    if (!text || !socket) return;
+    if (!text) return;
     els.send.disabled = true;
-    els.chatError.textContent = '';
+    els.error.textContent = '';
     socket.timeout(8000).emit('chat:send', { text, spoiler: els.spoiler.checked }, (err, res) => {
       els.send.disabled = false;
-      if (err) {
-        els.chatError.textContent = 'No se pudo enviar. Revisa tu conexión.';
-      } else if (res && res.error) {
-        els.chatError.textContent = res.error;
-      } else {
+      if (err) els.error.textContent = 'No se pudo enviar. Revisa tu conexión.';
+      else if (res && res.error) els.error.textContent = res.error;
+      else {
         els.input.value = '';
         els.spoiler.checked = false;
       }
       els.input.focus();
     });
   });
-
-  async function init() {
-    let status = { enabled: false };
-    try {
-      status = await api('/api/chat/status');
-    } catch {
-      // Treated as disabled below.
-    }
-    if (!status.enabled || typeof io === 'undefined') return showDisabled();
-
-    me = status.user;
-    showEnabled();
-    updateAccountUI();
-    connect();
-  }
-
-  init();
 })();

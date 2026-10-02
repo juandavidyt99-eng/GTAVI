@@ -1,12 +1,15 @@
 const http = require('http');
 const path = require('path');
 const crypto = require('crypto');
+const { EventEmitter } = require('events');
 const express = require('express');
 const compression = require('compression');
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const { createStore } = require('./chat/store');
 const { createChatRouter } = require('./chat/routes');
+const { createSocialRouter } = require('./chat/social');
+const { JsonSessionStore } = require('./chat/session-store');
 const { attachChatSocket } = require('./chat/socket');
 
 const PORT = process.env.PORT || 3000;
@@ -16,18 +19,24 @@ async function main() {
   const store = await createStore();
   const getStore = () => store;
 
+  // Without SESSION_SECRET, generate one once and keep it, so sessions survive restarts.
   let secret = process.env.SESSION_SECRET;
   if (!secret) {
-    secret = crypto.randomBytes(32).toString('hex');
-    if (store) console.warn('[chat] SESSION_SECRET is not set: users will be logged out on every restart.');
+    secret = await store.getMeta('session_secret');
+    if (!secret) {
+      secret = crypto.randomBytes(32).toString('hex');
+      await store.setMeta('session_secret', secret);
+    }
   }
+
+  let sessionStore;
+  if (store.kind === 'mysql') sessionStore = new MySQLStore({ expiration: THIRTY_DAYS, endConnectionOnClose: false }, store.pool);
+  else if (store.kind === 'file') sessionStore = new JsonSessionStore(store);
 
   const sessionMiddleware = session({
     name: 'gtavi.sid',
     secret,
-    store: store && store.kind === 'mysql'
-      ? new MySQLStore({ expiration: THIRTY_DAYS, endConnectionOnClose: false }, store.pool)
-      : undefined,
+    store: sessionStore,
     resave: false,
     saveUninitialized: false,
     cookie: { httpOnly: true, sameSite: 'lax', secure: 'auto', maxAge: THIRTY_DAYS },
@@ -61,13 +70,33 @@ async function main() {
     next();
   });
 
-  app.use('/api', sessionMiddleware, createChatRouter(getStore));
+  // Reject cross-site writes: browsers always send Origin on POST/PATCH/DELETE.
+  const sameOriginWrites = (req, res, next) => {
+    if (req.method === 'GET' || req.method === 'HEAD') return next();
+    const origin = req.headers.origin;
+    if (origin) {
+      try {
+        if (new URL(origin).host === req.headers.host) return next();
+      } catch { /* invalid origin */ }
+      return res.status(403).json({ error: 'Origen no permitido.' });
+    }
+    next();
+  };
+
+  const bus = new EventEmitter();
+  app.use('/api', sessionMiddleware, sameOriginWrites, createChatRouter(getStore), createSocialRouter(getStore, bus));
   app.use('/api', (req, res) => res.status(404).json({ error: 'No encontrado.' }));
 
   const publicDir = path.join(__dirname, 'public');
 
   const notFound = (req, res) => res.status(404).sendFile(path.join(publicDir, '404.html'));
   app.get(['/404', '/404.html'], notFound);
+
+  // Public profiles share the profile page; the script reads the username from the URL.
+  app.get('/u/:username', (req, res, next) => {
+    if (!/^[A-Za-z0-9_]{3,20}$/.test(req.params.username)) return next();
+    res.set('Cache-Control', 'no-cache').sendFile(path.join(publicDir, 'perfil.html'));
+  });
 
   // Clean URLs: /noticias.html -> /noticias, /index.html -> /
   app.get(/^\/(.+)\.html$/, (req, res) => {
@@ -92,10 +121,10 @@ async function main() {
   app.use(notFound);
 
   const server = http.createServer(app);
-  attachChatSocket(server, sessionMiddleware, getStore);
+  attachChatSocket(server, sessionMiddleware, getStore, bus);
 
   server.listen(PORT, () => {
-    console.log(`GTA VI site running on port ${PORT} (chat: ${store ? store.kind : 'disabled'})`);
+    console.log(`GTA VI site running on port ${PORT} (community store: ${store.kind})`);
   });
 }
 

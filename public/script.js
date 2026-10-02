@@ -171,3 +171,30 @@ if ('IntersectionObserver' in window) {
     observer.observe(el);
   });
 }
+
+// Account state for the menus: the bottom bar shows your initial when you're logged in.
+if (document.querySelector('[data-nav-avatar]')) {
+  window.GTA_ME = window.GTA_ME || fetch('/api/me', { credentials: 'same-origin' })
+    .then(res => (res.ok ? res.json() : null))
+    .catch(() => null);
+
+  window.GTANav = {
+    render(user) {
+      document.querySelectorAll('[data-nav-avatar]').forEach(slot => {
+        if (!slot.dataset.icon) slot.dataset.icon = slot.innerHTML;
+        if (user) {
+          let hue = 0;
+          for (const ch of user.username) hue = (hue * 31 + ch.codePointAt(0)) % 360;
+          slot.textContent = user.username.charAt(0).toUpperCase();
+          slot.style.background = `linear-gradient(135deg, hsl(${hue} 75% 52%), hsl(${(hue + 50) % 360} 70% 38%))`;
+          slot.classList.add('has-user');
+        } else {
+          slot.innerHTML = slot.dataset.icon;
+          slot.style.background = '';
+          slot.classList.remove('has-user');
+        }
+      });
+    },
+  };
+  window.GTA_ME.then(data => window.GTANav.render(data && data.user));
+}
