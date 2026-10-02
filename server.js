@@ -2,6 +2,7 @@ const http = require('http');
 const path = require('path');
 const crypto = require('crypto');
 const express = require('express');
+const compression = require('compression');
 const session = require('express-session');
 const MySQLStore = require('express-mysql-session')(session);
 const { createStore } = require('./chat/store');
@@ -36,6 +37,30 @@ async function main() {
   app.set('trust proxy', 1);
   app.disable('x-powered-by');
 
+  // One canonical URL per page: no "www." and no trailing slash.
+  app.use((req, res, next) => {
+    const host = req.headers.host || '';
+    if (host.startsWith('www.')) {
+      return res.redirect(301, `https://${host.slice(4)}${req.originalUrl}`);
+    }
+    if (req.path.length > 1 && req.path.endsWith('/') && !req.path.startsWith('/api/')) {
+      const query = req.originalUrl.slice(req.path.length);
+      // Collapse leading slashes too, so "//host/" can't become an off-site redirect.
+      return res.redirect(301, '/' + req.path.replace(/^\/+|\/+$/g, '') + query);
+    }
+    next();
+  });
+
+  app.use(compression());
+  app.use((req, res, next) => {
+    res.set({
+      'X-Content-Type-Options': 'nosniff',
+      'Referrer-Policy': 'strict-origin-when-cross-origin',
+      'X-Frame-Options': 'SAMEORIGIN',
+    });
+    next();
+  });
+
   app.use('/api', sessionMiddleware, createChatRouter(getStore));
   app.use('/api', (req, res) => res.status(404).json({ error: 'No encontrado.' }));
 
@@ -46,12 +71,24 @@ async function main() {
 
   // Clean URLs: /noticias.html -> /noticias, /index.html -> /
   app.get(/^\/(.+)\.html$/, (req, res) => {
-    const name = req.params[0];
+    const name = req.params[0].replace(/^\/+/, '');
     const query = req.originalUrl.slice(req.path.length);
     res.redirect(301, (name === 'index' ? '/' : `/${name}`) + query);
   });
 
-  app.use(express.static(publicDir, { extensions: ['html'] }));
+  // HTML always revalidates; CSS/JS are versioned (?v=) and images rarely change.
+  app.use(express.static(publicDir, {
+    extensions: ['html'],
+    setHeaders(res, filePath) {
+      if (/\.html$/.test(filePath)) {
+        res.setHeader('Cache-Control', 'no-cache');
+      } else if (/\.(css|js)$/.test(filePath)) {
+        res.setHeader('Cache-Control', 'public, max-age=2592000');
+      } else if (/\.(jpe?g|png|webp|avif|svg|ico)$/.test(filePath)) {
+        res.setHeader('Cache-Control', 'public, max-age=604800');
+      }
+    },
+  }));
   app.use(notFound);
 
   const server = http.createServer(app);

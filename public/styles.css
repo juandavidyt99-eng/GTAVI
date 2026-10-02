@@ -3137,3 +3137,210 @@ button:focus-visible,
     background: linear-gradient(0deg, var(--bg-dark) 0%, rgba(10,6,18,0.9) 50%, rgba(10,6,18,0.75) 100%);
   }
 }
+
+/* =========================================================
+   SEO guide pages (cuándo sale, precio, preguntas frecuentes)
+   ========================================================= */
+.page-inner .footer-grid { grid-template-columns: 1.4fr repeat(4, 1fr); gap: 32px; }
+
+.guide-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+.guide-strip a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.03);
+  color: var(--text-light);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+.guide-strip a:hover { border-color: rgba(0,229,255,0.45); background: rgba(0,229,255,0.06); }
+.guide-strip .icon { color: var(--cyan); }
+
+.guide-block { padding-top: 56px; }
+.guide-layout { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 48px; align-items: start; }
+.guide { display: flex; flex-direction: column; gap: 8px; max-width: 780px; }
+.guide-updated { font-size: 13px; line-height: 1.6; color: var(--text-muted); }
+.guide-updated .icon { width: 16px; height: 16px; margin-right: 6px; vertical-align: -3px; color: var(--pink); }
+
+.answer-box {
+  margin: 14px 0 18px;
+  padding: 24px 26px;
+  border: 1px solid rgba(0,229,255,0.35);
+  border-left: 4px solid var(--cyan);
+  border-radius: 16px;
+  background: linear-gradient(90deg, rgba(0,229,255,0.08), rgba(0,229,255,0.02));
+}
+.answer-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+  color: var(--cyan);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.answer-box p { font-size: clamp(16px, 1.8vw, 19px); line-height: 1.6; }
+
+.guide-section { padding-top: 28px; scroll-margin-top: 96px; }
+.guide-section h2 {
+  margin-bottom: 14px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: 400;
+  font-size: clamp(32px, 3.6vw, 44px);
+  line-height: 1;
+  letter-spacing: 0.5px;
+}
+.guide-section > p { margin-bottom: 14px; font-size: 16px; line-height: 1.8; color: #d6cbe3; }
+.guide-section a:not(.btn) { color: var(--cyan); font-weight: 600; text-decoration: none; }
+.guide-section a:not(.btn):hover { text-decoration: underline; }
+
+.guide-countdown {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 8px 0 6px;
+}
+.gc-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 20px 8px 16px;
+  border: 1px solid rgba(255,46,166,0.3);
+  border-radius: 16px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255,46,166,0.18), transparent 70%), var(--surface);
+}
+.gc-value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 7vw, 64px);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(180deg, #fff, #ffb3dd);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.gc-label { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); }
+
+.table-wrap { margin-bottom: 14px; overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; }
+.guide-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.guide-table th, .guide-table td { padding: 14px 16px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; line-height: 1.5; }
+.guide-table thead th { background: rgba(255,255,255,0.04); font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+.guide-table tbody tr:last-child th, .guide-table tbody tr:last-child td { border-bottom: 0; }
+.guide-table tbody th { font-weight: 700; white-space: nowrap; }
+.guide-table td { color: #d6cbe3; }
+.status { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; }
+.status-ok { background: rgba(61,220,132,0.14); color: #3ddc84; }
+.status-no { background: rgba(255,255,255,0.08); color: var(--text-muted); }
+
+.timeline { position: relative; display: flex; flex-direction: column; gap: 4px; margin: 8px 0 14px; list-style: none; }
+.timeline::before { content: ''; position: absolute; top: 8px; bottom: 8px; left: 7px; width: 2px; background: linear-gradient(var(--pink), var(--purple), var(--cyan)); opacity: 0.5; }
+.tl-item { position: relative; display: grid; grid-template-columns: 120px 1fr; gap: 16px; padding: 12px 0 12px 32px; }
+.tl-item::before { content: ''; position: absolute; top: 17px; left: 1px; width: 14px; height: 14px; border: 2px solid var(--pink); border-radius: 50%; background: var(--bg-dark); }
+.tl-launch::before { background: var(--pink); box-shadow: 0 0 0 5px rgba(255,46,166,0.2); }
+.tl-item time { padding-top: 2px; font-size: 13px; font-weight: 700; color: var(--pink); }
+.tl-item strong { font-size: 16px; }
+.tl-item p { margin-top: 2px; font-size: 14px; line-height: 1.6; color: var(--text-muted); }
+.tl-item a { font-size: 12px; white-space: nowrap; }
+.tl-item a .icon-ext { width: 12px; height: 12px; vertical-align: -1px; }
+
+.faq-list { display: flex; flex-direction: column; gap: 10px; }
+.faq-item { border: 1px solid var(--line); border-radius: 14px; background: var(--surface); transition: border-color 0.2s; }
+.faq-item[open] { border-color: rgba(255,46,166,0.4); }
+.faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 56px;
+  padding: 14px 20px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  list-style: none;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: '+';
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  color: var(--pink);
+  font-size: 20px;
+  font-weight: 400;
+  transition: transform 0.2s;
+}
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-item summary:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; border-radius: 14px; }
+.faq-answer { padding: 0 20px 18px; }
+.faq-answer p { font-size: 15px; line-height: 1.7; color: #d6cbe3; }
+.faq-answer a { color: var(--cyan); font-weight: 600; text-decoration: none; }
+.faq-answer a:hover { text-decoration: underline; }
+
+.guide-sources ul { display: flex; flex-direction: column; gap: 4px; list-style: none; }
+.guide-sources a { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; font-size: 14px; }
+
+.guide-toc {
+  position: sticky;
+  top: 96px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+}
+.guide-toc-title { margin-bottom: 10px; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); }
+.guide-toc ol { display: flex; flex-direction: column; gap: 2px; list-style: none; counter-reset: toc; }
+.guide-toc li { counter-increment: toc; }
+.guide-toc a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+  padding: 0 10px;
+  border-radius: 10px;
+  color: var(--text-light);
+  font-size: 14px;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.guide-toc a::before { content: counter(toc, decimal-leading-zero); font-family: 'Bebas Neue', sans-serif; font-size: 16px; color: var(--pink); }
+.guide-toc a:hover { background: rgba(255,255,255,0.05); color: var(--pink); }
+
+@media (max-width: 1100px) {
+  .page-inner .footer-grid { grid-template-columns: repeat(4, 1fr); }
+  .page-inner .footer-brand { grid-column: 1 / -1; }
+}
+
+@media (max-width: 900px) {
+  .page-inner .footer-grid { grid-template-columns: 1fr 1fr; }
+  .guide-layout { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .guide-toc { display: none; }
+}
+
+@media (max-width: 560px) {
+  .guide-countdown { gap: 6px; }
+  .gc-unit { padding: 14px 4px 12px; border-radius: 12px; }
+  .gc-label { font-size: 9px; letter-spacing: 1px; }
+  .answer-box { padding: 18px; }
+  .tl-item { grid-template-columns: 1fr; gap: 2px; }
+  .guide-table th, .guide-table td { padding: 12px; }
+  .faq-item summary { padding: 12px 16px; font-size: 15px; }
+  .faq-answer { padding: 0 16px 16px; }
+}
