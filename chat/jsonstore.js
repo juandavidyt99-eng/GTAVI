@@ -14,6 +14,7 @@ function createJsonStore(filePath) {
     seq: { user: 0, message: 0, post: 0, comment: 0 },
     users: new Map(),          // id -> user
     usersByName: new Map(),    // lowercase username -> user
+    usersByGoogle: new Map(),  // Google account id -> user
     messages: [],
     messageIndex: new Map(),   // id -> message
     reactions: new Map(),      // messageId -> Map(emoji -> Set(userId))
@@ -33,6 +34,7 @@ function createJsonStore(filePath) {
     for (const u of raw.users || []) {
       state.users.set(u.id, u);
       state.usersByName.set(u.username.toLowerCase(), u);
+      if (u.google_id) state.usersByGoogle.set(u.google_id, u);
     }
     // Older files stored messages as { username, createdAt }: map them to the current shape.
     state.messages = (raw.messages || []).map(m => ({
@@ -183,6 +185,23 @@ function createJsonStore(filePath) {
       const user = { id: ++state.seq.user, username, password_hash: passwordHash, created_at: now(), bio: '', team: null };
       state.users.set(user.id, user);
       state.usersByName.set(key, user);
+      save();
+      return { id: user.id, username };
+    },
+    async findUserByGoogleId(googleId) {
+      return state.usersByGoogle.get(googleId) || null;
+    },
+    async createGoogleUser(username, googleId, passwordHash) {
+      const key = username.toLowerCase();
+      if (state.usersByName.has(key) || state.usersByGoogle.has(googleId)) {
+        const err = new Error('duplicate');
+        err.code = 'ER_DUP_ENTRY';
+        throw err;
+      }
+      const user = { id: ++state.seq.user, username, password_hash: passwordHash, google_id: googleId, created_at: now(), bio: '', team: null };
+      state.users.set(user.id, user);
+      state.usersByName.set(key, user);
+      state.usersByGoogle.set(googleId, user);
       save();
       return { id: user.id, username };
     },

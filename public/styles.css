@@ -4937,3 +4937,16 @@ body.page-chat .site-footer { display: none; }
   .hm-tile { min-height: 400px; }
   .hm-tile-body { padding: 22px; }
 }
+
+/* "Continuar con Google" in the sign-in dialog */
+.auth-google {
+  display: flex; align-items: center; justify-content: center; gap: 12px; width: 100%; min-height: 48px; padding: 0 18px;
+  border-radius: 999px; border: 1px solid #dadce0; background: #fff; color: #1f1f1f;
+  font-size: 15px; font-weight: 600; text-decoration: none; transition: background 0.2s, box-shadow 0.2s;
+}
+.auth-google:hover { background: #f2f2f2; box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
+.auth-google:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+.auth-google[hidden], .auth-or[hidden] { display: none; }
+.auth-google-g { width: 20px; height: 20px; flex: none; }
+.auth-or { display: flex; align-items: center; gap: 12px; margin: 16px 0; font-size: 12px; color: var(--text-muted); }
+.auth-or::before, .auth-or::after { content: ''; flex: 1; height: 1px; background: var(--line); }

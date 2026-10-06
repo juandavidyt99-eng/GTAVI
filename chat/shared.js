@@ -21,6 +21,14 @@ const admins = new Set((process.env.ADMIN_USERS || '')
   .split(',').map(s => s.trim().toLowerCase()).filter(Boolean));
 const isAdminName = name => Boolean(name && admins.has(String(name).toLowerCase()));
 
+// "Entrar con Google" is on only when both credentials are set in the environment.
+function googleConfig() {
+  const id = process.env.GOOGLE_CLIENT_ID;
+  const secret = process.env.GOOGLE_CLIENT_SECRET;
+  if (!id || !secret) return null;
+  return { id, secret, redirectUri: process.env.GOOGLE_REDIRECT_URI || 'https://gtavivicecity.com/api/auth/google/callback' };
+}
+
 // "Hot" ranking: engagement that decays with age (like Hacker News).
 function hotScore(post, nowMs) {
   const ageHours = (nowMs - new Date(post.created_at).getTime()) / 3.6e6;
@@ -70,5 +78,5 @@ function youtubeId(input) {
 
 module.exports = {
   HISTORY_LIMIT, CHAT_TEXT_MAX, EDIT_WINDOW_MS, REACTIONS, REPORT_REASONS,
-  dataDir, isAdminName, hotScore, cleanLine, cleanMultiline, youtubeId,
+  dataDir, isAdminName, googleConfig, hotScore, cleanLine, cleanMultiline, youtubeId,
 };

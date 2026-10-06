@@ -1,7 +1,7 @@
 // Community API: posts, likes, comments and profiles.
 const express = require('express');
 const { createLimiter } = require('./limits');
-const { cleanLine, cleanMultiline, youtubeId, isAdminName } = require('./shared');
+const { cleanLine, cleanMultiline, youtubeId, isAdminName, googleConfig } = require('./shared');
 
 const CATEGORIES = ['debate', 'teoria', 'leonida', 'noticias', 'clip'];
 const TEAMS = ['jason', 'lucia'];
@@ -56,7 +56,7 @@ function createSocialRouter(getStore, bus) {
     const user = currentUser(req);
     const profile = user ? await getStore().getProfile(user.username) : null;
     if (profile) delete profile.id;
-    res.json({ enabled: true, user: profile, admin: isAdmin(user) });
+    res.json({ enabled: true, user: profile, admin: isAdmin(user), google: Boolean(googleConfig()) });
   }));
 
   router.patch('/me', requireUser, wrap(async (req, res) => {

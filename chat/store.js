@@ -43,6 +43,14 @@ async function createMysqlStore(config) {
     if (!have.has(name)) await pool.query(`ALTER TABLE messages ADD COLUMN ${name} ${def}`);
   }
 
+  // Accounts created before "Entrar con Google" need the column that links them to Google.
+  const [userCols] = await pool.query(
+    "SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'users'"
+  );
+  if (!userCols.some(c => c.COLUMN_NAME === 'google_id')) {
+    await pool.query('ALTER TABLE users ADD COLUMN google_id VARCHAR(64) NULL, ADD UNIQUE KEY uq_users_google (google_id)');
+  }
+
   const toPost = r => ({
     id: r.id,
     userId: r.user_id,
@@ -156,6 +164,15 @@ async function createMysqlStore(config) {
     },
     async createUser(username, passwordHash) {
       const [result] = await pool.query('INSERT INTO users (username, password_hash) VALUES (?, ?)', [username, passwordHash]);
+      return { id: result.insertId, username };
+    },
+    async findUserByGoogleId(googleId) {
+      const [rows] = await pool.query('SELECT id, username FROM users WHERE google_id = ?', [googleId]);
+      return rows[0] || null;
+    },
+    async createGoogleUser(username, googleId, passwordHash) {
+      const [result] = await pool.query(
+        'INSERT INTO users (username, password_hash, google_id) VALUES (?, ?, ?)', [username, passwordHash, googleId]);
       return { id: result.insertId, username };
     },
     async getProfile(username) {
