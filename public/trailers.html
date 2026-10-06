@@ -7,6 +7,7 @@
 <meta name="description" content="Mira todos los tráilers oficiales de GTA 6: Tráiler 1, Tráiler 2 y el Extended Look con 26 minutos de juego, con fechas y las claves de cada vídeo.">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 <meta name="theme-color" content="#0a0612">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="canonical" href="https://gtavivicecity.com/trailers">
 <link rel="alternate" hreflang="es" href="https://gtavivicecity.com/trailers">
 <link rel="alternate" hreflang="x-default" href="https://gtavivicecity.com/trailers">
@@ -34,7 +35,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik+Spray+Paint&family=Bebas+Neue&family=Archivo+Black&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=20261006b">
+<link rel="stylesheet" href="/styles.css?v=20261006c">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -61,7 +62,10 @@
   "@type": "VideoObject",
   "name": "Grand Theft Auto VI: An Extended Look",
   "description": "Un vistazo extendido al juego: conducción, combate, misiones y el cambio entre Jason y Lucia en plena acción.",
-  "thumbnailUrl": "https://i.ytimg.com/vi/tJbzMqJGH4k/hqdefault.jpg",
+  "thumbnailUrl": [
+    "https://gtavivicecity.com/images/news/oficial/extended-look-1280.webp",
+    "https://i.ytimg.com/vi/tJbzMqJGH4k/hqdefault.jpg"
+  ],
   "uploadDate": "2026-08-27",
   "embedUrl": "https://www.youtube.com/embed/tJbzMqJGH4k",
   "contentUrl": "https://www.youtube.com/watch?v=tJbzMqJGH4k",
@@ -77,7 +81,10 @@
   "@type": "VideoObject",
   "name": "Grand Theft Auto VI: Tráiler 2",
   "description": "Jason y Lucia, en el lado más oscuro del lugar más soleado de Estados Unidos, atrapados en una conspiración criminal que recorre Leonida.",
-  "thumbnailUrl": "https://i.ytimg.com/vi/VQRLujxTm3c/hqdefault.jpg",
+  "thumbnailUrl": [
+    "https://gtavivicecity.com/images/news/oficial/trailer-2-1280.webp",
+    "https://i.ytimg.com/vi/VQRLujxTm3c/hqdefault.jpg"
+  ],
   "uploadDate": "2025-05-06",
   "embedUrl": "https://www.youtube.com/embed/VQRLujxTm3c",
   "contentUrl": "https://www.youtube.com/watch?v=VQRLujxTm3c",
@@ -93,7 +100,10 @@
   "@type": "VideoObject",
   "name": "Grand Theft Auto VI: Tráiler 1",
   "description": "La presentación de GTA VI: el regreso a Vice City y el estado de Leonida, con Lucia como protagonista.",
-  "thumbnailUrl": "https://i.ytimg.com/vi/QdBZY2fkU-0/hqdefault.jpg",
+  "thumbnailUrl": [
+    "https://gtavivicecity.com/images/news/oficial/trailer-1-1280.webp",
+    "https://i.ytimg.com/vi/QdBZY2fkU-0/hqdefault.jpg"
+  ],
   "uploadDate": "2023-12-04",
   "embedUrl": "https://www.youtube.com/embed/QdBZY2fkU-0",
   "contentUrl": "https://www.youtube.com/watch?v=QdBZY2fkU-0",
@@ -142,9 +152,9 @@
     <h2 class="sr-only" id="cine-title">Reproductor de tráilers</h2>
     <div class="theater">
       <div class="theater-main">
-        <div class="theater-stage" id="theater-stage">
+        <div class="theater-stage" id="theater-stage" data-player-stage>
           <button class="video-card" id="theater-card" data-video-id="tJbzMqJGH4k" aria-label="Reproducir An Extended Look">
-            <img id="theater-thumb" data-yt-thumb="tJbzMqJGH4k" alt="Portada de An Extended Look" width="1280" height="720" decoding="async">
+            <img id="theater-thumb" src="/images/news/oficial/extended-look-1280.webp" alt="Portada de An Extended Look" width="1280" height="720" fetchpriority="high" decoding="async">
             <span class="play-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
             <span class="video-badge" id="theater-badge">Gameplay · 26 min</span>
           </button>
@@ -154,7 +164,7 @@
           <div>
             <h3 id="theater-title">An Extended Look</h3>
             <p class="theater-desc" id="theater-desc">Un vistazo extendido al juego: conducción, combate, misiones y el cambio entre Jason y Lucia en plena acción.</p>
-            <p class="video-meta"><time id="theater-date" datetime="2026-08-27">27 ago 2026</time> · <a id="theater-yt" href="https://www.youtube.com/watch?v=tJbzMqJGH4k" target="_blank" rel="noopener">Ver en YouTube</a></p>
+            <p class="video-meta"><time id="theater-date" datetime="2026-08-27">27 ago 2026</time> · <a id="theater-yt" href="https://www.youtube.com/watch?v=tJbzMqJGH4k" target="_blank" rel="noopener">¿No se reproduce? Ver en YouTube</a></p>
           </div>
         </div>
       </div>
@@ -163,26 +173,26 @@
         <ol class="playlist" id="playlist">
         <li>
           <button type="button" class="pl-item" data-index="0" aria-current="true" aria-label="Ver An Extended Look">
-            <span class="pl-thumb"><img data-yt-thumb="tJbzMqJGH4k" alt="" width="480" height="270" loading="lazy" decoding="async"><span class="pl-now">Viendo</span></span>
+            <span class="pl-thumb"><img src="/images/news/oficial/extended-look-800.webp" alt="" width="800" height="450" loading="lazy" decoding="async"><span class="pl-now">Viendo</span></span>
             <span class="pl-text"><span class="pl-num">01</span><strong>An Extended Look</strong><span>27 ago 2026 · 26 min</span></span>
           </button>
         </li>
         <li>
           <button type="button" class="pl-item" data-index="1" aria-current="false" aria-label="Ver Tráiler 2">
-            <span class="pl-thumb"><img data-yt-thumb="VQRLujxTm3c" alt="" width="480" height="270" loading="lazy" decoding="async"><span class="pl-now">Viendo</span></span>
+            <span class="pl-thumb"><img src="/images/news/oficial/trailer-2-800.webp" alt="" width="800" height="450" loading="lazy" decoding="async"><span class="pl-now">Viendo</span></span>
             <span class="pl-text"><span class="pl-num">02</span><strong>Tráiler 2</strong><span>6 may 2025</span></span>
           </button>
         </li>
         <li>
           <button type="button" class="pl-item" data-index="2" aria-current="false" aria-label="Ver Tráiler 1">
-            <span class="pl-thumb"><img data-yt-thumb="QdBZY2fkU-0" alt="" width="480" height="270" loading="lazy" decoding="async"><span class="pl-now">Viendo</span></span>
+            <span class="pl-thumb"><img src="/images/news/oficial/trailer-1-800.webp" alt="" width="800" height="450" loading="lazy" decoding="async"><span class="pl-now">Viendo</span></span>
             <span class="pl-text"><span class="pl-num">03</span><strong>Tráiler 1</strong><span>4 dic 2023</span></span>
           </button>
         </li>
         </ol>
       </aside>
     </div>
-    <script type="application/json" id="trailer-data">[{"id": "tJbzMqJGH4k", "num": "01", "title": "An Extended Look", "kind": "Gameplay", "length": "26 min", "date": "2026-08-27", "date_h": "27 ago 2026", "desc": "Un vistazo extendido al juego: conducción, combate, misiones y el cambio entre Jason y Lucia en plena acción."}, {"id": "VQRLujxTm3c", "num": "02", "title": "Tráiler 2", "kind": "Tráiler", "length": "", "date": "2025-05-06", "date_h": "6 may 2025", "desc": "Jason y Lucia, en el lado más oscuro del lugar más soleado de Estados Unidos, atrapados en una conspiración criminal que recorre Leonida."}, {"id": "QdBZY2fkU-0", "num": "03", "title": "Tráiler 1", "kind": "Tráiler", "length": "", "date": "2023-12-04", "date_h": "4 dic 2023", "desc": "La presentación de GTA VI: el regreso a Vice City y el estado de Leonida, con Lucia como protagonista."}]</script>
+    <script type="application/json" id="trailer-data">[{"id": "tJbzMqJGH4k", "num": "01", "title": "An Extended Look", "kind": "Gameplay", "length": "26 min", "date": "2026-08-27", "date_h": "27 ago 2026", "desc": "Un vistazo extendido al juego: conducción, combate, misiones y el cambio entre Jason y Lucia en plena acción.", "poster": "/images/news/oficial/extended-look-1280.webp"}, {"id": "VQRLujxTm3c", "num": "02", "title": "Tráiler 2", "kind": "Tráiler", "length": "", "date": "2025-05-06", "date_h": "6 may 2025", "desc": "Jason y Lucia, en el lado más oscuro del lugar más soleado de Estados Unidos, atrapados en una conspiración criminal que recorre Leonida.", "poster": "/images/news/oficial/trailer-2-1280.webp"}, {"id": "QdBZY2fkU-0", "num": "03", "title": "Tráiler 1", "kind": "Tráiler", "length": "", "date": "2023-12-04", "date_h": "4 dic 2023", "desc": "La presentación de GTA VI: el regreso a Vice City y el estado de Leonida, con Lucia como protagonista.", "poster": "/images/news/oficial/trailer-1-1280.webp"}]</script>
   </div>
 </section>
 
@@ -368,7 +378,7 @@
   <a href="/comunidad" class="bn-item"><span class="bn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/><path d="M8 9h8M8 13h5"/></svg></span><span class="bn-label">Comunidad</span></a>
   <a href="/perfil" class="bn-item"><span class="bn-icon"><span class="bn-avatar" data-nav-avatar><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.8 3.6-6 7-6s6.2 2.2 7 6"/></svg></span></span><span class="bn-label">Perfil</span></a>
 </nav>
-<script src="/script.js?v=20261006b"></script>
-<script src="/js/trailers.js?v=20261006b"></script>
+<script src="/script.js?v=20261006c"></script>
+<script src="/js/trailers.js?v=20261006c"></script>
 </body>
 </html>

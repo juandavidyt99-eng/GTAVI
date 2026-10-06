@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://gtavivicecity.com/</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-10-06</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/og-gtavi.jpg</image:loc></image:image>
@@ -22,6 +22,54 @@
     <image:image><image:loc>https://gtavivicecity.com/images/og-noticias.jpg</image:loc></image:image>
   </url>
   <url>
+    <loc>https://gtavivicecity.com/noticias/gta-6-caja-coleccionista-goodtime-state</loc>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/goodtime-gear-1600.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/og/gta-6-caja-coleccionista-goodtime-state.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://gtavivicecity.com/noticias/gta-6-calendario-lanzamiento</loc>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/piscina-vice-city-1600.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/og/gta-6-calendario-lanzamiento.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://gtavivicecity.com/noticias/gta-6-the-album-banda-sonora</loc>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/discoteca-vice-city-1600.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/og/gta-6-the-album-banda-sonora.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://gtavivicecity.com/noticias/gta-6-ultimate-edition-que-incluye</loc>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/ultimate-atardecer-1600.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/og/gta-6-ultimate-edition-que-incluye.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://gtavivicecity.com/noticias/gta-6-extended-look-claves</loc>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/ganado-costa-1600.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/og/gta-6-extended-look-claves.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://gtavivicecity.com/noticias/vintage-vice-city-pack-gta-6</loc>
+    <lastmod>2026-10-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/vapid-stanier-1600.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/og/vintage-vice-city-pack-gta-6.jpg</image:loc></image:image>
+  </url>
+  <url>
     <loc>https://gtavivicecity.com/gta-6-precio</loc>
     <lastmod>2026-10-02</lastmod>
     <changefreq>weekly</changefreq>
@@ -30,7 +78,7 @@
   </url>
   <url>
     <loc>https://gtavivicecity.com/trailers</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-10-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/og-trailers.jpg</image:loc></image:image>

@@ -125,29 +125,67 @@ if (newsFilters && newsFeed) {
   });
 }
 
-// Trailers: official YouTube thumbnails (maxres falls back to hq when missing)
-document.querySelectorAll('img[data-yt-thumb]').forEach(img => {
-  img.addEventListener('error', () => {
-    if (!img.src.includes('hqdefault')) img.src = `https://i.ytimg.com/vi/${img.dataset.ytThumb}/hqdefault.jpg`;
-  });
-  img.src = `https://i.ytimg.com/vi/${img.dataset.ytThumb}/maxresdefault.jpg`;
-});
-
-// Trailers: load the YouTube player only when clicked
-document.querySelectorAll('.video-card[data-video-id]').forEach(card => {
-  card.addEventListener('click', () => {
-    const live = document.createElement('div');
-    live.className = 'video-live';
+// Trailers: the YouTube player only loads when someone presses play.
+// Posters are hosted on this site, so the cards look right even if YouTube's image servers are slow.
+window.GTAPlayer = {
+  frame(id, title) {
     const iframe = document.createElement('iframe');
-    iframe.src = `https://www.youtube.com/embed/${card.dataset.videoId}?autoplay=1&rel=0&playsinline=1`;
-    iframe.title = card.getAttribute('aria-label');
-    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&playsinline=1`;
+    iframe.title = title || 'Reproductor de YouTube';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen';
     // YouTube rejects embeds that arrive without a referrer (player error 153).
     iframe.referrerPolicy = 'strict-origin-when-cross-origin';
     iframe.allowFullscreen = true;
-    live.appendChild(iframe);
-    card.replaceWith(live);
-  });
+    return iframe;
+  },
+  play(stage, id, title) {
+    const live = document.createElement('div');
+    live.className = 'video-live';
+    live.appendChild(this.frame(id, title));
+    stage.replaceChildren(live);
+    stage.dataset.playing = id;
+  },
+};
+
+document.addEventListener('click', e => {
+  const card = e.target.closest('.video-card[data-video-id]');
+  if (!card) return;
+  const title = card.dataset.title || card.getAttribute('aria-label') || '';
+  const stage = card.closest('[data-player-stage]');
+  if (stage) {
+    window.GTAPlayer.play(stage, card.dataset.videoId, title);
+  } else {
+    const holder = document.createElement('div');
+    card.replaceWith(holder);
+    window.GTAPlayer.play(holder, card.dataset.videoId, title);
+    holder.replaceWith(holder.firstChild);
+  }
+});
+
+// Home video player: the list on the side swaps and plays the video on the big screen
+document.querySelectorAll('[data-tv]').forEach(tv => {
+  const stage = tv.querySelector('[data-player-stage]');
+  const items = tv.querySelectorAll('[data-tv-item]');
+  const set = (sel, fn) => { const el = tv.querySelector(sel); if (el) fn(el); };
+  items.forEach(btn => btn.addEventListener('click', () => {
+    items.forEach(b => b.setAttribute('aria-current', String(b === btn)));
+    set('[data-tv-num]', el => { el.textContent = btn.dataset.num; });
+    set('[data-tv-title]', el => { el.textContent = btn.dataset.title; });
+    set('[data-tv-desc]', el => { el.textContent = btn.dataset.desc; });
+    set('[data-tv-meta]', el => { el.textContent = btn.dataset.meta; });
+    set('[data-tv-yt]', el => { el.href = `https://www.youtube.com/watch?v=${btn.dataset.videoId}`; });
+    window.GTAPlayer.play(stage, btn.dataset.videoId, `Grand Theft Auto VI: ${btn.dataset.title}`);
+    if (window.matchMedia('(max-width: 900px)').matches) stage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }));
+});
+
+// "Faltan X días" badges
+document.querySelectorAll('[data-days-left]').forEach(el => {
+  const target = new Date(el.dataset.daysLeft).getTime();
+  const days = Math.ceil((target - Date.now()) / 86400000);
+  const out = el.querySelector('strong') || el;
+  if (days > 1) out.textContent = String(days);
+  else el.textContent = days === 1 ? '¡GTA VI sale mañana!' : '¡GTA VI ya está disponible!';
 });
 
 // Fade-in on scroll
@@ -155,6 +193,7 @@ const revealEls = document.querySelectorAll([
   '.block-head, .news-top, .feed-head, .story-card, .video-item, .region-card, .duo-card-bio, .spec',
   '.news-featured, .news-card, .trailer-note, .region-detail, .profile, .duo-fact, .cast-card',
   '.feature-card, .soon-card, .cta-card, .hub-card',
+  '.hm-card, .tv, .ed-card, .hm-tile, .hm-join, .hm-guide, .ar-card',
 ].join(', '));
 if ('IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries) => {

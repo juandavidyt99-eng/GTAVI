@@ -112,6 +112,12 @@ async function main() {
     res.set('Cache-Control', 'no-cache').sendFile(path.join(publicDir, 'perfil.html'));
   });
 
+  // /noticias is a page and also the folder of our own articles (/noticias/<slug>), so the
+  // static handler would treat it as a directory; serve the page explicitly.
+  app.get('/noticias', (req, res) => {
+    res.set('Cache-Control', 'no-cache').sendFile(path.join(publicDir, 'noticias.html'));
+  });
+
   // Clean URLs: /noticias.html -> /noticias, /index.html -> /
   app.get(/^\/(.+)\.html$/, (req, res) => {
     const name = req.params[0].replace(/^\/+/, '');
