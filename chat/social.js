@@ -1,7 +1,7 @@
 // Community API: posts, likes, comments and profiles.
 const express = require('express');
 const { createLimiter } = require('./limits');
-const { cleanLine, cleanMultiline, youtubeId } = require('./shared');
+const { cleanLine, cleanMultiline, youtubeId, isAdminName } = require('./shared');
 
 const CATEGORIES = ['debate', 'teoria', 'leonida', 'noticias', 'clip'];
 const TEAMS = ['jason', 'lucia'];
@@ -15,9 +15,6 @@ function createSocialRouter(getStore, bus) {
   const router = express.Router();
   router.use(express.json({ limit: '16kb' }));
 
-  const admins = new Set((process.env.ADMIN_USERS || '')
-    .split(',').map(s => s.trim().toLowerCase()).filter(Boolean));
-
   const limit = {
     postBurst: createLimiter({ max: 1, windowMs: 20 * 1000 }),
     postHour: createLimiter({ max: 10, windowMs: 60 * 60 * 1000 }),
@@ -28,7 +25,7 @@ function createSocialRouter(getStore, bus) {
   };
 
   const currentUser = req => (req.session && req.session.user) || null;
-  const isAdmin = user => Boolean(user && admins.has(user.username.toLowerCase()));
+  const isAdmin = user => Boolean(user && isAdminName(user.username));
   const canModify = (user, ownerId) => Boolean(user && (user.id === ownerId || isAdmin(user)));
 
   function present(item, user) {

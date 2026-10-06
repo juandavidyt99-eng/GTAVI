@@ -11,6 +11,7 @@ const { createChatRouter } = require('./chat/routes');
 const { createSocialRouter } = require('./chat/social');
 const { JsonSessionStore } = require('./chat/session-store');
 const { attachChatSocket } = require('./chat/socket');
+const images = require('./chat/images');
 
 const PORT = process.env.PORT || 3000;
 const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
@@ -91,6 +92,19 @@ async function main() {
 
   const notFound = (req, res) => res.status(404).sendFile(path.join(publicDir, '404.html'));
   app.get(['/404', '/404.html'], notFound);
+
+  // Chat photos live outside the app folder so they survive deploys.
+  app.get('/media/chat/:file', (req, res) => {
+    if (!images.NAME_RE.test(req.params.file)) return res.status(404).end();
+    res.sendFile(req.params.file, {
+      root: images.uploadsDir(),
+      maxAge: '365d',
+      immutable: true,
+      headers: { 'Content-Type': 'image/webp', 'Content-Security-Policy': "default-src 'none'" },
+    }, err => {
+      if (err && !res.headersSent) res.status(404).end();
+    });
+  });
 
   // Public profiles share the profile page; the script reads the username from the URL.
   app.get('/u/:username', (req, res, next) => {

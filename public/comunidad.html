@@ -34,7 +34,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Rubik+Spray+Paint&family=Bebas+Neue&family=Archivo+Black&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=20261002b">
+<link rel="stylesheet" href="/styles.css?v=20261006">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -79,6 +79,7 @@
       <a href="/leonida">Leonida</a>
       <a href="/protagonistas">Protagonistas</a>
       <a href="/comunidad" class="active" aria-current="page">Comunidad <span class="nav-tag nav-tag-beta">Beta</span></a>
+      <a href="/chat">Chat <span class="live-dot nav-live" aria-hidden="true"></span></a>
       <a href="/clips">Clips</a>
       <a href="/perfil">Perfil</a>
     </nav>
@@ -95,8 +96,8 @@
     <span class="kicker">Comunidad · Beta</span>
     <h1 class="page-title">Comunidad <em>GTA VI</em></h1>
     <p class="page-lead">El lugar para hablar de Vice City, compartir teorías y descubrir GTA VI con otros jugadores.</p>
-    <div class="page-actions"><a class="btn btn-primary btn-icon-text" href="#debates">Entrar a la comunidad <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="btn btn-outline" href="/clips">Ver clips</a></div>
-    <ul class="page-meta"><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c.5 3.5 4.5 5.4 4.5 10a4.5 4.5 0 0 1-9 0c0-2 1-3.4 2-4.4.2 1.6 1 2.6 2 3 0-3.3-1-5.6.5-8.6Z"/></svg>Debates en tiempo real</li><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/><path d="M8 9h8M8 13h5"/></svg>Chat en vivo</li><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg>Normas claras y spoilers marcados</li></ul>
+    <div class="page-actions"><a class="btn btn-primary btn-icon-text" href="#debates">Entrar a la comunidad <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><a class="btn btn-outline" href="/chat">Chat en vivo</a></div>
+    <ul class="page-meta"><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c.5 3.5 4.5 5.4 4.5 10a4.5 4.5 0 0 1-9 0c0-2 1-3.4 2-4.4.2 1.6 1 2.6 2 3 0-3.3-1-5.6.5-8.6Z"/></svg>Debates en tiempo real</li><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 7.5 16 11l5 3.5Z"/><rect x="3" y="6" width="13" height="12" rx="2"/></svg>Clips de la comunidad</li><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg>Normas claras y spoilers marcados</li></ul>
   </div>
 </section>
 
@@ -162,7 +163,7 @@
         <div class="side-card">
           <h2>Chat en vivo</h2>
           <p class="side-text side-online"><span class="live-dot"></span><strong id="side-online">—</strong>&nbsp;conectados ahora</p>
-          <a class="btn btn-outline btn-sm" href="#chat">Entrar al chat</a>
+          <a class="btn btn-primary btn-sm" href="/chat">Entrar al chat</a>
         </div>
         <div class="side-card">
           <h2>Explora</h2>
@@ -185,46 +186,6 @@
         </div>
       </aside>
     </div>
-  </div>
-</section>
-
-<section class="block community-chat" id="chat" aria-labelledby="chat-title">
-  <div class="container">
-    <header class="block-head community-head">
-      <div>
-        <span class="kicker">En vivo</span>
-        <h2 class="block-title" id="chat-title">Chat <em>en vivo</em></h2>
-      </div>
-      <div class="online-pill" id="online-pill" hidden>
-        <span class="live-dot"></span><strong id="online-count">0</strong>&nbsp;en línea
-      </div>
-    </header>
-    <section class="chat-panel chat-panel-wide" aria-label="Chat general">
-      <div class="chat-panel-head">
-        <span class="chat-channel"># general</span>
-        <span class="chat-status" id="chat-status" data-state="connecting">Conectando…</span>
-      </div>
-      <ol class="chat-messages" id="chat-messages" aria-live="polite"></ol>
-      <p class="chat-empty" id="chat-empty" hidden>Todavía no hay mensajes. ¡Escribe el primero!</p>
-      <form class="chat-composer" id="chat-composer" hidden>
-        <input id="chat-input" type="text" maxlength="500" autocomplete="off" placeholder="Escribe un mensaje…" aria-label="Mensaje">
-        <label class="spoiler-toggle" title="Oculta el mensaje hasta que alguien lo toque">
-          <input type="checkbox" id="chat-spoiler">
-          <span>Spoiler</span>
-        </label>
-        <button type="submit" class="chat-send" id="chat-send" aria-label="Enviar mensaje">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </button>
-        <p class="chat-error" id="chat-error" role="alert"></p>
-      </form>
-      <div class="chat-guest" id="chat-guest" hidden>
-        <p>Inicia sesión para escribir en el chat.</p>
-        <div class="chat-guest-actions">
-          <button type="button" class="btn btn-primary" data-open-auth="register">Crear cuenta</button>
-          <button type="button" class="btn btn-outline" data-open-auth="login">Entrar</button>
-        </div>
-      </div>
-    </section>
   </div>
 </section>
 
@@ -302,6 +263,11 @@
         <span class="hub-text"><strong>Personajes</strong><span>Jason Duval y Lucia Caminos.</span></span>
         <svg class="hub-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
+      <a class="hub-card" href="/chat">
+        <svg class="hub-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/><path d="M8 9h8M8 13h5"/></svg>
+        <span class="hub-text"><strong>Chat en vivo</strong><span>Habla con otros fans ahora mismo.</span></span>
+        <svg class="hub-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
       <a class="hub-card" href="/clips">
         <svg class="hub-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 7.5 16 11l5 3.5Z"/><rect x="3" y="6" width="13" height="12" rx="2"/></svg>
         <span class="hub-text"><strong>Clips</strong><span>Comparte y mira clips de la comunidad.</span></span>
@@ -342,7 +308,8 @@
     </nav>
     <nav class="footer-col" aria-label="Comunidad">
       <h4>Comunidad</h4>
-      <a href="/comunidad">Debates y chat <span class="nav-tag nav-tag-beta">Beta</span></a>
+      <a href="/comunidad">Debates <span class="nav-tag nav-tag-beta">Beta</span></a>
+      <a href="/chat">Chat en vivo</a>
       <a href="/clips">Clips de la comunidad</a>
       <a href="/perfil">Tu perfil</a>
     </nav>
@@ -371,10 +338,9 @@
   <a href="/comunidad" class="bn-item" aria-current="page"><span class="bn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/><path d="M8 9h8M8 13h5"/></svg></span><span class="bn-label">Comunidad</span></a>
   <a href="/perfil" class="bn-item"><span class="bn-icon"><span class="bn-avatar" data-nav-avatar><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.8 3.6-6 7-6s6.2 2.2 7 6"/></svg></span></span><span class="bn-label">Perfil</span></a>
 </nav>
-<script src="/script.js?v=20261002b"></script>
+<script src="/script.js?v=20261006"></script>
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/social.js?v=20261002b"></script>
-<script src="/js/comunidad.js?v=20261002b"></script>
-<script src="/js/chat.js?v=20261002b"></script>
+<script src="/js/social.js?v=20261006"></script>
+<script src="/js/comunidad.js?v=20261006"></script>
 </body>
 </html>

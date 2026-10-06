@@ -3,7 +3,9 @@
 // so the community keeps working across restarts. Assumes one server process.
 const fs = require('fs');
 const path = require('path');
-const { hotScore, HISTORY_LIMIT } = require('./shared');
+const { hotScore } = require('./shared');
+
+const MESSAGE_CAP = 5000;
 
 const SAVE_DELAY_MS = 400;
 
@@ -13,6 +15,10 @@ function createJsonStore(filePath) {
     users: new Map(),          // id -> user
     usersByName: new Map(),    // lowercase username -> user
     messages: [],
+    messageIndex: new Map(),   // id -> message
+    reactions: new Map(),      // messageId -> Map(emoji -> Set(userId))
+    reports: [],
+    mutes: {},                 // userId -> until (ms)
     posts: new Map(),          // id -> post
     likes: new Map(),          // postId -> Set(userId)
     comments: new Map(),       // postId -> [comment]
@@ -28,7 +34,26 @@ function createJsonStore(filePath) {
       state.users.set(u.id, u);
       state.usersByName.set(u.username.toLowerCase(), u);
     }
-    state.messages = raw.messages || [];
+    // Older files stored messages as { username, createdAt }: map them to the current shape.
+    state.messages = (raw.messages || []).map(m => ({
+      id: m.id,
+      user_id: m.user_id ?? (state.usersByName.get(String(m.username).toLowerCase()) || {}).id ?? 0,
+      content: m.content || '',
+      spoiler: Boolean(m.spoiler),
+      image: m.image || null,
+      image_w: m.image_w || 0,
+      image_h: m.image_h || 0,
+      reply_to: m.reply_to || null,
+      edited_at: m.edited_at || null,
+      deleted: Boolean(m.deleted),
+      created_at: m.created_at || m.createdAt || new Date().toISOString(),
+    }));
+    for (const r of raw.reactions || []) {
+      if (!state.reactions.has(r.m)) state.reactions.set(r.m, new Map());
+      state.reactions.get(r.m).set(r.e, new Set(r.u));
+    }
+    state.reports = raw.reports || [];
+    state.mutes = raw.mutes || {};
     for (const p of raw.posts || []) {
       const { likers = [], ...post } = p;
       state.posts.set(post.id, post);
@@ -42,6 +67,7 @@ function createJsonStore(filePath) {
     for (const [sid, s] of Object.entries(raw.sessions || {})) state.sessions.set(sid, s);
     state.meta = raw.meta || {};
   }
+  for (const m of state.messages) state.messageIndex.set(m.id, m);
 
   let timer = null;
   function serialize() {
@@ -52,6 +78,10 @@ function createJsonStore(filePath) {
       seq: state.seq,
       users: [...state.users.values()],
       messages: state.messages,
+      reactions: [...state.reactions].flatMap(([m, byEmoji]) =>
+        [...byEmoji].filter(([, users]) => users.size).map(([e, users]) => ({ m, e, u: [...users] }))),
+      reports: state.reports,
+      mutes: state.mutes,
       posts: [...state.posts.values()].map(p => ({ ...p, likers: [...(state.likes.get(p.id) || [])] })),
       comments: [...state.commentsById.values()],
       sessions: Object.fromEntries(state.sessions),
@@ -105,6 +135,36 @@ function createJsonStore(filePath) {
   });
   const toComment = c => ({ id: c.id, postId: c.post_id, userId: c.user_id, author: authorOf(c.user_id), content: c.content, createdAt: c.created_at });
 
+  function presentMessage(m, viewerId) {
+    const author = authorOf(m.user_id);
+    let replyTo = null;
+    if (m.reply_to) {
+      const r = state.messageIndex.get(m.reply_to);
+      replyTo = r && !r.deleted
+        ? { id: r.id, username: authorOf(r.user_id).username, excerpt: r.content.slice(0, 120), hasImage: Boolean(r.image), deleted: false }
+        : { id: m.reply_to, username: r ? authorOf(r.user_id).username : '', excerpt: '', hasImage: false, deleted: true };
+    }
+    const byEmoji = state.reactions.get(m.id);
+    const reactions = byEmoji
+      ? [...byEmoji].filter(([, users]) => users.size).map(([emoji, users]) => ({
+        emoji, count: users.size, mine: Boolean(viewerId && users.has(viewerId)),
+      }))
+      : [];
+    return {
+      id: m.id,
+      userId: m.user_id,
+      username: author.username,
+      team: author.team,
+      content: m.deleted ? '' : m.content,
+      spoiler: Boolean(m.spoiler),
+      image: m.image && !m.deleted ? { name: m.image, w: m.image_w, h: m.image_h } : null,
+      replyTo,
+      createdAt: m.created_at,
+      editedAt: m.edited_at,
+      reactions,
+    };
+  }
+
   return {
     kind: filePath ? 'file' : 'memory',
     flush,
@@ -143,15 +203,97 @@ function createJsonStore(filePath) {
     },
 
     // Chat
-    async addMessage(userId, content, spoiler) {
-      const message = { id: ++state.seq.message, username: state.users.get(userId).username, content, spoiler, createdAt: now() };
-      state.messages.push(message);
-      if (state.messages.length > HISTORY_LIMIT) state.messages.splice(0, state.messages.length - HISTORY_LIMIT);
+    async addMessage(userId, { content, spoiler, image, replyTo }) {
+      const m = {
+        id: ++state.seq.message, user_id: userId, content, spoiler: Boolean(spoiler),
+        image: image ? image.name : null, image_w: image ? image.w : 0, image_h: image ? image.h : 0,
+        reply_to: replyTo || null, edited_at: null, deleted: false, created_at: now(),
+      };
+      state.messages.push(m);
+      state.messageIndex.set(m.id, m);
+      while (state.messages.length > MESSAGE_CAP) {
+        const old = state.messages.shift();
+        state.messageIndex.delete(old.id);
+        state.reactions.delete(old.id);
+      }
       save();
-      return { id: message.id, createdAt: message.createdAt };
+      return presentMessage(m, userId);
     },
-    async recentMessages() {
-      return state.messages.map(m => ({ ...m }));
+    async getMessage(id, viewerId) {
+      const m = state.messageIndex.get(id);
+      return m ? presentMessage(m, viewerId) : null;
+    },
+    async listMessages({ before, limit, viewerId }) {
+      const visible = state.messages.filter(m => !m.deleted && (!before || m.id < before));
+      const slice = visible.slice(-limit);
+      return { messages: slice.map(m => presentMessage(m, viewerId)), hasMore: visible.length > slice.length };
+    },
+    async editMessage(id, content) {
+      const m = state.messageIndex.get(id);
+      if (!m || m.deleted) return null;
+      m.content = content;
+      m.edited_at = now();
+      save();
+      return presentMessage(m, null);
+    },
+    async deleteMessage(id) {
+      const m = state.messageIndex.get(id);
+      if (!m || m.deleted) return null;
+      const image = m.image;
+      m.deleted = true;
+      m.content = '';
+      m.image = null;
+      state.reactions.delete(id);
+      state.reports = state.reports.filter(r => r.message_id !== id);
+      save();
+      return { image };
+    },
+    async toggleReaction(id, userId, emoji) {
+      const m = state.messageIndex.get(id);
+      if (!m || m.deleted) return null;
+      if (!state.reactions.has(id)) state.reactions.set(id, new Map());
+      const byEmoji = state.reactions.get(id);
+      if (!byEmoji.has(emoji)) byEmoji.set(emoji, new Set());
+      const users = byEmoji.get(emoji);
+      const on = !users.has(userId);
+      if (on) users.add(userId); else users.delete(userId);
+      save();
+      return { on, count: users.size };
+    },
+    async getMute(userId) {
+      const until = state.mutes[userId] || 0;
+      return until > Date.now() ? until : 0;
+    },
+    async setMute(userId, untilMs) {
+      if (untilMs) state.mutes[userId] = untilMs; else delete state.mutes[userId];
+      save();
+    },
+    async createReport({ messageId, reporterId, reason }) {
+      const m = state.messageIndex.get(messageId);
+      if (!m || m.deleted) return null;
+      if (state.reports.some(r => r.message_id === messageId && r.reporter_id === reporterId)) return false;
+      state.reports.push({ message_id: messageId, reporter_id: reporterId, reason, created_at: now() });
+      save();
+      return true;
+    },
+    async listReports() {
+      const grouped = new Map();
+      for (const r of state.reports) {
+        if (!grouped.has(r.message_id)) grouped.set(r.message_id, []);
+        grouped.get(r.message_id).push(r);
+      }
+      return [...grouped].map(([messageId, list]) => ({
+        messageId,
+        count: list.length,
+        reasons: [...new Set(list.map(r => r.reason))],
+        reporters: [...new Set(list.map(r => authorOf(r.reporter_id).username))],
+        lastAt: list[list.length - 1].created_at,
+        message: presentMessage(state.messageIndex.get(messageId), null),
+      })).sort((a, b) => (a.lastAt < b.lastAt ? 1 : -1)).slice(0, 50);
+    },
+    async dismissReports(messageId) {
+      state.reports = state.reports.filter(r => r.message_id !== messageId);
+      save();
     },
 
     // Posts

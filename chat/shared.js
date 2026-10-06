@@ -1,5 +1,25 @@
 // Helpers shared by both stores and the API.
+const fs = require('fs');
+const os = require('os');
+const path = require('path');
+
 const HISTORY_LIMIT = 50;
+const CHAT_TEXT_MAX = 500;
+const EDIT_WINDOW_MS = 15 * 60 * 1000;
+// Reactions allowed in the chat (kept in sync with the client).
+const REACTIONS = ['👍', '❤️', '😂', '😮', '😢', '🔥', '👏', '💀'];
+const REPORT_REASONS = ['spam', 'acoso', 'spoiler', 'inapropiado', 'otro'];
+
+// Folder for everything that must survive deploys (data file, uploaded photos).
+function dataDir() {
+  const dir = process.env.DATA_DIR || path.join(os.homedir(), '.gtavi-data');
+  fs.mkdirSync(dir, { recursive: true });
+  return dir;
+}
+
+const admins = new Set((process.env.ADMIN_USERS || '')
+  .split(',').map(s => s.trim().toLowerCase()).filter(Boolean));
+const isAdminName = name => Boolean(name && admins.has(String(name).toLowerCase()));
 
 // "Hot" ranking: engagement that decays with age (like Hacker News).
 function hotScore(post, nowMs) {
@@ -48,4 +68,7 @@ function youtubeId(input) {
   return id && /^[A-Za-z0-9_-]{11}$/.test(id) ? id : null;
 }
 
-module.exports = { HISTORY_LIMIT, hotScore, cleanLine, cleanMultiline, youtubeId };
+module.exports = {
+  HISTORY_LIMIT, CHAT_TEXT_MAX, EDIT_WINDOW_MS, REACTIONS, REPORT_REASONS,
+  dataDir, isAdminName, hotScore, cleanLine, cleanMultiline, youtubeId,
+};

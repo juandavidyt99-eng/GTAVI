@@ -1,9 +1,8 @@
 const fs = require('fs');
-const os = require('os');
 const path = require('path');
 const mysql = require('mysql2/promise');
 const { createJsonStore } = require('./jsonstore');
-const { HISTORY_LIMIT } = require('./shared');
+const { dataDir } = require('./shared');
 
 function dbConfigFromEnv() {
   const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
@@ -25,6 +24,23 @@ async function createMysqlStore(config) {
   const schema = fs.readFileSync(path.join(__dirname, '..', 'db', 'schema.sql'), 'utf8');
   for (const statement of schema.split(';').map(s => s.trim()).filter(Boolean)) {
     await pool.query(statement);
+  }
+
+  // The messages table predates photos, replies and edits: add the new columns when missing.
+  const [existing] = await pool.query(
+    "SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'messages'"
+  );
+  const have = new Set(existing.map(c => c.COLUMN_NAME));
+  const wanted = [
+    ['image', 'VARCHAR(40) NULL'],
+    ['image_w', 'SMALLINT UNSIGNED NOT NULL DEFAULT 0'],
+    ['image_h', 'SMALLINT UNSIGNED NOT NULL DEFAULT 0'],
+    ['reply_to', 'INT NULL'],
+    ['edited_at', 'TIMESTAMP NULL DEFAULT NULL'],
+    ['deleted', 'TINYINT(1) NOT NULL DEFAULT 0'],
+  ];
+  for (const [name, def] of wanted) {
+    if (!have.has(name)) await pool.query(`ALTER TABLE messages ADD COLUMN ${name} ${def}`);
   }
 
   const toPost = r => ({
@@ -81,6 +97,54 @@ async function createMysqlStore(config) {
     }
   }
 
+  const MESSAGE_SELECT = `SELECT m.id, m.user_id, m.content, m.spoiler, m.image, m.image_w, m.image_h, m.reply_to,
+           m.edited_at, m.deleted, m.created_at, u.username, pr.team,
+           r.content AS r_content, r.image AS r_image, r.deleted AS r_deleted, ru.username AS r_username
+    FROM messages m
+    JOIN users u ON u.id = m.user_id
+    LEFT JOIN profiles pr ON pr.user_id = m.user_id
+    LEFT JOIN messages r ON r.id = m.reply_to
+    LEFT JOIN users ru ON ru.id = r.user_id`;
+
+  async function attachReactions(rows, viewerId) {
+    const byMessage = new Map();
+    if (rows.length) {
+      const [rx] = await pool.query(
+        `SELECT message_id, emoji, COUNT(*) AS c, SUM(user_id = ?) AS mine
+         FROM message_reactions WHERE message_id IN (?) GROUP BY message_id, emoji ORDER BY MIN(created_at)`,
+        [viewerId || 0, rows.map(r => r.id)]
+      );
+      for (const x of rx) {
+        if (!byMessage.has(x.message_id)) byMessage.set(x.message_id, []);
+        byMessage.get(x.message_id).push({ emoji: x.emoji, count: Number(x.c), mine: Number(x.mine) > 0 });
+      }
+    }
+    return rows.map(r => {
+      const deleted = Boolean(r.deleted);
+      let replyTo = null;
+      if (r.reply_to) {
+        const gone = r.r_content === null || Boolean(r.r_deleted);
+        replyTo = {
+          id: r.reply_to, username: r.r_username || '', excerpt: gone ? '' : String(r.r_content).slice(0, 120),
+          hasImage: !gone && Boolean(r.r_image), deleted: gone,
+        };
+      }
+      return {
+        id: r.id,
+        userId: r.user_id,
+        username: r.username,
+        team: r.team || null,
+        content: deleted ? '' : r.content,
+        spoiler: Boolean(r.spoiler),
+        image: r.image && !deleted ? { name: r.image, w: r.image_w, h: r.image_h } : null,
+        replyTo,
+        createdAt: r.created_at,
+        editedAt: r.edited_at,
+        reactions: byMessage.get(r.id) || [],
+      };
+    });
+  }
+
   return {
     kind: 'mysql',
     pool,
@@ -120,28 +184,94 @@ async function createMysqlStore(config) {
     },
 
     // Chat
-    async addMessage(userId, content, spoiler) {
+    async addMessage(userId, { content, spoiler, image, replyTo }) {
       const [result] = await pool.query(
-        'INSERT INTO messages (user_id, content, spoiler) VALUES (?, ?, ?)',
-        [userId, content, spoiler ? 1 : 0]
+        `INSERT INTO messages (user_id, content, spoiler, image, image_w, image_h, reply_to)
+         VALUES (?, ?, ?, ?, ?, ?, ?)`,
+        [userId, content, spoiler ? 1 : 0, image ? image.name : null, image ? image.w : 0, image ? image.h : 0, replyTo || null]
       );
-      const [rows] = await pool.query('SELECT created_at FROM messages WHERE id = ?', [result.insertId]);
-      return { id: result.insertId, createdAt: rows[0].created_at };
+      return this.getMessage(result.insertId, userId);
     },
-    async recentMessages() {
-      const [rows] = await pool.query(
-        `SELECT m.id, m.content, m.spoiler, m.created_at, u.username
-         FROM messages m JOIN users u ON u.id = m.user_id
-         ORDER BY m.id DESC LIMIT ?`,
-        [HISTORY_LIMIT]
+    async getMessage(id, viewerId) {
+      const [rows] = await pool.query(`${MESSAGE_SELECT} WHERE m.id = ?`, [id]);
+      if (!rows.length) return null;
+      return (await attachReactions(rows, viewerId))[0];
+    },
+    async listMessages({ before, limit, viewerId }) {
+      const params = [];
+      let where = 'WHERE m.deleted = 0';
+      if (before) { where += ' AND m.id < ?'; params.push(before); }
+      params.push(limit + 1);
+      const [rows] = await pool.query(`${MESSAGE_SELECT} ${where} ORDER BY m.id DESC LIMIT ?`, params);
+      const hasMore = rows.length > limit;
+      const page = rows.slice(0, limit).reverse();
+      return { messages: await attachReactions(page, viewerId), hasMore };
+    },
+    async editMessage(id, content) {
+      const [res] = await pool.query('UPDATE messages SET content = ?, edited_at = NOW() WHERE id = ? AND deleted = 0', [content, id]);
+      if (!res.affectedRows) return null;
+      return this.getMessage(id, null);
+    },
+    async deleteMessage(id) {
+      return inTransaction(async conn => {
+        const [rows] = await conn.query('SELECT image FROM messages WHERE id = ? AND deleted = 0 FOR UPDATE', [id]);
+        if (!rows.length) return null;
+        await conn.query("UPDATE messages SET deleted = 1, content = '', image = NULL WHERE id = ?", [id]);
+        await conn.query('DELETE FROM message_reactions WHERE message_id = ?', [id]);
+        await conn.query('DELETE FROM chat_reports WHERE message_id = ?', [id]);
+        return { image: rows[0].image };
+      });
+    },
+    async toggleReaction(id, userId, emoji) {
+      const [found] = await pool.query('SELECT id FROM messages WHERE id = ? AND deleted = 0', [id]);
+      if (!found.length) return null;
+      const [ins] = await pool.query('INSERT IGNORE INTO message_reactions (message_id, user_id, emoji) VALUES (?, ?, ?)', [id, userId, emoji]);
+      const on = ins.affectedRows === 1;
+      if (!on) await pool.query('DELETE FROM message_reactions WHERE message_id = ? AND user_id = ? AND emoji = ?', [id, userId, emoji]);
+      const [[row]] = await pool.query('SELECT COUNT(*) AS c FROM message_reactions WHERE message_id = ? AND emoji = ?', [id, emoji]);
+      return { on, count: Number(row.c) };
+    },
+    async getMute(userId) {
+      const [rows] = await pool.query('SELECT until_ms FROM chat_mutes WHERE user_id = ?', [userId]);
+      const until = rows[0] ? Number(rows[0].until_ms) : 0;
+      return until > Date.now() ? until : 0;
+    },
+    async setMute(userId, untilMs) {
+      if (!untilMs) return void await pool.query('DELETE FROM chat_mutes WHERE user_id = ?', [userId]);
+      await pool.query(
+        'INSERT INTO chat_mutes (user_id, until_ms) VALUES (?, ?) ON DUPLICATE KEY UPDATE until_ms = VALUES(until_ms)',
+        [userId, untilMs]
       );
-      return rows.reverse().map(r => ({
-        id: r.id,
-        username: r.username,
-        content: r.content,
-        spoiler: Boolean(r.spoiler),
-        createdAt: r.created_at,
-      }));
+    },
+    async createReport({ messageId, reporterId, reason }) {
+      const [found] = await pool.query('SELECT id FROM messages WHERE id = ? AND deleted = 0', [messageId]);
+      if (!found.length) return null;
+      const [res] = await pool.query(
+        'INSERT IGNORE INTO chat_reports (message_id, reporter_id, reason) VALUES (?, ?, ?)',
+        [messageId, reporterId, reason]
+      );
+      return res.affectedRows === 1;
+    },
+    async listReports() {
+      const [rows] = await pool.query(
+        `SELECT rp.message_id, COUNT(*) AS c, MAX(rp.created_at) AS last_at,
+                GROUP_CONCAT(DISTINCT rp.reason) AS reasons, GROUP_CONCAT(DISTINCT u.username) AS reporters
+         FROM chat_reports rp JOIN users u ON u.id = rp.reporter_id
+         GROUP BY rp.message_id ORDER BY last_at DESC LIMIT 50`
+      );
+      const out = [];
+      for (const r of rows) {
+        const message = await this.getMessage(r.message_id, null);
+        if (!message) continue;
+        out.push({
+          messageId: r.message_id, count: Number(r.c), reasons: String(r.reasons).split(','),
+          reporters: String(r.reporters).split(','), lastAt: r.last_at, message,
+        });
+      }
+      return out;
+    },
+    async dismissReports(messageId) {
+      await pool.query('DELETE FROM chat_reports WHERE message_id = ?', [messageId]);
     },
 
     // Posts
@@ -244,9 +374,7 @@ async function createMysqlStore(config) {
 }
 
 function dataFilePath() {
-  const dir = process.env.DATA_DIR || path.join(os.homedir(), '.gtavi-data');
-  fs.mkdirSync(dir, { recursive: true });
-  return path.join(dir, 'community.json');
+  return path.join(dataDir(), 'community.json');
 }
 
 async function createStore() {
