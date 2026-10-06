@@ -4532,3 +4532,4 @@ body.page-chat .site-footer { display: none; }
 @media (max-width: 900px) {
   .page-noticias .feed-toolbar { align-items: stretch; }
 }
+.page-noticias [id] { scroll-margin-top: 96px; }
