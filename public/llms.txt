@@ -14,6 +14,9 @@ Datos clave confirmados por Rockstar Games:
 - [Preguntas frecuentes](https://gtavivicecity.com/preguntas-frecuentes): PC, GTA Online, microtransacciones y más.
 
 ## Artículos de nuestra redacción
+- [¿GTA 6 sale en PC?](https://gtavivicecity.com/noticias/gta-6-pc): lo que se sabe, precedentes de Rockstar y requisitos falsos.
+- [¿GTA 6 sale en PS4 o Xbox One?](https://gtavivicecity.com/noticias/gta-6-ps4-xbox-one): plataformas confirmadas y opciones.
+- [Estafas con GTA 6](https://gtavivicecity.com/noticias/gta-6-gratis-apk-estafas): por qué no existe GTA 6 gratis ni en APK y cómo protegerse.
 - [Caja de coleccionista «The Goodtime State – Vice City Collection»](https://gtavivicecity.com/noticias/gta-6-caja-coleccionista-goodtime-state): precio, contenido y fecha.
 - [Calendario de GTA 6](https://gtavivicecity.com/noticias/gta-6-calendario-lanzamiento): precarga, lanzamiento y fechas clave.
 - [«GTA VI: The Album»](https://gtavivicecity.com/noticias/gta-6-the-album-banda-sonora): 34 temas y artistas confirmados.
@@ -29,3 +32,8 @@ Datos clave confirmados por Rockstar Games:
 - [Comunidad](https://gtavivicecity.com/comunidad): publicaciones, comentarios, me gusta y chat en vivo de fans.
 - [Chat en vivo](https://gtavivicecity.com/chat): chat general de la comunidad con fotos, respuestas y reacciones.
 - [Clips](https://gtavivicecity.com/clips): clips de YouTube compartidos por la comunidad.
+
+## Sobre el sitio
+- [Sobre nosotros y política editorial](https://gtavivicecity.com/sobre-nosotros): quiénes somos y cómo verificamos y etiquetamos la información.
+- [Privacidad](https://gtavivicecity.com/privacidad): datos que guarda la comunidad.
+- [Feed RSS](https://gtavivicecity.com/feed.xml): artículos de la redacción.

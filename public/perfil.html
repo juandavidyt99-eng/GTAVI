@@ -32,8 +32,11 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Rubik+Spray+Paint&family=Bebas+Neue&family=Archivo+Black&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=20261006d">
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Rubik+Spray+Paint&family=Bebas+Neue&family=Archivo+Black&family=Poppins:wght@400;600;700;800&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Rubik+Spray+Paint&family=Bebas+Neue&family=Archivo+Black&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Rubik+Spray+Paint&family=Bebas+Neue&family=Archivo+Black&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet"></noscript>
+<link rel="alternate" type="application/rss+xml" title="GTA VI Vice City: noticias de GTA 6" href="/feed.xml">
+<link rel="stylesheet" href="/styles.css?v=20261008a">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -197,6 +200,8 @@
       <a href="/cuando-sale-gta-6">¿Cuándo sale GTA 6?</a>
       <a href="/gta-6-precio">Precio de GTA 6</a>
       <a href="/preguntas-frecuentes">Preguntas frecuentes</a>
+      <a href="/noticias/gta-6-pc">¿GTA 6 sale en PC?</a>
+      <a href="/noticias/gta-6-gratis-apk-estafas">Estafas con GTA 6</a>
     </nav>
     <nav class="footer-col" aria-label="Fuentes oficiales">
       <h4>Fuentes oficiales</h4>
@@ -206,6 +211,7 @@
   </div>
   <div class="container footer-bottom">
     <p>Sitio de fans no oficial. Grand Theft Auto VI es una marca de Rockstar Games. Este sitio no está afiliado ni respaldado por Rockstar Games ni por Take-Two Interactive.</p>
+    <nav class="footer-legal" aria-label="Sobre el sitio"><a href="/sobre-nosotros">Sobre nosotros</a><a href="/sobre-nosotros#politica-editorial">Política editorial</a><a href="/privacidad">Privacidad</a><a href="/sobre-nosotros#contacto">Contacto</a><a href="/feed.xml">RSS</a></nav>
     <p>&copy; 2026 gtavivicecity.com</p>
   </div>
 </footer>
@@ -217,9 +223,9 @@
   <a href="/comunidad" class="bn-item"><span class="bn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/><path d="M8 9h8M8 13h5"/></svg></span><span class="bn-label">Comunidad</span></a>
   <a href="/perfil" class="bn-item" aria-current="page"><span class="bn-icon"><span class="bn-avatar" data-nav-avatar><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.8 3.6-6 7-6s6.2 2.2 7 6"/></svg></span></span><span class="bn-label">Perfil</span></a>
 </nav>
-<script src="/script.js?v=20261006d"></script>
+<script src="/script.js?v=20261008a"></script>
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/social.js?v=20261006d"></script>
-<script src="/js/perfil.js?v=20261006d"></script>
+<script src="/js/social.js?v=20261008a"></script>
+<script src="/js/perfil.js?v=20261008a"></script>
 </body>
 </html>

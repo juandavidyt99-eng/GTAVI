@@ -4950,3 +4950,46 @@ body.page-chat .site-footer { display: none; }
 .auth-google-g { width: 20px; height: 20px; flex: none; }
 .auth-or { display: flex; align-items: center; gap: 12px; margin: 16px 0; font-size: 12px; color: var(--text-muted); }
 .auth-or::before, .auth-or::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+
+/* Footer links to the trust pages, data tables in articles, extra article links on the home */
+.footer-legal { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.footer-legal a { display: inline-flex; align-items: center; min-height: 32px; color: var(--text-muted); font-size: 13px; text-decoration: none; }
+.footer-legal a:hover { color: #FF5DBB; }
+
+.ar-table-wrap { margin: 0 0 1.5em; overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; }
+.ar-table { width: 100%; min-width: 480px; border-collapse: collapse; font-size: 15px; line-height: 1.45; }
+.ar-table th, .ar-table td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--line); }
+.ar-table thead th { background: rgba(255,46,166,0.12); font-size: 12px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: #FF5DBB; }
+.ar-table tbody th { font-weight: 700; color: #fff; }
+.ar-table tbody tr:last-child th, .ar-table tbody tr:last-child td { border-bottom: 0; }
+.ar-content code { padding: 2px 6px; border-radius: 6px; background: rgba(255,255,255,0.08); font-size: 0.9em; }
+
+.legal-block { padding: 56px 0 72px; }
+.legal-content { max-width: 760px; }
+.legal-content h2 { scroll-margin-top: 96px; }
+
+.hm-more { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 18px; list-style: none; }
+.hm-more a {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 8px; height: 100%; padding: 14px 16px;
+  border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--text-light); text-decoration: none;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.hm-more a:hover { border-color: rgba(255,93,187,0.5); transform: translateY(-2px); }
+.hm-more .tag { display: inline-flex; line-height: 1.4; }
+.hm-more strong { font-size: 15px; line-height: 1.35; }
+@media (max-width: 900px) { .hm-more { grid-template-columns: minmax(0, 1fr); } }
+.footer-bottom { flex-wrap: wrap; }
+.footer-legal { flex-basis: 100%; order: -1; }
+@media (max-width: 640px) {
+  .ar-table { min-width: 0; font-size: 13px; }
+  .ar-table th, .ar-table td { padding: 10px 8px; }
+  .ar-table thead th { font-size: 10px; letter-spacing: 0.8px; }
+}
+/* Every footer now has five columns (brand + four link groups), the home included. */
+.footer-grid { grid-template-columns: 1.4fr repeat(4, 1fr); gap: 32px; }
+@media (max-width: 1100px) {
+  .footer-grid { grid-template-columns: repeat(4, 1fr); }
+  .footer-brand { grid-column: 1 / -1; }
+}
+@media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .footer-grid { gap: 28px; } }
