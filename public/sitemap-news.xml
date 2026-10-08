@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
+    <loc>https://gtavivicecity.com/noticias/gta-6-nuevas-imagenes-emisoras-radio</loc>
+    <news:news>
+      <news:publication><news:name>GTA VI Vice City</news:name><news:language>es</news:language></news:publication>
+      <news:publication_date>2026-10-08T17:30:00-05:00</news:publication_date>
+      <news:title>GTA 6 muestra nuevas imágenes de Vice City y revela sus emisoras: Bad Bunny, Lana Del Rey y Slayer, al micrófono</news:title>
+    </news:news>
+  </url>
+  <url>
     <loc>https://gtavivicecity.com/noticias/gta-6-pc</loc>
     <news:news>
       <news:publication><news:name>GTA VI Vice City</news:name><news:language>es</news:language></news:publication>

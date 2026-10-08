@@ -6,8 +6,18 @@
     <atom:link href="https://gtavivicecity.com/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Noticias, guías y análisis de GTA 6 (Grand Theft Auto VI) en español, con fuentes.</description>
     <language>es</language>
-    <lastBuildDate>Thu, 08 Oct 2026 09:00:00 -0500</lastBuildDate>
+    <lastBuildDate>Thu, 08 Oct 2026 17:30:00 -0500</lastBuildDate>
     <image><url>https://gtavivicecity.com/images/icon-512.png</url><title>GTA VI Vice City: noticias de GTA 6</title><link>https://gtavivicecity.com/noticias</link></image>
+    <item>
+      <title>GTA 6 muestra nuevas imágenes de Vice City y revela sus emisoras: Bad Bunny, Lana Del Rey y Slayer, al micrófono</title>
+      <link>https://gtavivicecity.com/noticias/gta-6-nuevas-imagenes-emisoras-radio</link>
+      <guid isPermaLink="true">https://gtavivicecity.com/noticias/gta-6-nuevas-imagenes-emisoras-radio</guid>
+      <pubDate>Thu, 08 Oct 2026 17:30:00 -0500</pubDate>
+      <category>Última hora</category>
+      <dc:creator>Redacción GTA VI Vice City</dc:creator>
+      <description>Rockstar Games publicó hoy tres capturas inéditas de Vice City y presentó las primeras seis emisoras de radio de GTA VI, que ya se pueden escuchar en avance. Al micrófono: Bad Bunny, Lana Del Rey, Morgan Wallen, Burna Boy, Slayer y más.</description>
+      <media:content url="https://gtavivicecity.com/images/news/redaccion/deportivo-neon-noche-1600.webp" medium="image" type="image/webp" width="1600" height="900"/>
+    </item>
     <item>
       <title>¿GTA 6 sale en PC? Lo que se sabe de la versión para ordenador</title>
       <link>https://gtavivicecity.com/noticias/gta-6-pc</link>
