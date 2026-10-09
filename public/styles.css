@@ -5001,3 +5001,20 @@ body.page-chat .site-footer { display: none; }
 .hm-more { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
 @media (min-width: 901px) { .ar-grid-5 > :nth-child(n) { grid-column: span 2; } }
 @media (max-width: 640px) { .ar-gallery { grid-template-columns: minmax(0, 1fr); } }
+
+/* Home: GTA 6 summary, quick facts and FAQ */
+.hm-about-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 40px; align-items: start; }
+.hm-about-text p { margin-bottom: 1.1em; font-size: 17px; line-height: 1.8; color: #ddd2ea; }
+.hm-about-text strong { color: #fff; }
+.hm-about-text a { color: #FF5DBB; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.hm-facts { display: grid; gap: 0; margin: 0; padding: 8px 22px; border: 1px solid rgba(255,93,187,0.3); border-radius: 20px;
+  background: linear-gradient(160deg, rgba(255,46,166,0.12), rgba(123,47,247,0.08) 60%), var(--surface); }
+.hm-facts div { display: flex; justify-content: space-between; gap: 16px; padding: 13px 0; border-bottom: 1px solid var(--line); }
+.hm-facts div:last-child { border-bottom: 0; }
+.hm-facts dt { font-size: 13px; color: var(--text-muted); }
+.hm-facts dd { margin: 0; font-size: 14px; font-weight: 700; color: #fff; text-align: right; }
+.hm-faq-title { margin: 44px 0 16px; font-size: 22px; font-weight: 800; }
+.hm-faq .faq-answer a { color: var(--cyan); font-weight: 600; text-decoration: none; }
+.hm-faq .faq-answer a:hover { text-decoration: underline; }
+@media (max-width: 900px) { .hm-about-grid { grid-template-columns: minmax(0, 1fr); gap: 24px; } }
+@media (max-width: 640px) { .hm-about-text p { font-size: 16px; } .hm-facts { padding: 4px 16px; } }
