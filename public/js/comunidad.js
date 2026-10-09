@@ -35,16 +35,23 @@
     if (!user) {
       card.append(
         G.el('h2', null, 'Únete a la comunidad'),
-        G.el('p', 'side-text', 'Crea tu cuenta gratis para publicar, comentar, dar me gusta y entrar al chat.'),
+        G.el('p', 'side-text', 'Entra gratis para publicar, comentar, dar me gusta y hablar en el chat.'),
       );
       const actions = G.el('div', 'side-actions');
-      const reg = G.el('button', 'btn btn-primary btn-sm', 'Crear cuenta');
-      reg.type = 'button';
-      reg.dataset.openAuth = 'register';
-      const log = G.el('button', 'btn-link', 'Ya tengo cuenta');
-      log.type = 'button';
-      log.dataset.openAuth = 'login';
-      actions.append(reg, log);
+      if (G.google) {
+        const google = G.el('a', 'auth-google auth-google-sm');
+        google.href = `/api/auth/google?next=${encodeURIComponent(location.pathname)}`;
+        google.innerHTML = '<svg class="auth-google-g" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Continuar con Google</span>';
+        actions.append(google);
+      } else {
+        const reg = G.el('button', 'btn btn-primary btn-sm', 'Crear cuenta');
+        reg.type = 'button';
+        reg.dataset.openAuth = 'register';
+        const log = G.el('button', 'btn-link', 'Ya tengo cuenta');
+        log.type = 'button';
+        log.dataset.openAuth = 'login';
+        actions.append(reg, log);
+      }
       card.append(actions);
       return;
     }
@@ -75,5 +82,11 @@
   // Online counter in the sidebar
   const socket = G.getSocket();
   const online = document.getElementById('side-online');
-  if (socket && online) socket.on('chat:online', n => { online.textContent = n; });
+  if (socket) {
+    socket.on('chat:online', n => {
+      if (online) online.textContent = n;
+      document.querySelectorAll('[data-online-count]').forEach(b => { b.textContent = n; });
+      document.querySelectorAll('[data-online-pill]').forEach(p => { p.hidden = !(n > 0); });
+    });
+  }
 })();

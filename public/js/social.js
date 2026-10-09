@@ -16,6 +16,10 @@ window.GTA = (() => {
     send: '<path d="M5 12h14M13 6l6 6-6 6"/>',
     eye: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>',
     close: '<path d="M6 6l12 12M18 6 6 18"/>',
+    lock: '<rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',
+    chatPerk: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/><path d="M8 9h8M8 13h5"/>',
+    postPerk: '<rect x="4" y="4" width="16" height="7" rx="2"/><rect x="4" y="14" width="16" height="6" rx="2"/><path d="M7.5 7.5h6"/>',
+    userPerk: '<circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.8 3.6-6 7-6s6.2 2.2 7 6"/>',
   };
   const GOOGLE_G = '<svg class="auth-google-g" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>';
 
@@ -113,6 +117,7 @@ window.GTA = (() => {
     if (!res.ok) {
       const err = new Error(data.error || 'Error de conexión. Inténtalo de nuevo.');
       err.status = res.status;
+      err.data = data;
       throw err;
     }
     return data;
@@ -128,10 +133,20 @@ window.GTA = (() => {
     if (!mePromise || force) {
       const initial = !force && window.GTA_ME ? window.GTA_ME : api('/api/me');
       mePromise = Promise.resolve(initial)
-        .then(d => { me = (d && d.user) || null; googleEnabled = Boolean(d && d.google); return me; })
-        .catch(() => { me = null; return null; });
+        .then(d => { me = (d && d.user) || null; googleEnabled = Boolean(d && d.google); markAuthMode(); return me; })
+        .catch(() => { me = null; markAuthMode(); return null; });
     }
     return mePromise;
+  }
+
+  // With Google on, every sign-in point shows only "Continuar con Google" ([data-auth-google]);
+  // the username/password controls ([data-auth-classic]) are the fallback while Google is off.
+  function markAuthMode() {
+    const root = document.documentElement;
+    root.classList.toggle('signin-google', googleEnabled);
+    root.classList.toggle('signin-classic', !googleEnabled);
+    const here = encodeURIComponent(location.pathname + location.search);
+    document.querySelectorAll('a[data-auth-google]').forEach(a => { a.href = `/api/auth/google?next=${here}`; });
   }
 
   function setMe(user) {
@@ -166,28 +181,40 @@ window.GTA = (() => {
   let dialogMode = 'login';
   let afterAuth = null;
 
+  const PERKS = [
+    [SVG.chatPerk, 'Chat en vivo con fotos y notas de voz'],
+    [SVG.postPerk, 'Publica debates, teorías y clips'],
+    [SVG.userPerk, 'Tu perfil con foto, portada y equipo'],
+  ];
+
   function buildDialog() {
     dialog = el('dialog', 'auth-dialog');
     dialog.setAttribute('aria-labelledby', 'gta-auth-title');
     dialog.innerHTML = `
       <form method="dialog" class="auth-close-form"><button class="auth-close" aria-label="Cerrar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">${SVG.close}</svg></button></form>
+      <div class="auth-hero" aria-hidden="true"></div>
       <div class="auth-brand">GTA<span>VI</span> <small>Comunidad</small></div>
       <h2 class="auth-title" id="gta-auth-title">Entrar</h2>
       <p class="auth-reason" hidden></p>
-      <a class="auth-google" href="/api/auth/google" hidden>${GOOGLE_G}<span>Continuar con Google</span></a>
-      <p class="auth-or" hidden><span>o con usuario y contraseña</span></p>
-      <div class="auth-tabs" role="tablist">
-        <button type="button" role="tab" class="auth-tab" data-tab="login" aria-selected="true">Entrar</button>
-        <button type="button" role="tab" class="auth-tab" data-tab="register" aria-selected="false">Crear cuenta</button>
+      <div class="auth-google-panel">
+        <a class="auth-google" href="/api/auth/google">${GOOGLE_G}<span>Continuar con Google</span></a>
+        <ul class="auth-perks">${PERKS.map(([svg, t]) => `<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${svg}</svg>${t}</li>`).join('')}</ul>
+        <p class="auth-trust"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${SVG.lock}</svg><span>Solo usamos tu nombre de Google para sugerirte un usuario. No vemos tu correo ni tu contraseña.</span></p>
       </div>
-      <form class="auth-form" novalidate>
-        <label>Usuario<input name="username" type="text" autocomplete="username" maxlength="20" required spellcheck="false" autocapitalize="off"></label>
-        <label>Contraseña<input name="password" type="password" autocomplete="current-password" maxlength="72" required></label>
-        <p class="auth-hint" hidden>Usuario: 3 a 20 letras, números o guion bajo. Contraseña: mínimo 8 caracteres.</p>
-        <p class="auth-error" role="alert"></p>
-        <button type="submit" class="btn btn-primary auth-submit">Entrar</button>
-      </form>
-      <p class="auth-legal">Al unirte aceptas las normas de la comunidad: respeto, sin spam y spoilers marcados.</p>`;
+      <div class="auth-classic-panel">
+        <div class="auth-tabs" role="tablist">
+          <button type="button" role="tab" class="auth-tab" data-tab="login" aria-selected="true">Entrar</button>
+          <button type="button" role="tab" class="auth-tab" data-tab="register" aria-selected="false">Crear cuenta</button>
+        </div>
+        <form class="auth-form" novalidate>
+          <label>Usuario<input name="username" type="text" autocomplete="username" maxlength="20" required spellcheck="false" autocapitalize="off"></label>
+          <label>Contraseña<input name="password" type="password" autocomplete="current-password" maxlength="72" required></label>
+          <p class="auth-hint" hidden>Usuario: 3 a 20 letras, números o guion bajo. Contraseña: mínimo 8 caracteres.</p>
+          <p class="auth-error" role="alert"></p>
+          <button type="submit" class="btn btn-primary auth-submit">Entrar</button>
+        </form>
+      </div>
+      <p class="auth-legal">Al continuar aceptas las normas de la comunidad y la <a href="/privacidad">política de privacidad</a>.</p>`;
     document.body.append(dialog);
 
     const form = dialog.querySelector('.auth-form');
@@ -216,7 +243,9 @@ window.GTA = (() => {
     dialogMode = mode;
     const register = mode === 'register';
     dialog.querySelectorAll('.auth-tab').forEach(tab => tab.setAttribute('aria-selected', String(tab.dataset.tab === mode)));
-    dialog.querySelector('.auth-title').textContent = register ? 'Crea tu cuenta' : 'Entrar';
+    dialog.querySelector('.auth-title').textContent = googleEnabled
+      ? (register ? 'Únete a la comunidad' : 'Entra a la comunidad')
+      : (register ? 'Crea tu cuenta' : 'Entrar');
     dialog.querySelector('.auth-submit').textContent = register ? 'Crear cuenta' : 'Entrar';
     dialog.querySelector('.auth-hint').hidden = !register;
     dialog.querySelector('.auth-form').password.autocomplete = register ? 'new-password' : 'current-password';
@@ -224,55 +253,76 @@ window.GTA = (() => {
   }
 
   function openAuth(mode = 'login', { reason = '', then = null } = {}) {
-    if (!dialog) buildDialog();
-    setDialogMode(mode);
-    const google = dialog.querySelector('.auth-google');
-    google.href = `/api/auth/google?next=${encodeURIComponent(location.pathname + location.search)}`;
-    google.hidden = !googleEnabled;
-    dialog.querySelector('.auth-or').hidden = !googleEnabled;
-    afterAuth = then;
-    const r = dialog.querySelector('.auth-reason');
-    r.textContent = reason;
-    r.hidden = !reason;
-    dialog.querySelector('.auth-form').reset();
-    dialog.showModal();
-    dialog.querySelector('input[name=username]').focus();
+    loadMe().then(() => {
+      if (!dialog) buildDialog();
+      dialog.classList.toggle('is-google', googleEnabled);
+      setDialogMode(mode);
+      dialog.querySelector('.auth-google').href = `/api/auth/google?next=${encodeURIComponent(location.pathname + location.search)}`;
+      afterAuth = then;
+      const r = dialog.querySelector('.auth-reason');
+      r.textContent = reason;
+      r.hidden = !reason;
+      dialog.querySelector('.auth-form').reset();
+      if (!dialog.open) dialog.showModal();
+      (googleEnabled ? dialog.querySelector('.auth-google') : dialog.querySelector('input[name=username]')).focus();
+    });
   }
 
-  // After "Continuar con Google" a new member picks the name everyone will see.
+  // After "Continuar con Google" a new member picks the name everyone will see. Members who joined
+  // with a password can type their old name and password once to keep their account.
   function openGoogleChooser(suggestion) {
-    const box = el('dialog', 'auth-dialog');
+    const box = el('dialog', 'auth-dialog is-google');
     box.setAttribute('aria-labelledby', 'gta-google-title');
     box.innerHTML = `
+      <div class="auth-hero" aria-hidden="true"></div>
       <div class="auth-brand">GTA<span>VI</span> <small>Comunidad</small></div>
       <h2 class="auth-title" id="gta-google-title">Elige tu nombre</h2>
       <p class="auth-reason">Tu cuenta de Google está lista. Así te verán en el chat y la comunidad.</p>
       <form class="auth-form" novalidate>
         <label>Nombre de usuario<input name="username" type="text" autocomplete="username" maxlength="20" required spellcheck="false" autocapitalize="off"></label>
         <p class="auth-hint">De 3 a 20 letras, números o guion bajo. No se puede cambiar después.</p>
+        <label class="auth-link-field" hidden>Contraseña de esa cuenta<input name="password" type="password" autocomplete="current-password" maxlength="72"></label>
         <p class="auth-error" role="alert"></p>
         <button type="submit" class="btn btn-primary auth-submit">Crear cuenta</button>
+        <button type="button" class="btn-link auth-link-toggle">¿Ya tenías cuenta con contraseña? Vincúlala</button>
       </form>
-      <p class="auth-legal">Al unirte aceptas las normas de la comunidad: respeto, sin spam y spoilers marcados.</p>`;
+      <p class="auth-legal">Al continuar aceptas las normas de la comunidad y la <a href="/privacidad">política de privacidad</a>.</p>`;
     document.body.append(box);
     const form = box.querySelector('form');
+    const linkField = box.querySelector('.auth-link-field');
+    const submit = box.querySelector('.auth-submit');
+    const toggle = box.querySelector('.auth-link-toggle');
     form.username.value = suggestion || '';
+    function setLinking(on) {
+      linkField.hidden = !on;
+      toggle.hidden = on;
+      box.querySelector('.auth-hint').hidden = on;
+      submit.textContent = on ? 'Vincular mi cuenta' : 'Crear cuenta';
+      box.querySelector('.auth-title').textContent = on ? 'Vincula tu cuenta' : 'Elige tu nombre';
+      box.querySelector('.auth-reason').textContent = on
+        ? 'Escribe tu usuario y contraseña de siempre una sola vez. Después entrarás solo con Google.'
+        : 'Tu cuenta de Google está lista. Así te verán en el chat y la comunidad.';
+      if (on) (form.username.value ? form.password : form.username).focus();
+    }
+    toggle.addEventListener('click', () => setLinking(true));
     box.addEventListener('close', () => box.remove());
     form.addEventListener('submit', async e => {
       e.preventDefault();
       const error = box.querySelector('.auth-error');
-      const submit = box.querySelector('.auth-submit');
       error.textContent = '';
       submit.disabled = true;
       try {
-        const res = await api('/api/auth/google/complete', { method: 'POST', body: { username: form.username.value.trim() } });
+        const body = { username: form.username.value.trim() };
+        if (!linkField.hidden) body.password = form.password.value;
+        const res = await api('/api/auth/google/complete', { method: 'POST', body });
         const data = await api('/api/me');
         setMe(data.user);
         refreshSocket();
         box.close();
-        toast(`¡Bienvenido a la comunidad, ${res.user.username}!`, 'success');
+        toast(res.linked ? `Cuenta vinculada. ¡Hola de nuevo, ${res.user.username}!` : `¡Bienvenido a la comunidad, ${res.user.username}!`, 'success');
         if (res.next && res.next !== location.pathname + location.search) location.assign(res.next);
       } catch (err) {
+        if (err.data && err.data.link && linkField.hidden) setLinking(true);
         error.textContent = err.message;
       } finally {
         submit.disabled = false;
@@ -765,6 +815,14 @@ window.GTA = (() => {
       update();
     });
     video?.addEventListener('input', update);
+    if (form.classList.contains('composer-collapsible')) {
+      if (window.matchMedia('(max-width: 640px)').matches) text.placeholder = '¿Qué opinas de GTA VI?';
+      const isEmpty = () => !text.value.trim() && !(video && video.value.trim());
+      form.addEventListener('focusin', () => form.classList.add('is-open'));
+      form.addEventListener('focusout', () => setTimeout(() => {
+        if (!form.contains(document.activeElement) && isEmpty()) form.classList.remove('is-open');
+      }, 200));
+    }
     videoToggle?.addEventListener('click', () => {
       const open = videoRow.hidden;
       videoRow.hidden = !open;
@@ -798,6 +856,8 @@ window.GTA = (() => {
           form.reset();
           text.style.height = 'auto';
           if (videoRow && !fixedCategory) videoRow.hidden = true;
+          form.classList.remove('is-open');
+          if (document.activeElement && form.contains(document.activeElement)) document.activeElement.blur();
           toast(category === 'clip' ? '¡Clip publicado!' : '¡Publicado!', 'success');
           if (onPosted) onPosted(post);
         } catch (err) {

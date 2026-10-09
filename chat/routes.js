@@ -212,6 +212,8 @@ function createChatRouter(getStore) {
   });
 
   router.post('/auth/register', requireStore, async (req, res, next) => {
+    // With Google sign-in on, new members join only through Google.
+    if (googleConfig()) return res.status(403).json({ error: 'Las cuentas nuevas se crean con Google.' });
     const username = String(req.body.username || '').trim();
     const password = String(req.body.password || '');
 
@@ -359,9 +361,33 @@ function createChatRouter(getStore) {
       return res.status(400).json({ error: 'La sesión con Google caducó. Vuelve a intentarlo.' });
     }
     const username = String(req.body.username || '').trim();
+    const password = typeof req.body.password === 'string' ? req.body.password : '';
     if (!USERNAME_RE.test(username)) {
       return res.status(400).json({ error: 'El usuario debe tener de 3 a 20 caracteres: letras, números o guion bajo.' });
     }
+
+    // Members who joined with a username and password keep their account: proving the old
+    // password once links it to this Google account.
+    if (password) {
+      if (!loginLimiter(req.ip)) {
+        return res.status(429).json({ error: 'Demasiados intentos. Espera unos minutos y vuelve a intentarlo.' });
+      }
+      try {
+        const owner = await getStore().findUserByName(username);
+        const linkable = owner && !owner.google_id;
+        const ok = await bcrypt.compare(password, linkable ? owner.password_hash : DUMMY_HASH);
+        if (!linkable || !ok) return res.status(401).json({ error: 'La contraseña no coincide con esa cuenta.', link: true });
+        if (!await getStore().linkGoogle(owner.id, pending.googleId)) {
+          return res.status(409).json({ error: 'Esta cuenta de Google ya está vinculada a otro usuario.' });
+        }
+        const nextPath = pending.next;
+        await startSession(req, owner);
+        return res.json({ user: { username: owner.username }, linked: true, next: nextPath });
+      } catch (err) {
+        return next(err);
+      }
+    }
+
     if (!registerLimiter(req.ip)) {
       return res.status(429).json({ error: 'Demasiadas cuentas creadas desde tu conexión. Inténtalo más tarde.' });
     }
@@ -375,7 +401,16 @@ function createChatRouter(getStore) {
       } catch (err) {
         if (err.code !== 'ER_DUP_ENTRY') throw err;
         user = await getStore().findUserByGoogleId(pending.googleId);
-        if (!user) return res.status(409).json({ error: 'Ese nombre de usuario ya está en uso.' });
+        if (!user) {
+          const owner = await getStore().findUserByName(username);
+          if (owner && !owner.google_id) {
+            return res.status(409).json({
+              error: 'Ese nombre ya tiene una cuenta. Si es tuya, escribe su contraseña para vincularla con Google.',
+              link: true,
+            });
+          }
+          return res.status(409).json({ error: 'Ese nombre de usuario ya está en uso.' });
+        }
       }
       await startSession(req, user);
       res.status(201).json({ user: { username: user.username }, next: pending.next });

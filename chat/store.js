@@ -171,7 +171,7 @@ async function createMysqlStore(config) {
 
     // Users
     async findUserByName(username) {
-      const [rows] = await pool.query('SELECT id, username, password_hash FROM users WHERE username = ?', [username]);
+      const [rows] = await pool.query('SELECT id, username, password_hash, google_id FROM users WHERE username = ?', [username]);
       return rows[0] || null;
     },
     async createUser(username, passwordHash) {
@@ -181,6 +181,16 @@ async function createMysqlStore(config) {
     async findUserByGoogleId(googleId) {
       const [rows] = await pool.query('SELECT id, username FROM users WHERE google_id = ?', [googleId]);
       return rows[0] || null;
+    },
+    // Links an existing password account to a Google account (only if it has none yet).
+    async linkGoogle(userId, googleId) {
+      try {
+        const [result] = await pool.query('UPDATE users SET google_id = ? WHERE id = ? AND google_id IS NULL', [googleId, userId]);
+        return result.affectedRows === 1;
+      } catch (err) {
+        if (err.code === 'ER_DUP_ENTRY') return false;
+        throw err;
+      }
     },
     async createGoogleUser(username, googleId, passwordHash) {
       const [result] = await pool.query(

@@ -233,7 +233,8 @@
         document.title = 'Únete | Comunidad GTA VI';
         $('profile-cover').style.setProperty('--cover', `url('${COVERS[DEFAULT_COVER]}')`);
         $('pa-google').hidden = !G.google;
-        $('pa-or').hidden = !G.google;
+        $('pa-trust').hidden = !G.google;
+        authForm.hidden = G.google;
         show('profile-auth');
         return;
       }

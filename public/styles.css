@@ -17,6 +17,7 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  overflow-x: clip; /* clips like hidden but keeps position: sticky working */
 }
 
 body {
@@ -24,6 +25,7 @@ body {
   color: var(--text-light);
   font-family: 'Poppins', sans-serif;
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .pink { color: var(--pink); }
@@ -5199,3 +5201,169 @@ body.page-chat .site-footer { display: none; }
   .cover-picks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .pe-photo { flex-direction: column; align-items: flex-start; }
 }
+
+/* ==========================================================================
+   Community hub (posts vs. live chat) and Google-only sign-in
+   ========================================================================== */
+html:not(.signin-google) [data-auth-google] { display: none !important; }
+html:not(.signin-classic) [data-auth-classic] { display: none !important; }
+
+/* Two clear tabs: Publicaciones | Chat en vivo */
+.cm-switch {
+  display: flex; gap: 4px; padding: 4px; border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.1); background: rgba(16,10,26,0.86);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.cm-tab {
+  display: flex; flex: 1 1 auto; align-items: center; justify-content: center; gap: 7px; min-width: 0; min-height: 44px; padding: 0 12px;
+  border-radius: 12px; color: var(--text-muted); font-size: 14px; font-weight: 700; text-decoration: none; white-space: nowrap;
+  transition: color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+.cm-tab .icon { flex: none; width: 19px; height: 19px; }
+.cm-tab > span:not(.cm-live) { overflow: hidden; text-overflow: ellipsis; }
+.cm-tab:hover { color: var(--text-light); background: rgba(255,255,255,0.05); }
+.cm-tab[aria-current="page"] {
+  color: #fff; background: linear-gradient(135deg, var(--pink), #b62ad9 60%, var(--purple));
+  box-shadow: 0 8px 22px rgba(255,46,166,0.3);
+}
+.cm-live {
+  display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px 2px 7px; border-radius: 999px;
+  background: rgba(61,220,132,0.14); color: #6ff0a8; font-size: 11px; font-weight: 800; font-variant-numeric: tabular-nums;
+}
+.cm-live[hidden] { display: none; }
+.cm-live .live-dot { width: 7px; height: 7px; }
+.cm-live-dot { padding: 0; background: none; }
+.cm-tab[aria-current="page"] .cm-live:not(.cm-live-dot) { background: rgba(255,255,255,0.2); color: #fff; }
+
+.cm-switch-bar {
+  position: sticky; top: 72px; z-index: 60; padding: 10px 0;
+  border-bottom: 1px solid var(--line); background: rgba(10,6,18,0.9);
+  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+}
+.cm-switch-bar .cm-switch { max-width: 480px; }
+
+/* Compact community header */
+.page-hero.cm-hero { min-height: 0; padding: 124px 0 30px; border-bottom: 0; }
+.cm-hero .page-lead { max-width: 560px; }
+.page-comunidad .social-block { padding-top: 24px; }
+
+@media (max-width: 900px) {
+  .page-hero.cm-hero { padding: 92px 0 18px; }
+  .cm-hero .breadcrumb ol { margin-bottom: 10px; }
+  .cm-hero .page-title { font-size: clamp(40px, 12vw, 56px); }
+  .cm-hero .page-lead { margin-top: 6px; font-size: 15px; }
+  .cm-switch-bar { padding: 8px 0; }
+  .cm-switch-bar .cm-switch { max-width: none; }
+  .page-comunidad .social-block { padding-top: 16px; }
+  .side-chat { display: none; }
+}
+
+/* Composer: one tidy line on phones until you start writing */
+@media (max-width: 640px) {
+  .composer-collapsible { margin-bottom: 14px; padding: 10px 12px; border-radius: 18px; }
+  .composer-collapsible .composer-top { align-items: center; gap: 10px; }
+  .composer-collapsible .composer-avatar .avatar { width: 38px; height: 38px; font-size: 16px; }
+  .composer-collapsible:not(.is-open) .composer-bar,
+  .composer-collapsible:not(.is-open) .composer-video,
+  .composer-collapsible:not(.is-open) .composer-error:empty { display: none; }
+  .composer-collapsible:not(.is-open) textarea {
+    height: 44px !important; min-height: 44px; padding: 10px 16px; overflow: hidden; border-radius: 22px;
+    background: rgba(255,255,255,0.06); white-space: nowrap; text-overflow: ellipsis; font-size: 15px;
+  }
+  .composer-collapsible.is-open .composer-video { margin-left: 0; }
+}
+
+/* Chat header with the same tabs */
+.cx-top .cm-switch { flex: 0 1 340px; background: rgba(10,6,18,0.55); }
+.cx-top .cm-tab { min-height: 40px; }
+@media (max-width: 900px) {
+  .cx-top .cx-title { display: none; }
+  .cx-top .cm-switch { flex: 1; min-width: 0; }
+  .cx-top .cm-tab { gap: 6px; padding: 0 10px; font-size: 13.5px; }
+}
+@media (max-width: 440px) {
+  .cx-top .cm-tab .icon { display: none; }
+}
+@media (max-width: 360px) {
+  .cm-switch-bar .cm-tab .icon { display: none; }
+}
+
+/* Guest bar in the chat */
+.cx-guest-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.cx-guest-actions .auth-classic { display: inline-flex; gap: 8px; }
+.auth-google-sm { width: auto; min-height: 44px; padding: 0 20px; font-size: 14px; }
+.side-actions .auth-google-sm { width: 100%; }
+
+/* Sign-in dialog: Google only */
+.auth-hero { display: none; }
+.auth-dialog.is-google { padding: 0 26px 22px; overflow-x: hidden; background: #120b1c; }
+.auth-dialog.is-google .auth-hero {
+  display: block; height: 128px; margin: 0 -26px;
+  background:
+    linear-gradient(180deg, rgba(18,11,28,0.1) 0%, rgba(18,11,28,0.55) 55%, #120b1c 100%),
+    url('/images/news/oficial/vice-city-skyline-800.webp') center 45% / cover no-repeat;
+}
+.auth-dialog.is-google .auth-close-form { z-index: 2; }
+.auth-dialog.is-google .auth-close { background: rgba(10,6,18,0.6); color: #fff; }
+.auth-dialog.is-google .auth-brand { position: relative; margin-top: -30px; }
+.auth-dialog.is-google .auth-title { margin-bottom: 8px; font-size: 34px; line-height: 1; }
+.auth-dialog.is-google .auth-reason { margin: 0 0 14px; }
+.auth-dialog.is-google .auth-classic-panel { display: none; }
+.auth-dialog:not(.is-google) .auth-google-panel { display: none; }
+.auth-google-panel .auth-google { margin-top: 6px; min-height: 52px; font-size: 16px; }
+.auth-perks {
+  display: grid; gap: 11px; margin: 16px 0 14px; padding: 14px 16px; list-style: none;
+  border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; background: rgba(255,255,255,0.035);
+}
+.auth-perks li { display: flex; align-items: center; gap: 11px; font-size: 14px; color: #e6dcf2; }
+.auth-perks svg { flex: none; width: 20px; height: 20px; color: #ff5dbb; }
+.auth-trust { display: flex; align-items: flex-start; gap: 10px; font-size: 12.5px; line-height: 1.5; color: var(--text-muted); }
+.auth-trust svg, .auth-trust .icon { flex: none; width: 18px; height: 18px; margin-top: 1px; color: #6ff0a8; }
+.auth-trust[hidden] { display: none; }
+.auth-legal a { color: inherit; }
+.auth-dialog .auth-link-field[hidden], .auth-link-toggle[hidden] { display: none; }
+.auth-link-toggle { display: block; margin: 12px auto 0; font-size: 13px; }
+.auth-dialog.is-google .auth-form { margin-top: 4px; }
+
+/* Profile sign-in box */
+.pa-box .pa-google { min-height: 52px; font-size: 16px; }
+.pa-box .auth-trust { margin-top: 14px; }
+
+/* Phones: dialogs rise from the bottom like an app sheet */
+@media (max-width: 560px) {
+  .auth-dialog {
+    width: 100%; max-width: 100%; max-height: 92dvh; margin: auto 0 0; overflow-y: auto;
+    border-width: 1px 0 0; border-radius: 24px 24px 0 0;
+    padding-bottom: calc(22px + env(safe-area-inset-bottom));
+  }
+  .auth-dialog.is-google { padding-left: 20px; padding-right: 20px; }
+  .auth-dialog.is-google .auth-hero { margin: 0 -20px; height: 112px; }
+}
+
+/* Post cards on phones: name and actions on one line, time underneath */
+@media (max-width: 640px) {
+  .post { grid-template-columns: 40px minmax(0, 1fr); gap: 12px; padding: 16px 14px; }
+  .post-avatar .avatar { width: 40px; height: 40px; font-size: 16px; }
+  .post-head { gap: 2px 8px; }
+  .post-head .post-author { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .post-head .post-time { order: 10; flex-basis: 100%; }
+}
+
+/* Desktop chat header: title shrinks before anything overlaps */
+.cx-top .cx-title { flex: 1 1 auto; min-width: 0; overflow: hidden; }
+.cx-top .cx-title > div { min-width: 0; }
+.cx-top .cx-title strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cx-top #cx-sub { display: none; }
+.cx-chip-text { white-space: nowrap; }
+.cm-switch-bar { background: rgba(10,6,18,0.94); }
+.cm-hero .page-title { font-size: clamp(48px, 6vw, 80px); }
+
+/* Sticky sidebars never hide their bottom on short screens: they scroll on their own */
+@media (min-width: 901px) {
+  .social-side, .forum-side { max-height: calc(100vh - 110px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+}
+@media (min-width: 1001px) {
+  .ar-side { max-height: calc(100vh - 116px); overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; }
+}
+/* The tabs at the top already lead to the chat */
+.side-chat { display: none; }

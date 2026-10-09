@@ -195,6 +195,14 @@ function createJsonStore(filePath) {
     async findUserByGoogleId(googleId) {
       return state.usersByGoogle.get(googleId) || null;
     },
+    async linkGoogle(userId, googleId) {
+      const user = state.users.get(userId);
+      if (!user || user.google_id || state.usersByGoogle.has(googleId)) return false;
+      user.google_id = googleId;
+      state.usersByGoogle.set(googleId, user);
+      save();
+      return true;
+    },
     async createGoogleUser(username, googleId, passwordHash) {
       const key = username.toLowerCase();
       if (state.usersByName.has(key) || state.usersByGoogle.has(googleId)) {
