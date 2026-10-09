@@ -126,15 +126,28 @@ window.GTA = (() => {
   // ---------------------------------------------------------------- account
   let me = null;
   let mePromise = null;
-  let googleEnabled = false;
+  // Until /api/me answers, assume the production setup (Google on).
+  let googleEnabled = true;
   const authListeners = new Set();
 
   function loadMe(force = false) {
     if (!mePromise || force) {
       const initial = !force && window.GTA_ME ? window.GTA_ME : api('/api/me');
       mePromise = Promise.resolve(initial)
-        .then(d => { me = (d && d.user) || null; googleEnabled = Boolean(d && d.google); markAuthMode(); return me; })
-        .catch(() => { me = null; markAuthMode(); return null; });
+        .then(d => {
+          if (!d) throw new Error('no account data');
+          me = d.user || null;
+          googleEnabled = Boolean(d.google);
+          markAuthMode();
+          return me;
+        })
+        .catch(() => {
+          // A failed request is not cached: the next call (e.g. opening the sign-in dialog) asks again.
+          me = null;
+          mePromise = null;
+          window.GTA_ME = null;
+          return null;
+        });
     }
     return mePromise;
   }
