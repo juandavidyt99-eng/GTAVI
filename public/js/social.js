@@ -42,10 +42,21 @@ window.GTA = (() => {
     return h;
   }
 
-  function avatar(name, team, size = '') {
+  // Profile photo when there is one, otherwise the coloured initial.
+  function avatar(name, team, size = '', photo = null) {
     const a = el('span', `avatar ${size}${team ? ` avatar-${team}` : ''}`, name.charAt(0).toUpperCase());
     a.style.background = `linear-gradient(135deg, hsl(${hue(name)} 75% 52%), hsl(${(hue(name) + 50) % 360} 70% 38%))`;
     a.setAttribute('aria-hidden', 'true');
+    if (photo && /^[a-f0-9]{24}$/.test(photo)) {
+      const img = el('img');
+      img.src = `/media/chat/${photo}_a.webp`;
+      img.alt = '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.addEventListener('error', () => img.remove());
+      a.classList.add('has-photo');
+      a.append(img);
+    }
     return a;
   }
 
@@ -410,7 +421,7 @@ window.GTA = (() => {
     const link = el('a', 'comment-avatar');
     link.href = `/u/${encodeURIComponent(c.author.username)}`;
     link.setAttribute('aria-label', `Perfil de ${c.author.username}`);
-    link.append(avatar(c.author.username, c.author.team, 'avatar-sm'));
+    link.append(avatar(c.author.username, c.author.team, 'avatar-sm', c.author.avatar));
     li.append(link, body);
     return li;
   }
@@ -424,7 +435,7 @@ window.GTA = (() => {
     const avatarLink = el('a', 'post-avatar');
     avatarLink.href = `/u/${encodeURIComponent(post.author.username)}`;
     avatarLink.setAttribute('aria-label', `Perfil de ${post.author.username}`);
-    avatarLink.append(avatar(post.author.username, post.author.team));
+    avatarLink.append(avatar(post.author.username, post.author.team, '', post.author.avatar));
 
     const main = el('div', 'post-main');
     const head = el('div', 'post-head');
@@ -733,7 +744,7 @@ window.GTA = (() => {
 
     function paintAvatar(user) {
       if (!avatarSlot) return;
-      avatarSlot.replaceChildren(user ? avatar(user.username, user.team) : el('span', 'avatar avatar-guest', '?'));
+      avatarSlot.replaceChildren(user ? avatar(user.username, user.team, '', user.avatar) : el('span', 'avatar avatar-guest', '?'));
     }
     onAuth(paintAvatar);
     loadMe().then(paintAvatar);
@@ -806,5 +817,6 @@ window.GTA = (() => {
     loadMe, onAuth, openAuth, requireAuth, authenticate, logout, setMe,
     getSocket, renderPost, createFeed, createComposer,
     get me() { return me; },
+    get google() { return googleEnabled; },
   };
 })();

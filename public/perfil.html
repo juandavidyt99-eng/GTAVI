@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Tu perfil | Comunidad GTA VI Vice City</title>
-<meta name="description" content="Tu perfil en la comunidad de GTA 6: publicaciones, clips, equipo y estadísticas.">
+<meta name="description" content="Tu perfil en la comunidad de GTA 6: foto, portada, publicaciones, clips, equipo y estadísticas.">
 <meta name="robots" content="noindex, follow">
 <meta name="theme-color" content="#0a0612">
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -18,7 +18,7 @@
 <meta property="og:locale" content="es_ES">
 <meta property="og:site_name" content="GTA VI Vice City">
 <meta property="og:title" content="Perfil en la comunidad GTA VI">
-<meta property="og:description" content="Tu perfil en la comunidad de GTA 6: publicaciones, clips, equipo y estadísticas.">
+<meta property="og:description" content="Tu perfil en la comunidad de GTA 6: foto, portada, publicaciones, clips, equipo y estadísticas.">
 <meta property="og:url" content="https://gtavivicecity.com/perfil">
 <meta property="og:image" content="https://gtavivicecity.com/images/og-comunidad.jpg">
 <meta property="og:image:width" content="1200">
@@ -27,7 +27,7 @@
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Perfil en la comunidad GTA VI">
-<meta name="twitter:description" content="Tu perfil en la comunidad de GTA 6: publicaciones, clips, equipo y estadísticas.">
+<meta name="twitter:description" content="Tu perfil en la comunidad de GTA 6: foto, portada, publicaciones, clips, equipo y estadísticas.">
 <meta name="twitter:image" content="https://gtavivicecity.com/images/og-comunidad.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,7 +36,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Rubik+Spray+Paint&family=Bebas+Neue&family=Archivo+Black&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Rubik+Spray+Paint&family=Bebas+Neue&family=Archivo+Black&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet"></noscript>
 <link rel="alternate" type="application/rss+xml" title="GTA VI Vice City: noticias de GTA 6" href="/feed.xml">
-<link rel="stylesheet" href="/styles.css?v=20261009a">
+<link rel="stylesheet" href="/styles.css?v=20261009c">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -82,7 +82,7 @@
 <main id="main">
 
 <section class="profile-page">
-  <div class="profile-cover" aria-hidden="true"></div>
+  <div class="profile-cover" id="profile-cover" aria-hidden="true"></div>
   <div class="container profile-wrap">
     <h1 class="sr-only" id="page-title">Perfil · Comunidad GTA VI</h1>
 
@@ -93,22 +93,51 @@
         <div class="pc-avatar" id="pc-avatar"></div>
         <div class="pc-actions" id="pc-actions"></div>
       </div>
-      <h2 class="pc-name" id="pc-name"></h2>
+      <div class="pc-head">
+        <h2 class="pc-name" id="pc-name"></h2>
+        <span class="pc-badge" id="pc-mod" hidden><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 5 6v5c0 4.5 3 8.3 7 10 4-1.7 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2 2 4-4"/></svg>Moderador</span>
+      </div>
+      <p class="pc-handle" id="pc-handle"></p>
       <div class="pc-meta">
         <span id="pc-team"></span>
         <span class="pc-joined" id="pc-joined"></span>
       </div>
       <p class="pc-bio" id="pc-bio"></p>
       <dl class="pc-stats">
-        <div><dt>Posts</dt><dd id="pc-posts">0</dd></div>
+        <div><dt>Publicaciones</dt><dd id="pc-posts">0</dd></div>
         <div><dt>Comentarios</dt><dd id="pc-comments">0</dd></div>
         <div><dt>Me gusta</dt><dd id="pc-likes">0</dd></div>
       </dl>
+      <div class="pc-quick" id="pc-quick">
+        <a class="pc-quick-link" href="/chat"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/><path d="M8 9h8M8 13h5"/></svg><span>Chat en vivo</span></a>
+        <a class="pc-quick-link" href="/comunidad"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><circle cx="16.5" cy="9.5" r="2.6"/><path d="M3.5 19.5c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M15 14.8c2.2.3 3.8 2 4.3 4.7"/></svg><span>Comunidad</span></a>
+        <a class="pc-quick-link" href="/clips"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 7.5 16 11l5 3.5Z"/><rect x="3" y="6" width="13" height="12" rx="2"/></svg><span>Clips</span></a>
+      </div>
       <div class="pc-footer" id="pc-footer"></div>
     </article>
 
     <form class="profile-edit" id="profile-edit" hidden novalidate>
       <h2>Editar perfil</h2>
+      <div class="pe-photo">
+        <div class="pe-avatar" id="pe-avatar"></div>
+        <div class="pe-photo-actions">
+          <input type="file" id="pe-file" accept="image/jpeg,image/png,image/webp" hidden>
+          <button type="button" class="btn btn-primary btn-sm" id="pe-upload"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="m21 16-5-5-8 8"/></svg>Cambiar foto</button>
+          <button type="button" class="btn btn-outline btn-sm" id="pe-remove" hidden>Quitar foto</button>
+          <small id="pe-photo-state">JPG, PNG o WebP. Se recorta en cuadrado.</small>
+        </div>
+      </div>
+      <fieldset class="field">
+        <legend>Portada</legend>
+        <div class="cover-picks">
+          <label class="cover-pick"><input type="radio" name="cover" value="vice-city"><img src="/images/news/oficial/vice-city-skyline-800.webp" alt="" width="800" height="450" loading="lazy"><span>Vice City</span></label>
+          <label class="cover-pick"><input type="radio" name="cover" value="neon"><img src="/images/news/redaccion/deportivo-neon-noche-800.webp" alt="" width="800" height="450" loading="lazy"><span>Neón</span></label>
+          <label class="cover-pick"><input type="radio" name="cover" value="playa"><img src="/images/news/redaccion/piscina-vice-city-800.webp" alt="" width="800" height="450" loading="lazy"><span>Piscina</span></label>
+          <label class="cover-pick"><input type="radio" name="cover" value="autopista"><img src="/images/news/redaccion/autopista-vice-city-800.webp" alt="" width="800" height="450" loading="lazy"><span>Autopista</span></label>
+          <label class="cover-pick"><input type="radio" name="cover" value="atardecer"><img src="/images/news/redaccion/ultimate-atardecer-800.webp" alt="" width="800" height="450" loading="lazy"><span>Atardecer</span></label>
+          <label class="cover-pick"><input type="radio" name="cover" value="puerto"><img src="/images/news/oficial/puerto-atardecer-800.webp" alt="" width="800" height="450" loading="lazy"><span>Puerto</span></label>
+        </div>
+      </fieldset>
       <label class="field">
         <span>Bio</span>
         <textarea name="bio" rows="3" maxlength="160" placeholder="Cuéntale a la comunidad quién eres y qué esperas de GTA VI"></textarea>
@@ -131,22 +160,27 @@
 
     <div class="profile-auth" id="profile-auth" hidden>
       <div class="pa-intro">
-        <span class="kicker">Tu perfil</span>
-        <h2 class="block-title">Únete a la <em>comunidad</em></h2>
-        <p>Crea tu cuenta gratis en segundos. Solo necesitas un nombre de usuario y una contraseña.</p>
-        <ul class="pa-perks"><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/><path d="M8 9h8M8 13h5"/></svg>Publica debates y teorías</li><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg>Da me gusta y comenta</li><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 7.5 16 11l5 3.5Z"/><rect x="3" y="6" width="13" height="12" rx="2"/></svg>Comparte clips</li><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><circle cx="16.5" cy="9.5" r="2.6"/><path d="M3.5 19.5c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M15 14.8c2.2.3 3.8 2 4.3 4.7"/></svg>Elige equipo: Jason o Lucia</li></ul>
+        <span class="kicker">Comunidad GTA VI</span>
+        <h2 class="block-title">Tu pase a <em>Leonida</em></h2>
+        <p>Crea tu perfil gratis en segundos y vive el estreno de GTA 6 con otros fans.</p>
+        <ul class="pa-perks"><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/><path d="M8 9h8M8 13h5"/></svg>Chatea en vivo y manda notas de voz</li><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="m21 16-5-5-8 8"/></svg>Comparte fotos y clips</li><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg>Da me gusta y comenta</li><li><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><circle cx="16.5" cy="9.5" r="2.6"/><path d="M3.5 19.5c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5M15 14.8c2.2.3 3.8 2 4.3 4.7"/></svg>Elige equipo: Jason o Lucia</li></ul>
       </div>
-      <form class="auth-form pa-form" id="profile-auth-form" novalidate>
-        <div class="auth-tabs" role="tablist">
-          <button type="button" role="tab" class="auth-tab" data-tab="register" aria-selected="true">Crear cuenta</button>
-          <button type="button" role="tab" class="auth-tab" data-tab="login" aria-selected="false">Entrar</button>
-        </div>
-        <label>Usuario<input name="username" type="text" autocomplete="username" maxlength="20" required spellcheck="false" autocapitalize="off"></label>
-        <label>Contraseña<input name="password" type="password" autocomplete="new-password" maxlength="72" required></label>
-        <p class="auth-hint" data-hint>Usuario: 3 a 20 letras, números o guion bajo. Contraseña: mínimo 8 caracteres.</p>
-        <p class="auth-error" role="alert"></p>
-        <button type="submit" class="btn btn-primary auth-submit">Crear cuenta</button>
-      </form>
+      <div class="pa-box">
+        <a class="auth-google pa-google" id="pa-google" href="/api/auth/google?next=%2Fperfil" hidden><svg class="auth-google-g" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Continuar con Google</span></a>
+        <p class="auth-or" id="pa-or" hidden><span>o con usuario y contraseña</span></p>
+        <form class="auth-form pa-form" id="profile-auth-form" novalidate>
+          <div class="auth-tabs" role="tablist">
+            <button type="button" role="tab" class="auth-tab" data-tab="register" aria-selected="true">Crear cuenta</button>
+            <button type="button" role="tab" class="auth-tab" data-tab="login" aria-selected="false">Entrar</button>
+          </div>
+          <label>Usuario<input name="username" type="text" autocomplete="username" maxlength="20" required spellcheck="false" autocapitalize="off"></label>
+          <label>Contraseña<input name="password" type="password" autocomplete="new-password" maxlength="72" required></label>
+          <p class="auth-hint" data-hint>Usuario: 3 a 20 letras, números o guion bajo. Contraseña: mínimo 8 caracteres.</p>
+          <p class="auth-error" role="alert"></p>
+          <button type="submit" class="btn btn-primary auth-submit">Crear cuenta</button>
+        </form>
+        <p class="auth-legal">Al unirte aceptas las normas de la comunidad y nuestra <a href="/privacidad">política de privacidad</a>.</p>
+      </div>
     </div>
 
     <div class="profile-missing" id="profile-missing" hidden>
@@ -172,6 +206,7 @@
       <button type="button" class="btn btn-outline btn-sm feed-more" id="profile-more" hidden>Cargar más</button>
     </section>
   </div>
+  <script type="application/json" id="profile-covers">{"vice-city": "/images/news/oficial/vice-city-skyline-800.webp", "neon": "/images/news/redaccion/deportivo-neon-noche-800.webp", "playa": "/images/news/redaccion/piscina-vice-city-800.webp", "autopista": "/images/news/redaccion/autopista-vice-city-800.webp", "atardecer": "/images/news/redaccion/ultimate-atardecer-800.webp", "puerto": "/images/news/oficial/puerto-atardecer-800.webp"}</script>
 </section>
 </main>
 
@@ -223,9 +258,9 @@
   <a href="/comunidad" class="bn-item"><span class="bn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/><path d="M8 9h8M8 13h5"/></svg></span><span class="bn-label">Comunidad</span></a>
   <a href="/perfil" class="bn-item" aria-current="page"><span class="bn-icon"><span class="bn-avatar" data-nav-avatar><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.8 3.6-6 7-6s6.2 2.2 7 6"/></svg></span></span><span class="bn-label">Perfil</span></a>
 </nav>
-<script src="/script.js?v=20261009a"></script>
+<script src="/script.js?v=20261009c"></script>
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/social.js?v=20261009a"></script>
-<script src="/js/perfil.js?v=20261009a"></script>
+<script src="/js/social.js?v=20261009c"></script>
+<script src="/js/perfil.js?v=20261009c"></script>
 </body>
 </html>

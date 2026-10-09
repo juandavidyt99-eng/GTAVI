@@ -227,6 +227,13 @@ if (document.querySelector('[data-nav-avatar]')) {
           slot.textContent = user.username.charAt(0).toUpperCase();
           slot.style.background = `linear-gradient(135deg, hsl(${hue} 75% 52%), hsl(${(hue + 50) % 360} 70% 38%))`;
           slot.classList.add('has-user');
+          if (user.avatar && /^[a-f0-9]{24}$/.test(user.avatar)) {
+            const img = document.createElement('img');
+            img.src = `/media/chat/${user.avatar}_a.webp`;
+            img.alt = '';
+            img.addEventListener('error', () => img.remove());
+            slot.append(img);
+          }
         } else {
           slot.innerHTML = slot.dataset.icon;
           slot.style.background = '';

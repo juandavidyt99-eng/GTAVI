@@ -2,6 +2,7 @@
 const { Server } = require('socket.io');
 const { createLimiter } = require('./limits');
 const images = require('./images');
+const voice = require('./audio');
 const { CHAT_TEXT_MAX, EDIT_WINDOW_MS, REACTIONS, cleanMultiline, isAdminName } = require('./shared');
 
 function sameOrigin(req) {
@@ -97,11 +98,20 @@ function attachChatSocket(httpServer, sessionMiddleware, getStore, bus) {
         image = images.claimUpload(user.id, payload.image);
         if (!image) return { error: 'La foto caducó. Súbela de nuevo.' };
       }
-      if (!content && !image) return { error: 'El mensaje está vacío.' };
+      let audio = null;
+      if (payload.audio) {
+        audio = voice.claimAudio(user.id, payload.audio);
+        if (!audio) {
+          if (image) images.removeImage(image.name);
+          return { error: 'La nota de voz caducó. Grábala de nuevo.' };
+        }
+      }
+      if (!content && !image && !audio) return { error: 'El mensaje está vacío.' };
 
       const now = Date.now();
       if (now - (lastSent.get(user.id) || 0) < 800 || !sendLimiter(user.id)) {
         if (image) images.removeImage(image.name);
+        if (audio) voice.removeAudio(audio.name);
         return { error: 'Vas muy rápido. Espera un momento.' };
       }
       lastSent.set(user.id, now);
@@ -112,7 +122,7 @@ function attachChatSocket(httpServer, sessionMiddleware, getStore, bus) {
         if (target && !target.replyTo?.deleted) replyTo = target.id;
       }
 
-      const saved = await getStore().addMessage(user.id, { content, spoiler: Boolean(payload.spoiler), image, replyTo });
+      const saved = await getStore().addMessage(user.id, { content, spoiler: Boolean(payload.spoiler), image, audio, replyTo });
       io.emit('chat:message', publicMessage(saved));
       return { ok: true, id: saved.id };
     });
@@ -131,7 +141,7 @@ function attachChatSocket(httpServer, sessionMiddleware, getStore, bus) {
       }
       const content = cleanMultiline(payload.text);
       if (content.length > CHAT_TEXT_MAX) return { error: `Máximo ${CHAT_TEXT_MAX} caracteres.` };
-      if (!content && !message.image) return { error: 'El mensaje no puede quedar vacío.' };
+      if (!content && !message.image && !message.audio) return { error: 'El mensaje no puede quedar vacío.' };
 
       const edited = await getStore().editMessage(id, content);
       if (!edited) return { error: 'El mensaje ya no existe.' };
@@ -149,6 +159,7 @@ function attachChatSocket(httpServer, sessionMiddleware, getStore, bus) {
       const removed = await getStore().deleteMessage(id);
       if (!removed) return { error: 'El mensaje ya no existe.' };
       images.removeImage(removed.image);
+      voice.removeAudio(removed.audio);
       io.emit('chat:deleted', { id });
     });
 

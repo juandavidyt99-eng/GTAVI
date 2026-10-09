@@ -12,6 +12,8 @@ const { createSocialRouter } = require('./chat/social');
 const { JsonSessionStore } = require('./chat/session-store');
 const { attachChatSocket } = require('./chat/socket');
 const images = require('./chat/images');
+const voice = require('./chat/audio');
+const { googleConfig } = require('./chat/shared');
 
 const PORT = process.env.PORT || 3000;
 const THIRTY_DAYS = 30 * 24 * 60 * 60 * 1000;
@@ -93,14 +95,18 @@ async function main() {
   const notFound = (req, res) => res.status(404).sendFile(path.join(publicDir, '404.html'));
   app.get(['/404', '/404.html'], notFound);
 
-  // Chat photos live outside the app folder so they survive deploys.
+  // Chat photos and voice notes live outside the app folder so they survive deploys.
   app.get('/media/chat/:file', (req, res) => {
-    if (!images.NAME_RE.test(req.params.file)) return res.status(404).end();
-    res.sendFile(req.params.file, {
+    const file = req.params.file;
+    let type = null;
+    if (images.NAME_RE.test(file)) type = 'image/webp';
+    else if (voice.NAME_RE.test(file)) type = voice.CONTENT_TYPES[file.split('.').pop()];
+    if (!type) return res.status(404).end();
+    res.sendFile(file, {
       root: images.uploadsDir(),
       maxAge: '365d',
       immutable: true,
-      headers: { 'Content-Type': 'image/webp', 'Content-Security-Policy': "default-src 'none'" },
+      headers: { 'Content-Type': type, 'Content-Security-Policy': "default-src 'none'" },
     }, err => {
       if (err && !res.headersSent) res.status(404).end();
     });
@@ -145,6 +151,9 @@ async function main() {
 
   server.listen(PORT, () => {
     console.log(`GTA VI site running on port ${PORT} (community store: ${store.kind})`);
+    console.log(googleConfig()
+      ? '[auth] Google sign-in is ON.'
+      : '[auth] Google sign-in is OFF (set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET to turn it on).');
   });
 }
 

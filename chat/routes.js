@@ -3,6 +3,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const { createLimiter } = require('./limits');
 const images = require('./images');
+const voice = require('./audio');
 const { REPORT_REASONS, isAdminName, googleConfig } = require('./shared');
 
 const USERNAME_RE = /^[A-Za-z0-9_]{3,20}$/;
@@ -80,6 +81,7 @@ function createChatRouter(getStore) {
       res.json({
         enabled: Boolean(getStore()),
         photos: images.enabled(),
+        audio: true,
         user: user ? { username: user.username } : null,
         admin: Boolean(user && isAdminName(user.username)),
         mutedUntil,
@@ -128,6 +130,35 @@ function createChatRouter(getStore) {
 
   router.delete('/chat/upload/:name', requireUser, (req, res) => {
     images.discardUpload(sessionUser(req).id, req.params.name);
+    res.json({ ok: true });
+  });
+
+  // Voice notes arrive as the raw recording (Content-Type: audio/*), with their length in ?ms=.
+  const audioLimiter = createLimiter({ max: 1, windowMs: 4 * 1000 });
+  const audioHourLimiter = createLimiter({ max: 40, windowMs: 60 * 60 * 1000 });
+  router.post('/chat/audio', requireStore, requireUser,
+    express.raw({ type: req => /^audio\//.test(req.headers['content-type'] || ''), limit: voice.MAX_BYTES }),
+    async (req, res, next) => {
+      try {
+        const user = sessionUser(req);
+        if (!Buffer.isBuffer(req.body) || !req.body.length) {
+          return res.status(415).json({ error: 'La nota de voz no tiene un formato válido.' });
+        }
+        if (await getStore().getMute(user.id)) return res.status(403).json({ error: 'Estás silenciado y no puedes enviar notas de voz.' });
+        if (!audioLimiter(user.id) || !audioHourLimiter(user.id)) {
+          return res.status(429).json({ error: 'Has enviado muchas notas de voz. Espera un momento.' });
+        }
+        const audio = await voice.saveAudio(req.body, req.query.ms);
+        voice.registerAudio(user.id, audio);
+        res.status(201).json({ audio });
+      } catch (err) {
+        if (err instanceof voice.AudioError) return res.status(400).json({ error: err.message });
+        next(err);
+      }
+    });
+
+  router.delete('/chat/audio/:name', requireUser, (req, res) => {
+    voice.discardAudio(sessionUser(req).id, req.params.name);
     res.json({ ok: true });
   });
 
@@ -362,7 +393,10 @@ function createChatRouter(getStore) {
   });
 
   router.use((err, req, res, next) => {
-    if (err.type === 'entity.too.large') return res.status(413).json({ error: 'La foto es demasiado grande (máximo 6 MB).' });
+    if (err.type === 'entity.too.large') {
+      const isAudio = req.path.startsWith('/chat/audio');
+      return res.status(413).json({ error: isAudio ? 'La nota de voz es demasiado larga (máximo 2 minutos).' : 'La foto es demasiado grande (máximo 6 MB).' });
+    }
     console.error('[chat] API error:', err);
     res.status(500).json({ error: 'Error del servidor. Inténtalo de nuevo.' });
   });

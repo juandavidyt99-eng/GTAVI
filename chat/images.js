@@ -14,7 +14,7 @@ try {
 const MAX_BYTES = 6 * 1024 * 1024;
 const ALLOWED_INPUT = new Set(['jpeg', 'png', 'webp']);
 const PENDING_TTL_MS = 60 * 60 * 1000;
-const NAME_RE = /^[a-f0-9]{24}(_t)?\.webp$/;
+const NAME_RE = /^[a-f0-9]{24}(_t|_a)?\.webp$/;
 
 const uploadsDir = () => {
   const dir = path.join(dataDir(), 'uploads', 'chat');
@@ -49,6 +49,31 @@ async function processImage(buffer) {
   await fs.promises.writeFile(path.join(dir, `${name}.webp`), full.data);
   await fs.promises.writeFile(path.join(dir, `${name}_t.webp`), thumb);
   return { name, w: full.info.width, h: full.info.height };
+}
+
+// Profile photos: square, centred on the most interesting part of the picture.
+async function processAvatar(buffer) {
+  if (!sharp) throw new ImageError('Las fotos no están disponibles en este momento.');
+  let meta;
+  try {
+    meta = await sharp(buffer, { limitInputPixels: 50e6 }).metadata();
+  } catch {
+    throw new ImageError('El archivo no es una imagen válida.');
+  }
+  if (!ALLOWED_INPUT.has(meta.format)) throw new ImageError('Solo se admiten fotos JPG, PNG o WebP.');
+  const data = await sharp(buffer, { limitInputPixels: 50e6 })
+    .rotate()
+    .resize(320, 320, { fit: 'cover', position: 'attention' })
+    .webp({ quality: 82 })
+    .toBuffer();
+  const name = crypto.randomBytes(12).toString('hex');
+  await fs.promises.writeFile(path.join(uploadsDir(), `${name}_a.webp`), data);
+  return name;
+}
+
+function removeAvatar(name) {
+  if (!name || !/^[a-f0-9]{24}$/.test(name)) return;
+  fs.promises.unlink(path.join(uploadsDir(), `${name}_a.webp`)).catch(() => {});
 }
 
 function removeImage(name) {
@@ -90,6 +115,6 @@ setInterval(() => {
 }, 10 * 60 * 1000).unref();
 
 module.exports = {
-  MAX_BYTES, NAME_RE, ImageError, enabled, uploadsDir, processImage, removeImage,
+  MAX_BYTES, NAME_RE, ImageError, enabled, uploadsDir, processImage, removeImage, processAvatar, removeAvatar,
   registerUpload, claimUpload, discardUpload,
 };

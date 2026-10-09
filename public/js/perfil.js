@@ -6,10 +6,15 @@
   const match = location.pathname.match(/^\/u\/([A-Za-z0-9_]{3,20})$/);
   const viewing = match ? match[1] : null;
   const dateFmt = new Intl.DateTimeFormat('es', { month: 'long', year: 'numeric' });
+  const COVERS = JSON.parse($('profile-covers').textContent);
+  const DEFAULT_COVER = 'vice-city';
+  const MAX_PHOTO_BYTES = 6 * 1024 * 1024;
 
-  const sections = ['profile-loading', 'profile-card', 'profile-edit', 'profile-auth', 'profile-missing', 'profile-posts'];
+  // The edit form is left alone here, so refreshing the card (e.g. after a new photo) keeps it open.
+  const sections = ['profile-loading', 'profile-card', 'profile-auth', 'profile-missing', 'profile-posts'];
   function show(...ids) {
     sections.forEach(id => { $(id).hidden = !ids.includes(id); });
+    if (!ids.includes('profile-card')) $('profile-edit').hidden = true;
   }
 
   let feed = null;
@@ -19,8 +24,13 @@
     profile = p;
     document.title = `${p.username} | Comunidad GTA VI`;
     $('page-title').textContent = `Perfil de ${p.username} en la comunidad GTA VI`;
-    $('pc-avatar').replaceChildren(G.avatar(p.username, p.team, 'avatar-xl'));
+    $('pc-avatar').replaceChildren(G.avatar(p.username, p.team, 'avatar-xl', p.avatar));
     $('pc-name').textContent = p.username;
+    $('pc-handle').textContent = `@${p.username}`;
+    $('pc-mod').hidden = !p.moderator;
+    $('pc-quick').hidden = !isMe;
+    const cover = COVERS[p.cover] || COVERS[DEFAULT_COVER];
+    $('profile-cover').style.setProperty('--cover', `url('${cover}')`);
     const team = $('pc-team');
     team.className = p.team ? `team-badge team-${p.team}` : 'team-badge team-none';
     team.textContent = p.team ? G.TEAM[p.team] : 'Sin equipo';
@@ -93,22 +103,91 @@
   const updateCounter = () => { counter.textContent = 160 - form.bio.value.length; };
   form.bio.addEventListener('input', updateCounter);
 
+  function paintEditAvatar() {
+    $('pe-avatar').replaceChildren(G.avatar(profile.username, profile.team, 'avatar-xl', profile.avatar));
+    $('pe-remove').hidden = !profile.avatar;
+  }
+
   function openEdit() {
     form.bio.value = profile.bio || '';
     form.querySelectorAll('[name=team]').forEach(r => { r.checked = r.value === (profile.team || ''); });
+    form.querySelectorAll('[name=cover]').forEach(r => { r.checked = r.value === (profile.cover || DEFAULT_COVER); });
+    paintEditAvatar();
+    $('pe-photo-state').textContent = 'JPG, PNG o WebP. Se recorta en cuadrado.';
     form.querySelector('[data-error]').textContent = '';
     updateCounter();
     form.hidden = false;
     form.bio.focus();
   }
-  form.querySelector('[data-cancel]').addEventListener('click', () => { form.hidden = true; });
+  form.querySelectorAll('[name=cover]').forEach(r => r.addEventListener('change', () => {
+    $('profile-cover').style.setProperty('--cover', `url('${COVERS[r.value] || COVERS[DEFAULT_COVER]}')`);
+  }));
+  form.querySelector('[data-cancel]').addEventListener('click', () => {
+    form.hidden = true;
+    $('profile-cover').style.setProperty('--cover', `url('${COVERS[profile.cover] || COVERS[DEFAULT_COVER]}')`);
+  });
+
+  // ---- Profile photo
+  async function shrink(file) {
+    if (file.size <= 1.5 * 1024 * 1024) return file;
+    try {
+      const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
+      const scale = Math.min(1, 1200 / Math.max(bitmap.width, bitmap.height));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(bitmap.width * scale);
+      canvas.height = Math.round(bitmap.height * scale);
+      canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+      return await new Promise(resolve => canvas.toBlob(b => resolve(b || file), 'image/jpeg', 0.88));
+    } catch {
+      return file;
+    }
+  }
+  const photoState = $('pe-photo-state');
+  $('pe-upload').addEventListener('click', () => $('pe-file').click());
+  $('pe-file').addEventListener('change', async () => {
+    const file = $('pe-file').files[0];
+    $('pe-file').value = '';
+    if (!file) return;
+    if (!/^image\/(jpeg|png|webp)$/.test(file.type)) { photoState.textContent = 'Solo se admiten fotos JPG, PNG o WebP.'; return; }
+    photoState.textContent = 'Subiendo foto…';
+    $('pe-upload').disabled = true;
+    try {
+      const prepared = await shrink(file);
+      if (prepared.size > MAX_PHOTO_BYTES) throw new Error('La foto es demasiado grande (máximo 6 MB).');
+      const res = await fetch('/api/me/avatar', {
+        method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': prepared.type || 'image/jpeg' }, body: prepared,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'No se pudo subir la foto.');
+      profile = { ...profile, avatar: data.user.avatar };
+      G.setMe({ ...G.me, ...data.user });
+      paintEditAvatar();
+      photoState.textContent = '¡Foto actualizada!';
+    } catch (err) {
+      photoState.textContent = err.message;
+    } finally {
+      $('pe-upload').disabled = false;
+    }
+  });
+  $('pe-remove').addEventListener('click', async () => {
+    try {
+      const { user } = await G.api('/api/me/avatar', { method: 'DELETE' });
+      profile = { ...profile, avatar: null };
+      G.setMe({ ...G.me, ...user });
+      paintEditAvatar();
+      photoState.textContent = 'Foto quitada.';
+    } catch (err) {
+      photoState.textContent = err.message;
+    }
+  });
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const submit = form.querySelector('[type=submit]');
     submit.disabled = true;
     try {
       const team = (form.querySelector('[name=team]:checked') || {}).value || null;
-      const { user } = await G.api('/api/me', { method: 'PATCH', body: { bio: form.bio.value, team } });
+      const cover = (form.querySelector('[name=cover]:checked') || {}).value || null;
+      const { user } = await G.api('/api/me', { method: 'PATCH', body: { bio: form.bio.value, team, cover } });
       G.setMe(user);
       form.hidden = true;
       G.toast('Perfil actualizado', 'success');
@@ -152,6 +231,9 @@
     if (!viewing) {
       if (!me) {
         document.title = 'Únete | Comunidad GTA VI';
+        $('profile-cover').style.setProperty('--cover', `url('${COVERS[DEFAULT_COVER]}')`);
+        $('pa-google').hidden = !G.google;
+        $('pa-or').hidden = !G.google;
         show('profile-auth');
         return;
       }

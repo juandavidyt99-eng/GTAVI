@@ -45,6 +45,8 @@ function createJsonStore(filePath) {
       image: m.image || null,
       image_w: m.image_w || 0,
       image_h: m.image_h || 0,
+      audio: m.audio || null,
+      audio_ms: m.audio_ms || 0,
       reply_to: m.reply_to || null,
       edited_at: m.edited_at || null,
       deleted: Boolean(m.deleted),
@@ -120,7 +122,7 @@ function createJsonStore(filePath) {
   const now = () => new Date().toISOString();
   const authorOf = userId => {
     const u = state.users.get(userId);
-    return u ? { username: u.username, team: u.team || null } : { username: 'desconocido', team: null };
+    return u ? { username: u.username, team: u.team || null, avatar: u.avatar || null } : { username: 'desconocido', team: null, avatar: null };
   };
   const toPost = (p, viewerId) => ({
     id: p.id,
@@ -143,8 +145,8 @@ function createJsonStore(filePath) {
     if (m.reply_to) {
       const r = state.messageIndex.get(m.reply_to);
       replyTo = r && !r.deleted
-        ? { id: r.id, username: authorOf(r.user_id).username, excerpt: r.content.slice(0, 120), hasImage: Boolean(r.image), deleted: false }
-        : { id: m.reply_to, username: r ? authorOf(r.user_id).username : '', excerpt: '', hasImage: false, deleted: true };
+        ? { id: r.id, username: authorOf(r.user_id).username, excerpt: r.content.slice(0, 120), hasImage: Boolean(r.image), hasAudio: Boolean(r.audio), deleted: false }
+        : { id: m.reply_to, username: r ? authorOf(r.user_id).username : '', excerpt: '', hasImage: false, hasAudio: false, deleted: true };
     }
     const byEmoji = state.reactions.get(m.id);
     const reactions = byEmoji
@@ -157,9 +159,11 @@ function createJsonStore(filePath) {
       userId: m.user_id,
       username: author.username,
       team: author.team,
+      avatar: author.avatar,
       content: m.deleted ? '' : m.content,
       spoiler: Boolean(m.spoiler),
       image: m.image && !m.deleted ? { name: m.image, w: m.image_w, h: m.image_h } : null,
+      audio: m.audio && !m.deleted ? { name: m.audio, ms: m.audio_ms } : null,
       replyTo,
       createdAt: m.created_at,
       editedAt: m.edited_at,
@@ -211,21 +215,34 @@ function createJsonStore(filePath) {
       let posts = 0, likesReceived = 0, comments = 0;
       for (const p of state.posts.values()) if (p.user_id === u.id) { posts++; likesReceived += p.like_count; }
       for (const c of state.commentsById.values()) if (c.user_id === u.id) comments++;
-      return { id: u.id, username: u.username, bio: u.bio || '', team: u.team || null, createdAt: u.created_at, stats: { posts, comments, likesReceived } };
+      return {
+        id: u.id, username: u.username, bio: u.bio || '', team: u.team || null, createdAt: u.created_at,
+        avatar: u.avatar || null, cover: u.cover || null, stats: { posts, comments, likesReceived },
+      };
     },
-    async updateProfile(userId, { bio, team }) {
+    async updateProfile(userId, { bio, team, cover }) {
       const u = state.users.get(userId);
       if (!u) return;
       u.bio = bio;
       u.team = team;
+      u.cover = cover || null;
       save();
+    },
+    async setAvatar(userId, avatar) {
+      const u = state.users.get(userId);
+      if (!u) return null;
+      const previous = u.avatar || null;
+      u.avatar = avatar;
+      save();
+      return previous;
     },
 
     // Chat
-    async addMessage(userId, { content, spoiler, image, replyTo }) {
+    async addMessage(userId, { content, spoiler, image, audio, replyTo }) {
       const m = {
         id: ++state.seq.message, user_id: userId, content, spoiler: Boolean(spoiler),
         image: image ? image.name : null, image_w: image ? image.w : 0, image_h: image ? image.h : 0,
+        audio: audio ? audio.name : null, audio_ms: audio ? audio.ms : 0,
         reply_to: replyTo || null, edited_at: null, deleted: false, created_at: now(),
       };
       state.messages.push(m);
@@ -258,14 +275,15 @@ function createJsonStore(filePath) {
     async deleteMessage(id) {
       const m = state.messageIndex.get(id);
       if (!m || m.deleted) return null;
-      const image = m.image;
+      const { image, audio } = m;
       m.deleted = true;
       m.content = '';
       m.image = null;
+      m.audio = null;
       state.reactions.delete(id);
       state.reports = state.reports.filter(r => r.message_id !== id);
       save();
-      return { image };
+      return { image, audio };
     },
     async toggleReaction(id, userId, emoji) {
       const m = state.messageIndex.get(id);

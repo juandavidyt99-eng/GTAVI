@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Chat en vivo de GTA 6 | Habla con la comunidad de GTA VI</title>
-<meta name="description" content="Chat en vivo de la comunidad de GTA 6: habla con otros fans en tiempo real, comparte fotos y comenta las novedades de GTA VI.">
+<meta name="description" content="Chat en vivo de la comunidad de GTA 6: habla con otros fans en tiempo real, comparte fotos y notas de voz y comenta las novedades de GTA VI.">
 <meta name="robots" content="noindex, follow">
 <meta name="theme-color" content="#0a0612">
 <meta name="referrer" content="strict-origin-when-cross-origin">
@@ -18,7 +18,7 @@
 <meta property="og:locale" content="es_ES">
 <meta property="og:site_name" content="GTA VI Vice City">
 <meta property="og:title" content="Chat en vivo de GTA 6">
-<meta property="og:description" content="Chat en vivo de la comunidad de GTA 6: habla con otros fans en tiempo real, comparte fotos y comenta las novedades de GTA VI.">
+<meta property="og:description" content="Chat en vivo de la comunidad de GTA 6: habla con otros fans en tiempo real, comparte fotos y notas de voz y comenta las novedades de GTA VI.">
 <meta property="og:url" content="https://gtavivicecity.com/chat">
 <meta property="og:image" content="https://gtavivicecity.com/images/og-comunidad.jpg">
 <meta property="og:image:width" content="1200">
@@ -27,7 +27,7 @@
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Chat en vivo de GTA 6">
-<meta name="twitter:description" content="Chat en vivo de la comunidad de GTA 6: habla con otros fans en tiempo real, comparte fotos y comenta las novedades de GTA VI.">
+<meta name="twitter:description" content="Chat en vivo de la comunidad de GTA 6: habla con otros fans en tiempo real, comparte fotos y notas de voz y comenta las novedades de GTA VI.">
 <meta name="twitter:image" content="https://gtavivicecity.com/images/og-comunidad.jpg">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,7 +36,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Rubik+Spray+Paint&family=Bebas+Neue&family=Archivo+Black&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 <noscript><link href="https://fonts.googleapis.com/css2?family=Rubik+Spray+Paint&family=Bebas+Neue&family=Archivo+Black&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet"></noscript>
 <link rel="alternate" type="application/rss+xml" title="GTA VI Vice City: noticias de GTA 6" href="/feed.xml">
-<link rel="stylesheet" href="/styles.css?v=20261009a">
+<link rel="stylesheet" href="/styles.css?v=20261009c">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -85,9 +85,10 @@
 <div class="cx-app" id="cx-app">
   <section class="cx-main" aria-label="Chat general">
     <header class="cx-top">
+      <a class="cx-back" href="/" aria-label="Volver a la portada"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a>
       <div class="cx-title">
-        <span class="cx-hash" aria-hidden="true">#</span>
-        <div><strong>general</strong><span id="cx-sub">Chat de la comunidad GTA VI</span></div>
+        <span class="cx-hash" aria-hidden="true">VI</span>
+        <div><strong>Chat de Vice City</strong><span id="cx-sub">Comunidad GTA VI · fotos, notas de voz y teorías</span></div>
       </div>
       <span class="cx-status" id="cx-status" data-state="connecting">Conectando…</span>
       <button type="button" class="cx-chip" id="cx-online-btn" aria-expanded="false" aria-controls="cx-side">
@@ -97,6 +98,11 @@
     </header>
 
     <div class="cx-scroll" id="cx-scroll" tabindex="-1">
+      <div class="cx-welcome">
+        <span class="cx-welcome-kicker">🌴 Bienvenido a Leonida</span>
+        <strong>El chat en vivo de los fans de GTA VI</strong>
+        <p>Comparte fotos, manda notas de voz y comenta cada novedad. Respeto siempre y spoilers marcados.</p>
+      </div>
       <button type="button" class="btn btn-outline btn-sm cx-older" id="cx-older" hidden>Cargar mensajes anteriores</button>
       <ol class="cx-list" id="cx-list" aria-live="polite" aria-relevant="additions"></ol>
       <div class="cx-empty" id="cx-empty" hidden>
@@ -122,19 +128,32 @@
         </div>
         <button type="button" class="icon-btn" id="cx-attach-remove" aria-label="Quitar foto"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
       </div>
-      <div class="cx-row">
+      <div class="cx-rec" id="cx-rec" hidden>
+        <button type="button" class="cx-rec-cancel" id="cx-rec-cancel" aria-label="Cancelar nota de voz"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></button>
+        <div class="cx-rec-live" aria-live="polite">
+          <span class="cx-rec-dot" aria-hidden="true"></span>
+          <span class="cx-rec-time" id="cx-rec-time">0:00</span>
+          <span class="cx-rec-bars" id="cx-rec-bars" aria-hidden="true"></span>
+          <span class="cx-rec-label" id="cx-rec-label">Grabando…</span>
+        </div>
+        <button type="button" class="cx-send cx-rec-send" id="cx-rec-send" aria-label="Enviar nota de voz"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      </div>
+      <div class="cx-row" id="cx-row">
         <input type="file" id="cx-file" accept="image/jpeg,image/png,image/webp" hidden>
-        <button type="button" class="cx-tool" id="cx-attach-btn" aria-label="Adjuntar foto" title="Adjuntar foto"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="m21 16-5-5-8 8"/></svg></button>
-        <button type="button" class="cx-tool" id="cx-emoji-btn" aria-label="Emojis" aria-expanded="false" title="Emojis"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/></svg></button>
-        <label class="sr-only" for="cx-input">Escribe un mensaje</label>
-        <textarea id="cx-input" rows="1" maxlength="500" placeholder="Escribe un mensaje…" autocomplete="off" enterkeyhint="send"></textarea>
+        <button type="button" class="cx-tool" id="cx-attach-btn" aria-label="Enviar foto" title="Enviar foto"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><circle cx="8.5" cy="10" r="1.6"/><path d="m21 16-5-5-8 8"/></svg></button>
+        <div class="cx-field">
+          <button type="button" class="cx-tool cx-tool-in" id="cx-emoji-btn" aria-label="Emojis" aria-expanded="false" title="Emojis"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5a4.5 4.5 0 0 0 7 0M9 9.5h.01M15 9.5h.01"/></svg></button>
+          <label class="sr-only" for="cx-input">Escribe un mensaje</label>
+          <textarea id="cx-input" rows="1" maxlength="500" placeholder="Escribe un mensaje…" autocomplete="off" enterkeyhint="send"></textarea>
+        </div>
+        <button type="button" class="cx-send cx-mic" id="cx-mic" aria-label="Grabar nota de voz" title="Grabar nota de voz" hidden><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></button>
         <button type="submit" class="cx-send" id="cx-send" aria-label="Enviar mensaje"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
       <div class="cx-foot"><p class="cx-error" id="cx-error" role="alert"></p><span class="cx-count" id="cx-count" aria-hidden="true"></span></div>
     </form>
 
     <div class="cx-notice" id="cx-guest" hidden>
-      <p><strong>Estás leyendo como invitado.</strong> Crea tu cuenta gratis para escribir y enviar fotos.</p>
+      <p><strong>Estás leyendo como invitado.</strong> Entra gratis para escribir, enviar fotos y notas de voz.</p>
       <div><button type="button" class="btn btn-primary btn-sm" data-open-auth="register">Crear cuenta</button>
       <button type="button" class="btn btn-outline btn-sm" data-open-auth="login">Entrar</button></div>
     </div>
@@ -155,7 +174,7 @@
         <li>Marca como spoiler la historia y las filtraciones.</li>
         <li>Sin spam, publicidad ni enlaces sospechosos.</li>
         <li>No compartas datos personales tuyos ni de otros.</li>
-        <li>Solo fotos relacionadas con GTA VI y aptas para mayores de edad.</li>
+        <li>Solo fotos y audios relacionados con GTA VI y aptos para todo el mundo.</li>
       </ol>
       <p class="cx-hint">Mantén pulsado o toca <b>⋯</b> en un mensaje para responder, reaccionar o reportarlo.</p>
     </section>
@@ -215,9 +234,9 @@
   <a href="/comunidad" class="bn-item" aria-current="page"><span class="bn-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/><path d="M8 9h8M8 13h5"/></svg></span><span class="bn-label">Comunidad</span></a>
   <a href="/perfil" class="bn-item"><span class="bn-icon"><span class="bn-avatar" data-nav-avatar><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.8 3.6-6 7-6s6.2 2.2 7 6"/></svg></span></span><span class="bn-label">Perfil</span></a>
 </nav>
-<script src="/script.js?v=20261009a"></script>
+<script src="/script.js?v=20261009c"></script>
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/social.js?v=20261009a"></script>
-<script src="/js/chat.js?v=20261009a"></script>
+<script src="/js/social.js?v=20261009c"></script>
+<script src="/js/chat.js?v=20261009c"></script>
 </body>
 </html>

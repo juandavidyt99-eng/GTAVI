@@ -52,7 +52,7 @@
     row.href = '/perfil';
     const info = G.el('div');
     info.append(G.el('strong', null, user.username), G.el('span', 'me-team', user.team ? G.TEAM[user.team] : 'Sin equipo'));
-    row.append(G.avatar(user.username, user.team, 'avatar-lg'), info);
+    row.append(G.avatar(user.username, user.team, 'avatar-lg', user.avatar), info);
     const stats = G.el('dl', 'me-stats');
     [['Posts', user.stats.posts], ['Coment.', user.stats.comments], ['Me gusta', user.stats.likesReceived]].forEach(([k, v]) => {
       const d = G.el('div');

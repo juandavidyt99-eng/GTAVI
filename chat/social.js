@@ -1,10 +1,13 @@
 // Community API: posts, likes, comments and profiles.
 const express = require('express');
 const { createLimiter } = require('./limits');
+const images = require('./images');
 const { cleanLine, cleanMultiline, youtubeId, isAdminName, googleConfig } = require('./shared');
 
 const CATEGORIES = ['debate', 'teoria', 'leonida', 'noticias', 'clip'];
 const TEAMS = ['jason', 'lucia'];
+// Cover pictures a profile can pick (official GTA VI images hosted on this site).
+const COVERS = ['vice-city', 'neon', 'playa', 'autopista', 'atardecer', 'puerto'];
 const PAGE_SIZE = 15;
 const POST_MAX = 1000;
 const CAPTION_MAX = 300;
@@ -22,6 +25,7 @@ function createSocialRouter(getStore, bus) {
     commentWindow: createLimiter({ max: 30, windowMs: 10 * 60 * 1000 }),
     like: createLimiter({ max: 60, windowMs: 60 * 1000 }),
     profile: createLimiter({ max: 10, windowMs: 10 * 60 * 1000 }),
+    avatar: createLimiter({ max: 6, windowMs: 10 * 60 * 1000 }),
   };
 
   const currentUser = req => (req.session && req.session.user) || null;
@@ -55,7 +59,7 @@ function createSocialRouter(getStore, bus) {
   router.get('/me', wrap(async (req, res) => {
     const user = currentUser(req);
     const profile = user ? await getStore().getProfile(user.username) : null;
-    if (profile) delete profile.id;
+    if (profile) { delete profile.id; profile.moderator = isAdminName(profile.username); }
     res.json({ enabled: true, user: profile, admin: isAdmin(user), google: Boolean(googleConfig()) });
   }));
 
@@ -64,9 +68,40 @@ function createSocialRouter(getStore, bus) {
     if (!limit.profile(user.id)) return res.status(429).json({ error: 'Has cambiado tu perfil muchas veces. Espera unos minutos.' });
     const bio = cleanLine(req.body.bio);
     const team = req.body.team || null;
+    const cover = req.body.cover || null;
     if (bio.length > BIO_MAX) return res.status(400).json({ error: `La bio admite como máximo ${BIO_MAX} caracteres.` });
     if (team !== null && !TEAMS.includes(team)) return res.status(400).json({ error: 'Equipo no válido.' });
-    await getStore().updateProfile(user.id, { bio, team });
+    if (cover !== null && !COVERS.includes(cover)) return res.status(400).json({ error: 'Portada no válida.' });
+    await getStore().updateProfile(user.id, { bio, team, cover });
+    const profile = await getStore().getProfile(user.username);
+    delete profile.id;
+    res.json({ user: profile });
+  }));
+
+  // Profile photo: sent as the raw image (Content-Type: image/*), stored square as WebP.
+  router.post('/me/avatar', requireUser,
+    express.raw({ type: ['image/jpeg', 'image/png', 'image/webp'], limit: images.MAX_BYTES }),
+    wrap(async (req, res) => {
+      const user = currentUser(req);
+      if (!images.enabled()) return res.status(503).json({ error: 'Las fotos no están disponibles en este momento.' });
+      if (!Buffer.isBuffer(req.body) || !req.body.length) return res.status(415).json({ error: 'Sube una foto JPG, PNG o WebP de hasta 6 MB.' });
+      if (!limit.avatar(user.id)) return res.status(429).json({ error: 'Has cambiado tu foto muchas veces. Espera unos minutos.' });
+      let name;
+      try {
+        name = await images.processAvatar(req.body);
+      } catch (err) {
+        if (err instanceof images.ImageError) return res.status(400).json({ error: err.message });
+        throw err;
+      }
+      images.removeAvatar(await getStore().setAvatar(user.id, name));
+      const profile = await getStore().getProfile(user.username);
+      delete profile.id;
+      res.status(201).json({ user: profile });
+    }));
+
+  router.delete('/me/avatar', requireUser, wrap(async (req, res) => {
+    const user = currentUser(req);
+    images.removeAvatar(await getStore().setAvatar(user.id, null));
     const profile = await getStore().getProfile(user.username);
     delete profile.id;
     res.json({ user: profile });
@@ -76,7 +111,7 @@ function createSocialRouter(getStore, bus) {
     const profile = await getStore().getProfile(String(req.params.username).slice(0, 20));
     if (!profile) return res.status(404).json({ error: 'Usuario no encontrado.' });
     delete profile.id;
-    res.json({ user: profile });
+    res.json({ user: { ...profile, moderator: isAdminName(profile.username) } });
   }));
 
   // ---- Posts

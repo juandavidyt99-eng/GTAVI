@@ -1,4 +1,4 @@
-// Live chat (/chat): messages, replies, reactions, photos, mentions, typing and moderation.
+// Live chat (/chat): messages, replies, reactions, photos, voice notes, mentions, typing and moderation.
 (() => {
   const G = window.GTA;
   const $ = id => document.getElementById(id);
@@ -13,6 +13,10 @@
   const EDIT_WINDOW_MS = 15 * 60 * 1000;
   const MAX_PHOTO_BYTES = 6 * 1024 * 1024;
   const NAME_RE = /^[a-f0-9]{24}$/;
+  const AUDIO_RE = /^[a-f0-9]{24}\.(webm|ogg|m4a)$/;
+  const MAX_VOICE_MS = 2 * 60 * 1000;
+  const PLAY_SVG = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5L8 5.5Z"/></svg>';
+  const PAUSE_SVG = '<svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>';
 
   const els = {
     scroll: $('cx-scroll'), list: $('cx-list'), empty: $('cx-empty'), older: $('cx-older'),
@@ -25,6 +29,8 @@
     attach: $('cx-attach'), attachImg: $('cx-attach-img'), attachState: $('cx-attach-state'), spoiler: $('cx-spoiler'),
     file: $('cx-file'), attachBtn: $('cx-attach-btn'), emojiBtn: $('cx-emoji-btn'),
     guest: $('cx-guest'), muted: $('cx-muted'), mutedText: $('cx-muted-text'),
+    row: $('cx-row'), mic: $('cx-mic'), rec: $('cx-rec'), recCancel: $('cx-rec-cancel'), recSend: $('cx-rec-send'),
+    recTime: $('cx-rec-time'), recBars: $('cx-rec-bars'), recLabel: $('cx-rec-label'),
   };
 
   const state = {
@@ -37,6 +43,7 @@
     uploading: false,
     admin: false,
     photos: true,
+    audio: false,          // voice notes allowed by the server and supported by this browser
     mutedUntil: 0,
     typing: new Map(),
     tabUnread: 0,
@@ -120,13 +127,74 @@
     return { fig, img };
   }
 
+  // Voice note player: one plays at a time; the bars fill up as it plays.
+  let playing = null;
+  const fmtDur = ms => {
+    const total = Math.max(0, Math.round(ms / 1000));
+    return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`;
+  };
+
+  function voiceNode(m) {
+    const { name, ms } = m.audio;
+    if (!AUDIO_RE.test(name)) return null;
+    const wrap = el('div', 'cx-voice');
+    const btn = el('button', 'cx-voice-btn');
+    btn.type = 'button';
+    btn.setAttribute('aria-label', `Reproducir nota de voz de ${m.username}`);
+    btn.innerHTML = PLAY_SVG;
+    const wave = el('div', 'cx-voice-wave');
+    wave.setAttribute('aria-hidden', 'true');
+    let seed = parseInt(name.slice(0, 8), 16) || 7;
+    const bars = [];
+    for (let i = 0; i < 30; i++) {
+      seed = (seed * 1103515245 + 12345) % 2147483648;
+      const b = el('i');
+      b.style.setProperty('--h', (0.22 + ((seed >> 8) % 1000) / 1000 * 0.78).toFixed(2));
+      bars.push(b);
+    }
+    wave.append(...bars);
+    const time = el('span', 'cx-voice-time', fmtDur(ms));
+    wrap.append(btn, wave, time);
+
+    const total = Math.max(0.5, ms / 1000);
+    let audio = null;
+    const paint = t => {
+      const filled = Math.round(Math.min(1, t / total) * bars.length);
+      bars.forEach((b, i) => b.classList.toggle('on', i < filled));
+    };
+    btn.addEventListener('click', () => {
+      if (!audio) {
+        audio = new Audio(`/media/chat/${name}`);
+        audio.preload = 'auto';
+        audio.addEventListener('timeupdate', () => { paint(audio.currentTime); time.textContent = fmtDur(audio.currentTime * 1000); });
+        audio.addEventListener('play', () => { wrap.classList.add('is-playing'); btn.innerHTML = PAUSE_SVG; btn.setAttribute('aria-label', 'Pausar nota de voz'); });
+        audio.addEventListener('pause', () => { wrap.classList.remove('is-playing'); btn.innerHTML = PLAY_SVG; btn.setAttribute('aria-label', `Reproducir nota de voz de ${m.username}`); });
+        audio.addEventListener('ended', () => { paint(0); time.textContent = fmtDur(ms); if (playing === audio) playing = null; });
+        audio.addEventListener('error', () => G.toast('Este navegador no puede reproducir la nota de voz.', 'error'));
+      }
+      if (audio.paused) {
+        if (playing && playing !== audio) playing.pause();
+        playing = audio;
+        audio.play().catch(() => {});
+      } else {
+        audio.pause();
+      }
+    });
+    wave.addEventListener('click', e => {
+      if (!audio || !Number.isFinite(audio.duration)) return;
+      const r = wave.getBoundingClientRect();
+      audio.currentTime = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * audio.duration;
+    });
+    return wrap;
+  }
+
   function quoteNode(m) {
     const q = m.replyTo;
     const btn = el('button', `cx-quote${q.deleted ? ' is-deleted' : ''}`);
     btn.type = 'button';
     btn.dataset.target = q.id;
     btn.append(el('strong', null, q.deleted ? 'Mensaje eliminado' : q.username));
-    if (!q.deleted) btn.append(el('span', null, q.excerpt || (q.hasImage ? '📷 Foto' : '')));
+    if (!q.deleted) btn.append(el('span', null, q.excerpt || (q.hasImage ? '📷 Foto' : q.hasAudio ? '🎤 Nota de voz' : '')));
     btn.addEventListener('click', () => {
       const target = state.messages.get(q.id);
       if (!target) return G.toast('Ese mensaje es anterior: carga el historial para verlo.');
@@ -160,7 +228,7 @@
     const avatarLink = el('a', 'cx-avatar');
     avatarLink.href = `/u/${encodeURIComponent(m.username)}`;
     avatarLink.setAttribute('aria-label', `Perfil de ${m.username}`);
-    avatarLink.append(G.avatar(m.username, m.team));
+    avatarLink.append(G.avatar(m.username, m.team, '', m.avatar));
 
     const body = el('div', 'cx-body');
     const meta = el('div', 'cx-meta');
@@ -174,7 +242,7 @@
     body.append(meta);
 
     const bubble = el('div', 'cx-bubble');
-    bubble.append(el('div', 'cx-slot-quote'), el('div', 'cx-slot-text'), el('div', 'cx-slot-photo'));
+    bubble.append(el('div', 'cx-slot-quote'), el('div', 'cx-slot-photo'), el('div', 'cx-slot-audio'), el('div', 'cx-slot-text'));
     body.append(bubble, el('div', 'cx-slot-reactions'));
 
     const more = el('button', 'cx-more');
@@ -216,6 +284,12 @@
         photo.append(node.fig);
         if (entry.pinned) node.img.addEventListener('load', () => { if (isNearBottom(400)) scrollToBottom(); });
       }
+    }
+
+    const voice = slot('cx-slot-audio');
+    if (!voice.firstChild && m.audio) {
+      const node = voiceNode(m);
+      if (node) voice.append(node);
     }
 
     li.querySelector('.cx-edited').textContent = m.editedAt ? '· editado' : '';
@@ -296,7 +370,7 @@
     }
     for (const other of state.messages.values()) {
       if (other.data.replyTo && other.data.replyTo.id === id) {
-        other.data.replyTo = { ...other.data.replyTo, deleted: true, excerpt: '', hasImage: false };
+        other.data.replyTo = { ...other.data.replyTo, deleted: true, excerpt: '', hasImage: false, hasAudio: false };
         renderEntry(other);
       }
     }
@@ -585,6 +659,13 @@
             img.alt = 'Foto reportada';
             content.append(img);
           }
+          if (r.message.audio && AUDIO_RE.test(r.message.audio.name)) {
+            const a = el('audio');
+            a.controls = true;
+            a.preload = 'none';
+            a.src = `/media/chat/${r.message.audio.name}`;
+            content.append(a);
+          }
           card.append(content, el('p', 'cx-report-by', `Reportado por: ${r.reporters.join(', ')}`));
           const actions = el('div', 'cx-report-actions');
           const mk = (label, cls, fn) => {
@@ -632,7 +713,7 @@
     els.reply.hidden = !m;
     if (m) {
       els.replyName.textContent = `Respondiendo a ${m.username}`;
-      els.replyText.textContent = m.content || (m.image ? '📷 Foto' : '');
+      els.replyText.textContent = m.content || (m.image ? '📷 Foto' : m.audio ? '🎤 Nota de voz' : '');
       els.input.focus();
     }
   }
@@ -646,9 +727,17 @@
     els.count.classList.toggle('warn', left < 30);
   }
 
+  // Empty composer shows the microphone; as soon as there is text or a photo it becomes "send".
+  function updateComposerMode() {
+    const hasContent = Boolean(els.input.value.trim() || state.image || state.uploading);
+    els.mic.hidden = !state.audio || hasContent;
+    els.send.hidden = state.audio && !hasContent;
+  }
+
   let lastTypingEmit = 0;
   els.input.addEventListener('input', () => {
     autosize();
+    updateComposerMode();
     if (els.input.value.trim() && Date.now() - lastTypingEmit > 2500 && socket && socket.connected) {
       lastTypingEmit = Date.now();
       socket.emit('chat:typing');
@@ -686,6 +775,7 @@
       els.input.value = '';
       autosize();
       clearAttachment({ keepServerFile: true });
+      updateComposerMode();
       setReply(null);
       closeEmoji();
     }
@@ -719,6 +809,7 @@
     els.attachImg.removeAttribute('src');
     els.spoiler.checked = false;
     els.file.value = '';
+    updateComposerMode();
   }
 
   async function attachFile(file) {
@@ -730,6 +821,7 @@
     setError('');
     clearAttachment();
     state.uploading = true;
+    updateComposerMode();
     els.attach.hidden = false;
     els.attachState.textContent = 'Subiendo…';
     els.attachImg.src = URL.createObjectURL(file);
@@ -746,6 +838,7 @@
       if (!res.ok) throw new Error(data.error || 'No se pudo subir la foto.');
       state.image = data.image;
       state.uploading = false;
+      updateComposerMode();
       els.attachState.textContent = 'Lista para enviar';
       els.input.focus();
     } catch (err) {
@@ -773,6 +866,148 @@
     const file = [...(e.dataTransfer?.files || [])].find(f => f.type.startsWith('image/'));
     if (file) { e.preventDefault(); attachFile(file); }
   });
+
+  // ---- voice notes (tap the microphone, tap send; up to 2 minutes)
+  const canRecord = Boolean(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
+  const rec = { recorder: null, stream: null, chunks: [], start: 0, timer: null, ctx: null, raf: 0, sending: false };
+
+  function pickMime() {
+    const options = ['audio/webm;codecs=opus', 'audio/mp4', 'audio/ogg;codecs=opus', 'audio/webm'];
+    return options.find(t => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t)) || '';
+  }
+
+  function showRecorder(on) {
+    els.rec.hidden = !on;
+    els.row.hidden = on;
+    els.composer.classList.toggle('is-recording', on);
+    if (!on) updateComposerMode();
+  }
+
+  function releaseMic() {
+    if (rec.stream) rec.stream.getTracks().forEach(t => t.stop());
+    rec.stream = null;
+    clearInterval(rec.timer);
+    cancelAnimationFrame(rec.raf);
+    if (rec.ctx) rec.ctx.close().catch(() => {});
+    rec.ctx = null;
+  }
+
+  function startMeter() {
+    const bars = Array.from({ length: 26 }, () => el('i'));
+    els.recBars.replaceChildren(...bars);
+    const levels = bars.map(() => 0.08);
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      rec.ctx = new Ctx();
+      const analyser = rec.ctx.createAnalyser();
+      analyser.fftSize = 512;
+      rec.ctx.createMediaStreamSource(rec.stream).connect(analyser);
+      const data = new Uint8Array(analyser.fftSize);
+      let last = 0;
+      const tick = now => {
+        rec.raf = requestAnimationFrame(tick);
+        if (now - last < 70) return;
+        last = now;
+        analyser.getByteTimeDomainData(data);
+        let peak = 0;
+        for (const v of data) peak = Math.max(peak, Math.abs(v - 128));
+        levels.shift();
+        levels.push(Math.max(0.08, Math.min(1, peak / 60)));
+        bars.forEach((b, i) => b.style.setProperty('--h', levels[i].toFixed(2)));
+      };
+      rec.raf = requestAnimationFrame(tick);
+    } catch { /* the meter is decorative */ }
+  }
+
+  async function startRecording() {
+    if (!me()) return G.openAuth('register', { reason: 'Entra gratis para enviar notas de voz.' });
+    if (rec.recorder || rec.sending || state.mutedUntil) return;
+    setError('');
+    closeEmoji();
+    try {
+      rec.stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+    } catch (err) {
+      return setError(err && err.name === 'NotAllowedError'
+        ? 'Permite el acceso al micrófono para enviar notas de voz.'
+        : 'No se pudo usar el micrófono de este dispositivo.');
+    }
+    const mime = pickMime();
+    try {
+      rec.recorder = new MediaRecorder(rec.stream, mime ? { mimeType: mime, audioBitsPerSecond: 48000 } : undefined);
+    } catch {
+      rec.recorder = new MediaRecorder(rec.stream);
+    }
+    rec.chunks = [];
+    rec.recorder.addEventListener('dataavailable', e => { if (e.data && e.data.size) rec.chunks.push(e.data); });
+    rec.recorder.start(250);
+    rec.start = Date.now();
+    els.recTime.textContent = '0:00';
+    els.recLabel.textContent = 'Grabando…';
+    showRecorder(true);
+    startMeter();
+    rec.timer = setInterval(() => {
+      const ms = Date.now() - rec.start;
+      els.recTime.textContent = fmtDur(ms);
+      if (ms >= MAX_VOICE_MS) sendRecording();
+    }, 250);
+  }
+
+  function stopRecorder() {
+    return new Promise(resolve => {
+      const r = rec.recorder;
+      if (!r || r.state === 'inactive') return resolve(null);
+      r.addEventListener('stop', () => resolve(new Blob(rec.chunks, { type: r.mimeType || 'audio/webm' })), { once: true });
+      r.stop();
+    });
+  }
+
+  function cancelRecording() {
+    const r = rec.recorder;
+    rec.recorder = null;
+    if (r && r.state !== 'inactive') { try { r.stop(); } catch { /* already stopped */ } }
+    releaseMic();
+    rec.chunks = [];
+    showRecorder(false);
+  }
+
+  async function sendRecording() {
+    if (!rec.recorder || rec.sending) return;
+    rec.sending = true;
+    const ms = Math.min(Date.now() - rec.start, MAX_VOICE_MS);
+    clearInterval(rec.timer);
+    els.recLabel.textContent = 'Enviando…';
+    els.recSend.disabled = true;
+    const blob = await stopRecorder();
+    rec.recorder = null;
+    releaseMic();
+    try {
+      if (ms < 700 || !blob || blob.size < 500) throw new Error('La nota de voz es demasiado corta.');
+      const type = (blob.type || 'audio/webm').split(';')[0];
+      const res = await fetch(`/api/chat/audio?ms=${ms}`, {
+        method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': type }, body: blob,
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'No se pudo enviar la nota de voz.');
+      const sent = await emit('chat:send', { audio: data.audio.name, replyTo: state.replyTo ? state.replyTo.id : undefined });
+      if (sent.error) {
+        G.api(`/api/chat/audio/${data.audio.name}`, { method: 'DELETE' }).catch(() => {});
+        throw new Error(sent.error);
+      }
+      setReply(null);
+    } catch (err) {
+      setError(err.message);
+      if (/silenciado/.test(err.message)) refreshStatus();
+    } finally {
+      rec.sending = false;
+      els.recSend.disabled = false;
+      showRecorder(false);
+    }
+  }
+
+  els.mic.addEventListener('click', startRecording);
+  els.recCancel.addEventListener('click', cancelRecording);
+  els.recSend.addEventListener('click', sendRecording);
+  window.addEventListener('pagehide', cancelRecording);
 
   // ---- emoji picker
   let picker = null;
@@ -861,6 +1096,8 @@
     }
     els.modBtn.hidden = !state.admin;
     els.attachBtn.hidden = !state.photos;
+    if ((!user || muted) && rec.recorder) cancelRecording();
+    updateComposerMode();
     document.querySelectorAll('.cx-msg').forEach(li => {
       const entry = state.messages.get(Number(li.dataset.id));
       if (entry) li.classList.toggle('is-own', isOwn(entry.data));
@@ -872,6 +1109,7 @@
       const s = await G.api('/api/chat/status');
       state.admin = s.admin;
       state.photos = s.photos;
+      state.audio = Boolean(s.audio && canRecord);
       state.mutedUntil = s.mutedUntil || 0;
     } catch { /* keep previous state */ }
     applyAccount();
@@ -924,7 +1162,7 @@
     refreshStatus();
   }
 
-  G.onAuth(() => { clearAttachment(); setReply(null); refreshStatus(); });
+  G.onAuth(() => { clearAttachment(); setReply(null); cancelRecording(); refreshStatus(); });
   G.loadMe().then(refreshStatus);
   setInterval(refreshReportCount, 45000);
 
@@ -941,4 +1179,5 @@
     fit();
   }
   autosize();
+  updateComposerMode();
 })();

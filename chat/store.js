@@ -38,6 +38,8 @@ async function createMysqlStore(config) {
     ['reply_to', 'INT NULL'],
     ['edited_at', 'TIMESTAMP NULL DEFAULT NULL'],
     ['deleted', 'TINYINT(1) NOT NULL DEFAULT 0'],
+    ['audio', 'VARCHAR(40) NULL'],
+    ['audio_ms', 'INT UNSIGNED NOT NULL DEFAULT 0'],
   ];
   for (const [name, def] of wanted) {
     if (!have.has(name)) await pool.query(`ALTER TABLE messages ADD COLUMN ${name} ${def}`);
@@ -51,10 +53,18 @@ async function createMysqlStore(config) {
     await pool.query('ALTER TABLE users ADD COLUMN google_id VARCHAR(64) NULL, ADD UNIQUE KEY uq_users_google (google_id)');
   }
 
+  // Profile photo and cover picture.
+  const [profileCols] = await pool.query(
+    "SELECT COLUMN_NAME FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'profiles'"
+  );
+  const haveProfile = new Set(profileCols.map(c => c.COLUMN_NAME));
+  if (!haveProfile.has('avatar')) await pool.query('ALTER TABLE profiles ADD COLUMN avatar VARCHAR(40) NULL');
+  if (!haveProfile.has('cover')) await pool.query('ALTER TABLE profiles ADD COLUMN cover VARCHAR(16) NULL');
+
   const toPost = r => ({
     id: r.id,
     userId: r.user_id,
-    author: { username: r.username, team: r.team || null },
+    author: { username: r.username, team: r.team || null, avatar: r.avatar || null },
     category: r.category,
     body: r.body,
     spoiler: Boolean(r.spoiler),
@@ -68,7 +78,7 @@ async function createMysqlStore(config) {
     id: r.id,
     postId: r.post_id,
     userId: r.user_id,
-    author: { username: r.username, team: r.team || null },
+    author: { username: r.username, team: r.team || null, avatar: r.avatar || null },
     content: r.content,
     createdAt: r.created_at,
   });
@@ -79,13 +89,13 @@ async function createMysqlStore(config) {
       ? 'EXISTS(SELECT 1 FROM post_likes l WHERE l.post_id = p.id AND l.user_id = ?) AS liked'
       : '0 AS liked';
     return `SELECT p.id, p.user_id, p.category, p.body, p.spoiler, p.video_id, p.like_count, p.comment_count,
-                   p.created_at, u.username, pr.team, ${liked}
+                   p.created_at, u.username, pr.team, pr.avatar, ${liked}
             FROM posts p
             JOIN users u ON u.id = p.user_id
             LEFT JOIN profiles pr ON pr.user_id = p.user_id`;
   }
 
-  const COMMENT_SELECT = `SELECT c.id, c.post_id, c.user_id, c.content, c.created_at, u.username, pr.team
+  const COMMENT_SELECT = `SELECT c.id, c.post_id, c.user_id, c.content, c.created_at, u.username, pr.team, pr.avatar
                           FROM comments c
                           JOIN users u ON u.id = c.user_id
                           LEFT JOIN profiles pr ON pr.user_id = c.user_id`;
@@ -105,9 +115,9 @@ async function createMysqlStore(config) {
     }
   }
 
-  const MESSAGE_SELECT = `SELECT m.id, m.user_id, m.content, m.spoiler, m.image, m.image_w, m.image_h, m.reply_to,
-           m.edited_at, m.deleted, m.created_at, u.username, pr.team,
-           r.content AS r_content, r.image AS r_image, r.deleted AS r_deleted, ru.username AS r_username
+  const MESSAGE_SELECT = `SELECT m.id, m.user_id, m.content, m.spoiler, m.image, m.image_w, m.image_h, m.audio, m.audio_ms, m.reply_to,
+           m.edited_at, m.deleted, m.created_at, u.username, pr.team, pr.avatar,
+           r.content AS r_content, r.image AS r_image, r.audio AS r_audio, r.deleted AS r_deleted, ru.username AS r_username
     FROM messages m
     JOIN users u ON u.id = m.user_id
     LEFT JOIN profiles pr ON pr.user_id = m.user_id
@@ -134,7 +144,7 @@ async function createMysqlStore(config) {
         const gone = r.r_content === null || Boolean(r.r_deleted);
         replyTo = {
           id: r.reply_to, username: r.r_username || '', excerpt: gone ? '' : String(r.r_content).slice(0, 120),
-          hasImage: !gone && Boolean(r.r_image), deleted: gone,
+          hasImage: !gone && Boolean(r.r_image), hasAudio: !gone && Boolean(r.r_audio), deleted: gone,
         };
       }
       return {
@@ -142,9 +152,11 @@ async function createMysqlStore(config) {
         userId: r.user_id,
         username: r.username,
         team: r.team || null,
+        avatar: r.avatar || null,
         content: deleted ? '' : r.content,
         spoiler: Boolean(r.spoiler),
         image: r.image && !deleted ? { name: r.image, w: r.image_w, h: r.image_h } : null,
+        audio: r.audio && !deleted ? { name: r.audio, ms: r.audio_ms } : null,
         replyTo,
         createdAt: r.created_at,
         editedAt: r.edited_at,
@@ -177,7 +189,7 @@ async function createMysqlStore(config) {
     },
     async getProfile(username) {
       const [rows] = await pool.query(
-        `SELECT u.id, u.username, u.created_at, pr.bio, pr.team,
+        `SELECT u.id, u.username, u.created_at, pr.bio, pr.team, pr.avatar, pr.cover,
                 (SELECT COUNT(*) FROM posts WHERE user_id = u.id) AS posts,
                 (SELECT COALESCE(SUM(like_count), 0) FROM posts WHERE user_id = u.id) AS likes_received,
                 (SELECT COUNT(*) FROM comments WHERE user_id = u.id) AS comments
@@ -189,23 +201,34 @@ async function createMysqlStore(config) {
       if (!r) return null;
       return {
         id: r.id, username: r.username, bio: r.bio || '', team: r.team || null, createdAt: r.created_at,
+        avatar: r.avatar || null, cover: r.cover || null,
         stats: { posts: Number(r.posts), comments: Number(r.comments), likesReceived: Number(r.likes_received) },
       };
     },
-    async updateProfile(userId, { bio, team }) {
+    async updateProfile(userId, { bio, team, cover }) {
       await pool.query(
-        `INSERT INTO profiles (user_id, bio, team) VALUES (?, ?, ?)
-         ON DUPLICATE KEY UPDATE bio = VALUES(bio), team = VALUES(team)`,
-        [userId, bio, team]
+        `INSERT INTO profiles (user_id, bio, team, cover) VALUES (?, ?, ?, ?)
+         ON DUPLICATE KEY UPDATE bio = VALUES(bio), team = VALUES(team), cover = VALUES(cover)`,
+        [userId, bio, team, cover || null]
       );
+    },
+    // Returns the previous photo so the caller can delete its file.
+    async setAvatar(userId, avatar) {
+      const [rows] = await pool.query('SELECT avatar FROM profiles WHERE user_id = ?', [userId]);
+      await pool.query(
+        `INSERT INTO profiles (user_id, avatar) VALUES (?, ?) ON DUPLICATE KEY UPDATE avatar = VALUES(avatar)`,
+        [userId, avatar]
+      );
+      return rows[0] ? rows[0].avatar : null;
     },
 
     // Chat
-    async addMessage(userId, { content, spoiler, image, replyTo }) {
+    async addMessage(userId, { content, spoiler, image, audio, replyTo }) {
       const [result] = await pool.query(
-        `INSERT INTO messages (user_id, content, spoiler, image, image_w, image_h, reply_to)
-         VALUES (?, ?, ?, ?, ?, ?, ?)`,
-        [userId, content, spoiler ? 1 : 0, image ? image.name : null, image ? image.w : 0, image ? image.h : 0, replyTo || null]
+        `INSERT INTO messages (user_id, content, spoiler, image, image_w, image_h, audio, audio_ms, reply_to)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [userId, content, spoiler ? 1 : 0, image ? image.name : null, image ? image.w : 0, image ? image.h : 0,
+          audio ? audio.name : null, audio ? audio.ms : 0, replyTo || null]
       );
       return this.getMessage(result.insertId, userId);
     },
@@ -231,12 +254,12 @@ async function createMysqlStore(config) {
     },
     async deleteMessage(id) {
       return inTransaction(async conn => {
-        const [rows] = await conn.query('SELECT image FROM messages WHERE id = ? AND deleted = 0 FOR UPDATE', [id]);
+        const [rows] = await conn.query('SELECT image, audio FROM messages WHERE id = ? AND deleted = 0 FOR UPDATE', [id]);
         if (!rows.length) return null;
-        await conn.query("UPDATE messages SET deleted = 1, content = '', image = NULL WHERE id = ?", [id]);
+        await conn.query("UPDATE messages SET deleted = 1, content = '', image = NULL, audio = NULL WHERE id = ?", [id]);
         await conn.query('DELETE FROM message_reactions WHERE message_id = ?', [id]);
         await conn.query('DELETE FROM chat_reports WHERE message_id = ?', [id]);
-        return { image: rows[0].image };
+        return { image: rows[0].image, audio: rows[0].audio };
       });
     },
     async toggleReaction(id, userId, emoji) {

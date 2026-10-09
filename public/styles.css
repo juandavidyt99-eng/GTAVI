@@ -5018,3 +5018,184 @@ body.page-chat .site-footer { display: none; }
 .hm-faq .faq-answer a:hover { text-decoration: underline; }
 @media (max-width: 900px) { .hm-about-grid { grid-template-columns: minmax(0, 1fr); gap: 24px; } }
 @media (max-width: 640px) { .hm-about-text p { font-size: 16px; } .hm-facts { padding: 4px 16px; } }
+
+/* ==========================================================================
+   Chat · Vice City theme, voice notes and phone layout
+   ========================================================================== */
+.cx-back { display: none; place-items: center; flex: none; width: 40px; height: 40px; margin-left: -6px; border-radius: 50%; color: var(--text-light); }
+.cx-back .icon { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.cx-back:hover { background: rgba(255,255,255,0.08); }
+.cx-main { border-color: rgba(255,93,187,0.22); background: #0d0816; }
+.cx-top {
+  position: relative; z-index: 3; border-bottom: 0;
+  background: linear-gradient(100deg, rgba(255,46,166,0.2), rgba(123,47,247,0.18) 55%, rgba(0,229,255,0.1)), rgba(10,6,18,0.88);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+}
+.cx-top::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: linear-gradient(90deg, var(--pink), var(--purple) 55%, var(--cyan)); opacity: 0.8; }
+.cx-hash { font-size: 21px; letter-spacing: 1px; background: linear-gradient(135deg, #ff8ccf, #ff2ea6 40%, #7b2ff7); box-shadow: 0 6px 18px rgba(255,46,166,0.45); }
+.cx-scroll {
+  background:
+    linear-gradient(180deg, rgba(13,8,22,0.8) 0%, rgba(13,8,22,0.93) 35%, rgba(13,8,22,0.97) 100%),
+    url('/images/news/oficial/vice-city-skyline-800.webp') center top / cover no-repeat;
+}
+.cx-welcome {
+  max-width: 540px; margin: 6px auto 16px; padding: 18px 20px; border-radius: 18px; text-align: center;
+  border: 1px solid rgba(255,93,187,0.32);
+  background: linear-gradient(135deg, rgba(255,46,166,0.18), rgba(123,47,247,0.16)), rgba(13,8,22,0.55);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.cx-welcome-kicker { font-size: 11px; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; color: #ffcf66; }
+.cx-welcome strong { display: block; margin: 6px 0 4px; font-family: 'Bebas Neue', sans-serif; font-size: 28px; font-weight: 400; letter-spacing: 0.5px; line-height: 1; }
+.cx-welcome p { font-size: 13px; line-height: 1.55; color: #d9cde7; }
+.cx-day span { border: 1px solid rgba(255,93,187,0.35); background: rgba(13,8,22,0.82); color: #ff9ed6; box-shadow: 0 0 16px rgba(255,46,166,0.15); }
+.cx-bubble { border-color: rgba(255,255,255,0.08); background: rgba(34,23,51,0.94); box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
+.cx-msg.is-own .cx-bubble { background: linear-gradient(135deg, #ff2ea6, #b62ad9 58%, #7b2ff7); box-shadow: 0 6px 18px rgba(255,46,166,0.28); }
+.cx-slot-photo + .cx-slot-audio:not(:empty), .cx-slot-photo:not(:empty) + .cx-slot-audio + .cx-slot-text:not(:empty),
+.cx-slot-audio:not(:empty) + .cx-slot-text:not(:empty) { margin-top: 8px; }
+.cx-bubble:has(.cx-slot-audio:not(:empty)) { padding: 8px 12px 8px 8px; }
+
+/* Voice note player */
+.cx-voice { display: flex; align-items: center; gap: 10px; width: min(280px, 64vw); }
+.cx-voice-btn {
+  display: grid; place-items: center; flex: none; width: 42px; height: 42px; padding: 0; border: 0; border-radius: 50%;
+  background: #fff; color: #9b2ad6; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); transition: transform 0.15s;
+}
+.cx-voice-btn:active { transform: scale(0.94); }
+.cx-voice-btn .icon { width: 20px; height: 20px; fill: currentColor; stroke: none; }
+.cx-msg:not(.is-own) .cx-voice-btn { background: linear-gradient(135deg, var(--pink), var(--purple)); color: #fff; }
+.cx-voice-wave { display: flex; flex: 1; align-items: center; gap: 2px; height: 34px; min-width: 0; cursor: pointer; }
+.cx-voice-wave i { flex: 1; min-height: 3px; height: calc(var(--h) * 100%); border-radius: 2px; background: rgba(255,255,255,0.38); transition: background 0.15s; }
+.cx-voice-wave i.on { background: #fff; }
+.cx-msg:not(.is-own) .cx-voice-wave i.on { background: #ff5dbb; }
+.cx-voice-time { flex: none; min-width: 34px; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; color: rgba(255,255,255,0.88); }
+.cx-report-body audio { display: block; width: 100%; max-width: 320px; margin-top: 8px; }
+
+/* Composer: field with emoji inside, microphone that turns into send */
+.cx-composer { border-top: 1px solid rgba(255,93,187,0.18); background: rgba(13,8,22,0.94); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); }
+.cx-row[hidden], .cx-rec[hidden], .cx-send[hidden] { display: none; }
+.cx-field {
+  display: flex; flex: 1; align-items: flex-end; min-width: 0; border: 1px solid rgba(255,255,255,0.14); border-radius: 24px;
+  background: rgba(255,255,255,0.06); transition: border-color 0.2s, box-shadow 0.2s;
+}
+.cx-field:focus-within { border-color: rgba(255,46,166,0.6); box-shadow: 0 0 0 3px rgba(255,46,166,0.12); }
+.cx-row .cx-field textarea { min-height: 44px; padding: 11px 16px 11px 2px; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.cx-tool-in { width: 44px; height: 44px; }
+.cx-tool-in .icon { width: 22px; height: 22px; }
+.cx-mic .icon { width: 22px; height: 22px; }
+.cx-composer .cx-emoji { bottom: calc(100% + 6px); }
+
+/* Recording bar */
+.cx-rec { display: flex; align-items: center; gap: 10px; }
+.cx-rec-cancel {
+  display: grid; place-items: center; flex: none; width: 46px; height: 46px; border: 0; border-radius: 50%;
+  background: rgba(255,77,109,0.14); color: #ff6b8a; cursor: pointer;
+}
+.cx-rec-cancel .icon { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.cx-rec-live {
+  display: flex; flex: 1; align-items: center; gap: 10px; min-width: 0; height: 46px; padding: 0 16px; border-radius: 24px;
+  border: 1px solid rgba(255,46,166,0.4); background: rgba(255,46,166,0.1);
+}
+.cx-rec-dot { flex: none; width: 10px; height: 10px; border-radius: 50%; background: #ff3b5c; box-shadow: 0 0 10px rgba(255,59,92,0.8); animation: cx-rec-pulse 1s ease-in-out infinite; }
+@keyframes cx-rec-pulse { 50% { opacity: 0.3; } }
+.cx-rec-time { flex: none; font-weight: 700; font-variant-numeric: tabular-nums; }
+.cx-rec-bars { display: flex; flex: 1; align-items: center; gap: 2px; height: 26px; min-width: 0; overflow: hidden; }
+.cx-rec-bars i { flex: 1; min-height: 2px; height: calc(var(--h, 0.08) * 100%); border-radius: 2px; background: linear-gradient(var(--pink), var(--purple)); transition: height 0.07s linear; }
+.cx-rec-label { flex: none; font-size: 12px; color: var(--text-muted); }
+@media (prefers-reduced-motion: reduce) { .cx-rec-dot { animation: none; } }
+
+@media (max-width: 900px) {
+  body.page-chat .navbar { display: none; }
+  body.page-chat .cx-app { padding-top: 0; }
+  .cx-back { display: grid; }
+  .cx-top { gap: 8px; padding: calc(8px + env(safe-area-inset-top)) 12px 10px; }
+  .cx-hash { width: 36px; height: 36px; border-radius: 11px; font-size: 18px; }
+  .cx-title { gap: 10px; }
+  .cx-title strong { font-size: 16px; }
+  .cx-chip { min-height: 36px; padding: 0 12px; }
+  .cx-welcome { margin: 4px 2px 12px; padding: 14px 16px; }
+  .cx-welcome strong { font-size: 24px; }
+  .cx-composer { padding: 8px 10px 10px; }
+  .cx-row { gap: 6px; }
+  .cx-tool { width: 42px; height: 46px; }
+}
+@media (max-width: 420px) {
+  .cx-rec-label { display: none; }
+  .cx-chip-text { display: none; }
+}
+
+/* ==========================================================================
+   Profile photos, professional profile and sign-in
+   ========================================================================== */
+.avatar.has-photo { overflow: hidden; color: transparent; }
+.avatar.has-photo img { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.bn-avatar { position: relative; overflow: hidden; }
+.bn-avatar img { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+
+.profile-cover {
+  height: clamp(220px, 34vw, 340px);
+  background:
+    linear-gradient(0deg, var(--bg-dark) 0%, rgba(10,6,18,0.35) 55%, rgba(10,6,18,0.55) 100%),
+    var(--cover, url('/images/news/oficial/vice-city-skyline-800.webp')) center 45% / cover no-repeat;
+  transition: background-image 0.3s;
+}
+.profile-card { border-color: rgba(255,93,187,0.22); background: linear-gradient(180deg, rgba(21,13,33,0.9), var(--surface)); }
+.pc-avatar .avatar-xl { width: 120px; height: 120px; font-size: 48px; }
+.pc-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; }
+.pc-head .pc-name { margin-top: 0; }
+.pc-badge {
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: 999px;
+  border: 1px solid rgba(255,186,0,0.5); background: rgba(255,186,0,0.12); color: #ffcf66; font-size: 12px; font-weight: 800; letter-spacing: 0.5px;
+}
+.pc-badge[hidden] { display: none; }
+.pc-badge .icon { width: 15px; height: 15px; }
+.pc-handle { margin-top: 2px; font-size: 14px; font-weight: 600; color: #ff8fd0; }
+.pc-quick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+.pc-quick[hidden] { display: none; }
+.pc-quick-link {
+  display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 0 10px;
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; background: rgba(255,255,255,0.04);
+  color: var(--text-light); font-size: 14px; font-weight: 700; text-decoration: none; transition: border-color 0.2s, background 0.2s;
+}
+.pc-quick-link:hover { border-color: rgba(255,93,187,0.5); background: rgba(255,46,166,0.1); }
+.pc-quick-link .icon { color: #ff5dbb; }
+
+.pe-photo { display: flex; align-items: center; gap: 18px; margin-bottom: 20px; }
+.pe-avatar .avatar-xl { width: 96px; height: 96px; font-size: 38px; }
+.pe-photo-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.pe-photo-actions .btn { display: inline-flex; align-items: center; gap: 8px; }
+.pe-photo-actions .btn[hidden] { display: none; }
+.pe-photo-actions small { flex-basis: 100%; font-size: 12px; color: var(--text-muted); }
+.cover-picks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.cover-pick { position: relative; display: block; overflow: hidden; border: 2px solid transparent; border-radius: 14px; cursor: pointer; }
+.cover-pick input { position: absolute; opacity: 0; pointer-events: none; }
+.cover-pick img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; transition: transform 0.3s; }
+.cover-pick span {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 10px 6px; font-size: 12px; font-weight: 700;
+  background: linear-gradient(0deg, rgba(5,3,8,0.85), transparent); color: #fff;
+}
+.cover-pick:hover img { transform: scale(1.05); }
+.cover-pick:has(input:checked) { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(255,46,166,0.25); }
+.cover-pick:has(input:focus-visible) { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+.profile-auth { border-color: rgba(255,93,187,0.25); }
+.pa-box { display: flex; flex-direction: column; gap: 0; padding: 22px; border: 1px solid var(--line); border-radius: 18px; background: rgba(10,6,18,0.65); }
+.pa-box .pa-form { padding: 0; border: 0; background: transparent; }
+.pa-box .auth-legal a { color: var(--text-muted); }
+.pa-google[hidden] { display: none; }
+
+/* Sign-in dialog with a touch of Leonida */
+.auth-dialog {
+  border-color: rgba(255,93,187,0.28);
+  background:
+    linear-gradient(180deg, rgba(18,11,28,0.55) 0%, rgba(18,11,28,0.8) 90px, #120b1c 170px),
+    url('/images/news/oficial/vice-city-skyline-800.webp') center top / 100% auto no-repeat,
+    #120b1c;
+}
+.auth-dialog .auth-brand { text-shadow: 0 2px 12px rgba(0,0,0,0.8); }
+
+@media (max-width: 640px) {
+  .pc-avatar .avatar-xl { width: 104px; height: 104px; font-size: 42px; }
+  .pc-quick { grid-template-columns: minmax(0, 1fr); }
+  .cover-picks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pe-photo { flex-direction: column; align-items: flex-start; }
+}
