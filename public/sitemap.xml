@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://gtavivicecity.com/</loc>
-    <lastmod>2026-10-09</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/og-gtavi.jpg</image:loc></image:image>
@@ -139,14 +139,14 @@
   </url>
   <url>
     <loc>https://gtavivicecity.com/comunidad</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/og-comunidad.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://gtavivicecity.com/clips</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.7</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/og-leonida.jpg</image:loc></image:image>
@@ -159,7 +159,7 @@
   </url>
   <url>
     <loc>https://gtavivicecity.com/privacidad</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>

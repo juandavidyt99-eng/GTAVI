@@ -23,6 +23,22 @@ function safeNext(value) {
   return /^\/(?![/\\])[^\s]*$/.test(next) && next.length <= 300 ? next : '/';
 }
 
+// Google profile pictures are served from *.googleusercontent.com; anything else is ignored.
+const GOOGLE_PHOTO_HOST = /^[a-z0-9-]+\.googleusercontent\.com$/;
+const GOOGLE_PHOTO_MAX_BYTES = 2 * 1024 * 1024;
+
+function googlePhotoUrl(value) {
+  try {
+    const url = new URL(String(value));
+    if (url.protocol !== 'https:' || !GOOGLE_PHOTO_HOST.test(url.hostname)) return null;
+    // ".../photo=s96-c" -> ask Google for a sharper 320 px square.
+    url.pathname = url.pathname.replace(/=s\d+(-c)?$/, '=s320-c');
+    return url.toString();
+  } catch {
+    return null;
+  }
+}
+
 // "Juan David López" -> "JuanDavidLopez": a starting point the user can change.
 function usernameFromName(name) {
   const base = String(name || '')
@@ -260,6 +276,27 @@ function createChatRouter(getStore) {
   // ---- Entrar con Google (OAuth 2.0 authorization code flow)
   const googleLimiter = createLimiter({ max: 20, windowMs: 10 * 60 * 1000 });
 
+  // Uses the member's Google picture as their profile photo, but only if they have none and haven't
+  // removed one on purpose. The picture is re-encoded and stored here; Google's link is not kept.
+  async function importGooglePhoto(user, picture) {
+    const url = googlePhotoUrl(picture);
+    if (!url || !images.enabled() || !user) return;
+    try {
+      const profile = await getStore().getProfile(user.username);
+      if (!profile || profile.avatar) return;
+      if (await getStore().getMeta(`avatar_optout_${user.id}`)) return;
+      const res = await fetch(url, { signal: AbortSignal.timeout(5000) });
+      const type = res.headers.get('content-type') || '';
+      if (!res.ok || !type.startsWith('image/')) return;
+      const buffer = Buffer.from(await res.arrayBuffer());
+      if (!buffer.length || buffer.length > GOOGLE_PHOTO_MAX_BYTES) return;
+      const name = await images.processAvatar(buffer);
+      images.removeAvatar(await getStore().setAvatar(user.id, name));
+    } catch (err) {
+      console.warn('[auth] Could not import the Google profile photo:', err.message);
+    }
+  }
+
   function saveSession(req) {
     return new Promise((resolve, reject) => req.session.save(err => (err ? reject(err) : resolve())));
   }
@@ -326,12 +363,16 @@ function createChatRouter(getStore) {
       const googleId = String(claims.sub);
       const existing = await getStore().findUserByGoogleId(googleId);
       if (existing) {
+        await importGooglePhoto(existing, claims.picture);
         await startSession(req, existing);
         return res.redirect(oauth.next);
       }
 
       // New here: let them pick their community name before the account is created.
-      req.session.googlePending = { googleId, name: usernameFromName(claims.given_name || claims.name), next: oauth.next, at: Date.now() };
+      req.session.googlePending = {
+        googleId, name: usernameFromName(claims.given_name || claims.name), picture: googlePhotoUrl(claims.picture),
+        next: oauth.next, at: Date.now(),
+      };
       await saveSession(req);
       res.redirect('/perfil?google=nuevo');
     } catch (err) {
@@ -381,6 +422,7 @@ function createChatRouter(getStore) {
           return res.status(409).json({ error: 'Esta cuenta de Google ya está vinculada a otro usuario.' });
         }
         const nextPath = pending.next;
+        await importGooglePhoto(owner, pending.picture);
         await startSession(req, owner);
         return res.json({ user: { username: owner.username }, linked: true, next: nextPath });
       } catch (err) {
@@ -412,6 +454,7 @@ function createChatRouter(getStore) {
           return res.status(409).json({ error: 'Ese nombre de usuario ya está en uso.' });
         }
       }
+      await importGooglePhoto(user, pending.picture);
       await startSession(req, user);
       res.status(201).json({ user: { username: user.username }, next: pending.next });
     } catch (err) {

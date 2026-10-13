@@ -212,7 +212,7 @@ window.GTA = (() => {
       <div class="auth-google-panel">
         <a class="auth-google" href="/api/auth/google">${GOOGLE_G}<span>Continuar con Google</span></a>
         <ul class="auth-perks">${PERKS.map(([svg, t]) => `<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${svg}</svg>${t}</li>`).join('')}</ul>
-        <p class="auth-trust"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${SVG.lock}</svg><span>Solo usamos tu nombre de Google para sugerirte un usuario. No vemos tu correo ni tu contraseña.</span></p>
+        <p class="auth-trust"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${SVG.lock}</svg><span>Usamos tu nombre y tu foto de Google para crear tu perfil. No vemos tu correo ni tu contraseña.</span></p>
       </div>
       <div class="auth-classic-panel">
         <div class="auth-tabs" role="tablist">
@@ -888,8 +888,12 @@ window.GTA = (() => {
   loadMe();
 
   // The community pages ask guests to sign in with Google (once per visit; they can still read).
+  // Never over search visitors or crawlers: a pop-up covering the page after a click from Google
+  // counts as an intrusive interstitial and hurts rankings. Those visitors keep the "Entrar" button.
   const ASK_PAGES = ['page-comunidad', 'page-chat', 'page-clips'];
-  if (!returningFromGoogle && ASK_PAGES.some(cls => document.body.classList.contains(cls))) {
+  const fromSearch = /^https?:\/\/([a-z0-9-]+\.)*(google|bing|duckduckgo|yahoo|yandex|ecosia|brave|baidu|qwant|startpage)\./i.test(document.referrer);
+  const isCrawler = /bot|crawl|spider|slurp|lighthouse|pagespeed|inspectiontool/i.test(navigator.userAgent);
+  if (!returningFromGoogle && !fromSearch && !isCrawler && ASK_PAGES.some(cls => document.body.classList.contains(cls))) {
     loadMe().then(user => {
       if (user || !googleEnabled) return;
       let asked = false;

@@ -102,6 +102,8 @@ function createSocialRouter(getStore, bus) {
   router.delete('/me/avatar', requireUser, wrap(async (req, res) => {
     const user = currentUser(req);
     images.removeAvatar(await getStore().setAvatar(user.id, null));
+    // Removed on purpose: signing in with Google must not bring the Google picture back.
+    await getStore().setMeta(`avatar_optout_${user.id}`, '1');
     const profile = await getStore().getProfile(user.username);
     delete profile.id;
     res.json({ user: profile });
