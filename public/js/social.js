@@ -167,7 +167,7 @@ window.GTA = (() => {
     mePromise = Promise.resolve(user);
     window.GTA_ME = Promise.resolve({ enabled: true, user, google: googleEnabled });
     authListeners.forEach(fn => fn(me));
-    if (window.GTANav) window.GTANav.render(me);
+    if (window.GTANav) window.GTANav.render(me, googleEnabled);
   }
 
   function onAuth(fn) {
@@ -344,6 +344,8 @@ window.GTA = (() => {
     box.showModal();
     form.username.select();
   }
+
+  const returningFromGoogle = new URLSearchParams(location.search).has('google');
 
   // Back from Google: finish a new account, or explain what went wrong.
   (() => {
@@ -884,6 +886,24 @@ window.GTA = (() => {
   }
 
   loadMe();
+
+  // The community pages ask guests to sign in with Google (once per visit; they can still read).
+  const ASK_PAGES = ['page-comunidad', 'page-chat', 'page-clips'];
+  if (!returningFromGoogle && ASK_PAGES.some(cls => document.body.classList.contains(cls))) {
+    loadMe().then(user => {
+      if (user || !googleEnabled) return;
+      let asked = false;
+      try {
+        asked = sessionStorage.getItem('gta-ask-login') === '1';
+        sessionStorage.setItem('gta-ask-login', '1');
+      } catch { /* storage blocked: ask every time */ }
+      if (asked) return;
+      setTimeout(() => {
+        if (me || document.querySelector('dialog[open]')) return;
+        openAuth('register', { reason: 'Entra con tu cuenta de Google para publicar, comentar y chatear con la comunidad.' });
+      }, 1200);
+    });
+  }
 
   return {
     CATEGORY, TEAM, api, el, icon, avatar, timeAgo, timeEl, toast, formatCount,
