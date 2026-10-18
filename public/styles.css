@@ -5397,3 +5397,8 @@ html:not(.signin-classic) [data-auth-classic] { display: none !important; }
   .nav-account.is-user { padding: 3px; }
   .nav-account.is-user .nav-account-name { display: none; }
 }
+
+/* Playable trailer inside an article */
+.ar-video .video-card { box-shadow: 0 24px 60px rgba(0,0,0,0.45); }
+.ar-video .video-card img { border-radius: 0; box-shadow: none; aspect-ratio: auto; height: 100%; }
+.ar-video .video-live iframe { display: block; width: 100%; height: 100%; border: 0; }

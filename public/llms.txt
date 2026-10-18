@@ -7,6 +7,8 @@ Datos clave confirmados por Rockstar Games:
 - Precio: 79,99 USD (edición estándar) y 99,99 USD (Ultimate Edition).
 - Protagonistas: Jason Duval y Lucia Caminos. Escenario: el estado de Leonida, con Vice City.
 - No hay versión de PC anunciada.
+- Clasificación por edades: M (Mature 17+) de la ESRB.
+- Último vídeo oficial: el tráiler de lanzamiento (15 de octubre de 2026), con «Flower in a Hurricane» de Justice, autores de la banda sonora original.
 
 ## Guías
 - [¿Cuándo sale GTA 6?](https://gtavivicecity.com/cuando-sale-gta-6): fecha, cuenta regresiva, plataformas y retrasos.
@@ -14,6 +16,9 @@ Datos clave confirmados por Rockstar Games:
 - [Preguntas frecuentes](https://gtavivicecity.com/preguntas-frecuentes): PC, GTA Online, microtransacciones y más.
 
 ## Artículos de nuestra redacción
+- [Tráiler de lanzamiento de GTA 6](https://gtavivicecity.com/noticias/gta-6-trailer-lanzamiento): qué muestra, la canción de Justice con SZA y Tame Impala y la clasificación M (17+).
+- [¿Se retrasará otra vez GTA 6?](https://gtavivicecity.com/noticias/gta-6-desarrollo-bloomberg-retraso): lo que revela el reportaje de Bloomberg sobre el desarrollo a un mes del estreno.
+- [Ropa oficial de GTA 6](https://gtavivicecity.com/noticias/gta-6-ropa-oficial-rockstar-store): la Grand Theft Auto VI Collection de la Rockstar Store, con precios.
 - [Nuevas imágenes y emisoras de radio de GTA 6](https://gtavivicecity.com/noticias/gta-6-nuevas-imagenes-emisoras-radio): las 6 primeras emisoras (Bad Bunny, Lana Del Rey, Slayer…) y 3 capturas nuevas de Vice City.
 - [¿GTA 6 sale en PC?](https://gtavivicecity.com/noticias/gta-6-pc): lo que se sabe, precedentes de Rockstar y requisitos falsos.
 - [¿GTA 6 sale en PS4 o Xbox One?](https://gtavivicecity.com/noticias/gta-6-ps4-xbox-one): plataformas confirmadas y opciones.
@@ -27,7 +32,7 @@ Datos clave confirmados por Rockstar Games:
 
 ## Secciones
 - [Noticias de GTA 6](https://gtavivicecity.com/noticias): oficial, noticias, filtraciones y rumores etiquetados, con fuentes.
-- [Tráilers](https://gtavivicecity.com/trailers): Tráiler 1, Tráiler 2 y An Extended Look.
+- [Tráilers](https://gtavivicecity.com/trailers): tráiler de lanzamiento, Tráiler 1, Tráiler 2 y An Extended Look.
 - [Mapa de Leonida](https://gtavivicecity.com/leonida): Vice City, Leonida Keys, Grassrivers, Port Gellhorn, Ambrosia y Mount Kalaga.
 - [Jason y Lucia](https://gtavivicecity.com/protagonistas): biografías oficiales y reparto confirmado.
 - [Comunidad](https://gtavivicecity.com/comunidad): publicaciones, comentarios, me gusta y chat en vivo de fans.

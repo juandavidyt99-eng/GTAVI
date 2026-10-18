@@ -2,24 +2,45 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://gtavivicecity.com/</loc>
-    <lastmod>2026-10-13</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/og-gtavi.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://gtavivicecity.com/cuando-sale-gta-6</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/og-trailers.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://gtavivicecity.com/noticias</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/og-noticias.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://gtavivicecity.com/noticias/gta-6-trailer-lanzamiento</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/hidroavion-grassrivers-1600.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://gtavivicecity.com/noticias/gta-6-desarrollo-bloomberg-retraso</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/salon-leonida-1600.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://gtavivicecity.com/noticias/gta-6-ropa-oficial-rockstar-store</loc>
+    <lastmod>2026-10-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/coleccion-rockstar-store-1600.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://gtavivicecity.com/noticias/gta-6-nuevas-imagenes-emisoras-radio</loc>
@@ -104,14 +125,14 @@
   </url>
   <url>
     <loc>https://gtavivicecity.com/gta-6-precio</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/og-comunidad.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://gtavivicecity.com/trailers</loc>
-    <lastmod>2026-10-06</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/og-trailers.jpg</image:loc></image:image>
@@ -132,7 +153,7 @@
   </url>
   <url>
     <loc>https://gtavivicecity.com/preguntas-frecuentes</loc>
-    <lastmod>2026-10-02</lastmod>
+    <lastmod>2026-10-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/og-noticias.jpg</image:loc></image:image>

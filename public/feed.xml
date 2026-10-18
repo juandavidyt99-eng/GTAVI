@@ -6,8 +6,38 @@
     <atom:link href="https://gtavivicecity.com/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Noticias, guías y análisis de GTA 6 (Grand Theft Auto VI) en español, con fuentes.</description>
     <language>es</language>
-    <lastBuildDate>Thu, 08 Oct 2026 17:30:00 -0500</lastBuildDate>
+    <lastBuildDate>Sun, 18 Oct 2026 09:00:00 -0500</lastBuildDate>
     <image><url>https://gtavivicecity.com/images/icon-512.png</url><title>GTA VI Vice City: noticias de GTA 6</title><link>https://gtavivicecity.com/noticias</link></image>
+    <item>
+      <title>GTA 6 estrena su tráiler de lanzamiento: Jason, Lucia y una canción inédita de Justice con SZA y Tame Impala</title>
+      <link>https://gtavivicecity.com/noticias/gta-6-trailer-lanzamiento</link>
+      <guid isPermaLink="true">https://gtavivicecity.com/noticias/gta-6-trailer-lanzamiento</guid>
+      <pubDate>Sun, 18 Oct 2026 09:00:00 -0500</pubDate>
+      <category>Última hora</category>
+      <dc:creator>Redacción GTA VI Vice City</dc:creator>
+      <description>A un mes del estreno, Rockstar Games publicó por sorpresa el tráiler de lanzamiento de GTA VI. Dura 1:29, se centra en Jason y Lucia y estrena «Flower in a Hurricane», el tema de Justice con Tame Impala, SZA y King Gizzard &amp; The Lizard Wizard.</description>
+      <media:content url="https://gtavivicecity.com/images/news/redaccion/hidroavion-grassrivers-1600.webp" medium="image" type="image/webp" width="1600" height="900"/>
+    </item>
+    <item>
+      <title>Rockstar lanza la ropa oficial de GTA VI: camisetas, gorras y accesorios de Vice City</title>
+      <link>https://gtavivicecity.com/noticias/gta-6-ropa-oficial-rockstar-store</link>
+      <guid isPermaLink="true">https://gtavivicecity.com/noticias/gta-6-ropa-oficial-rockstar-store</guid>
+      <pubDate>Sun, 18 Oct 2026 08:00:00 -0500</pubDate>
+      <category>Coleccionismo</category>
+      <dc:creator>Redacción GTA VI Vice City</dc:creator>
+      <description>Rockstar Games abrió el 8 de octubre la «Grand Theft Auto VI Collection», una línea oficial de ropa y accesorios inspirada en el juego. Las camisetas y gorras cuestan 29,99 USD y las pegatinas, desde 4,99 USD.</description>
+      <media:content url="https://gtavivicecity.com/images/news/redaccion/coleccion-rockstar-store-1600.webp" medium="image" type="image/webp" width="1600" height="900"/>
+    </item>
+    <item>
+      <title>¿Se retrasará otra vez GTA 6? Lo que revela Bloomberg sobre el desarrollo a un mes del estreno</title>
+      <link>https://gtavivicecity.com/noticias/gta-6-desarrollo-bloomberg-retraso</link>
+      <guid isPermaLink="true">https://gtavivicecity.com/noticias/gta-6-desarrollo-bloomberg-retraso</guid>
+      <pubDate>Sun, 18 Oct 2026 07:00:00 -0500</pubDate>
+      <category>Desarrollo</category>
+      <dc:creator>Redacción GTA VI Vice City</dc:creator>
+      <description>Un reportaje de Jason Schreier en Bloomberg cuenta que Rockstar sigue retocando GTA VI a pocas semanas del lanzamiento. Aun así, el periodista cree que el 19 de noviembre no se moverá, y Rockstar no ha anunciado ningún cambio.</description>
+      <media:content url="https://gtavivicecity.com/images/news/redaccion/salon-leonida-1600.webp" medium="image" type="image/webp" width="1600" height="900"/>
+    </item>
     <item>
       <title>GTA 6 muestra nuevas imágenes de Vice City y revela sus emisoras: Bad Bunny, Lana Del Rey y Slayer, al micrófono</title>
       <link>https://gtavivicecity.com/noticias/gta-6-nuevas-imagenes-emisoras-radio</link>
