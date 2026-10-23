@@ -3,7 +3,7 @@
 > Sitio de fans en español sobre GTA 6 (Grand Theft Auto VI): cuenta regresiva, noticias con fuentes, tráilers oficiales, mapa de Leonida, protagonistas y comunidad. No está afiliado a Rockstar Games ni a Take-Two Interactive.
 
 Datos clave confirmados por Rockstar Games:
-- GTA 6 sale el 19 de noviembre de 2026 en PlayStation 5 y Xbox Series X|S. Precarga desde el 12 de noviembre de 2026.
+- GTA 6 sale el 19 de noviembre de 2026 en PlayStation 5 y Xbox Series X|S, a las 00:00 hora local de cada país según PlayStation Store y Microsoft Store. Precarga desde el 12 de noviembre de 2026.
 - Precio: 79,99 USD (edición estándar) y 99,99 USD (Ultimate Edition).
 - Protagonistas: Jason Duval y Lucia Caminos. Escenario: el estado de Leonida, con Vice City.
 - No hay versión de PC anunciada.
@@ -16,6 +16,7 @@ Datos clave confirmados por Rockstar Games:
 - [Preguntas frecuentes](https://gtavivicecity.com/preguntas-frecuentes): PC, GTA Online, microtransacciones y más.
 
 ## Artículos de nuestra redacción
+- [¿A qué hora sale GTA 6?](https://gtavivicecity.com/noticias/gta-6-hora-lanzamiento-por-pais): hora exacta de lanzamiento (00:00 hora local del 19 de noviembre) y precio en PS5 y Xbox en cada país, según PlayStation Store y Microsoft Store.
 - [Tráiler de lanzamiento de GTA 6](https://gtavivicecity.com/noticias/gta-6-trailer-lanzamiento): qué muestra, la canción de Justice con SZA y Tame Impala y la clasificación M (17+).
 - [¿Se retrasará otra vez GTA 6?](https://gtavivicecity.com/noticias/gta-6-desarrollo-bloomberg-retraso): lo que revela el reportaje de Bloomberg sobre el desarrollo a un mes del estreno.
 - [Ropa oficial de GTA 6](https://gtavivicecity.com/noticias/gta-6-ropa-oficial-rockstar-store): la Grand Theft Auto VI Collection de la Rockstar Store, con precios.

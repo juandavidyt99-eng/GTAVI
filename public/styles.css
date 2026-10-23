@@ -5402,3 +5402,9 @@ html:not(.signin-classic) [data-auth-classic] { display: none !important; }
 .ar-video .video-card { box-shadow: 0 24px 60px rgba(0,0,0,0.45); }
 .ar-video .video-card img { border-radius: 0; box-shadow: none; aspect-ratio: auto; height: 100%; }
 .ar-video .video-live iframe { display: block; width: 100%; height: 100%; border: 0; }
+
+/* Guide tables fit the phone: long country names wrap instead of pushing the table sideways */
+@media (max-width: 560px) {
+  .guide-table tbody th { white-space: normal; min-width: 96px; }
+  .guide-table th, .guide-table td { padding: 10px 10px; }
+}

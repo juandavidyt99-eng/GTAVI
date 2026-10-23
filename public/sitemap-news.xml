@@ -1,27 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
-    <loc>https://gtavivicecity.com/noticias/gta-6-trailer-lanzamiento</loc>
+    <loc>https://gtavivicecity.com/noticias/gta-6-hora-lanzamiento-por-pais</loc>
     <news:news>
       <news:publication><news:name>GTA VI Vice City</news:name><news:language>es</news:language></news:publication>
-      <news:publication_date>2026-10-18T09:00:00-05:00</news:publication_date>
-      <news:title>GTA 6 estrena su tráiler de lanzamiento: Jason, Lucia y una canción inédita de Justice con SZA y Tame Impala</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://gtavivicecity.com/noticias/gta-6-ropa-oficial-rockstar-store</loc>
-    <news:news>
-      <news:publication><news:name>GTA VI Vice City</news:name><news:language>es</news:language></news:publication>
-      <news:publication_date>2026-10-18T08:00:00-05:00</news:publication_date>
-      <news:title>Rockstar lanza la ropa oficial de GTA VI: camisetas, gorras y accesorios de Vice City</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://gtavivicecity.com/noticias/gta-6-desarrollo-bloomberg-retraso</loc>
-    <news:news>
-      <news:publication><news:name>GTA VI Vice City</news:name><news:language>es</news:language></news:publication>
-      <news:publication_date>2026-10-18T07:00:00-05:00</news:publication_date>
-      <news:title>¿Se retrasará otra vez GTA 6? Lo que revela Bloomberg sobre el desarrollo a un mes del estreno</news:title>
+      <news:publication_date>2026-10-23T12:00:00-05:00</news:publication_date>
+      <news:title>¿A qué hora sale GTA 6? Hora exacta de lanzamiento y precio en cada país</news:title>
     </news:news>
   </url>
 </urlset>

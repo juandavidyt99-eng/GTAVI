@@ -6,8 +6,18 @@
     <atom:link href="https://gtavivicecity.com/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Noticias, guías y análisis de GTA 6 (Grand Theft Auto VI) en español, con fuentes.</description>
     <language>es</language>
-    <lastBuildDate>Sun, 18 Oct 2026 09:00:00 -0500</lastBuildDate>
+    <lastBuildDate>Fri, 23 Oct 2026 12:00:00 -0500</lastBuildDate>
     <image><url>https://gtavivicecity.com/images/icon-512.png</url><title>GTA VI Vice City: noticias de GTA 6</title><link>https://gtavivicecity.com/noticias</link></image>
+    <item>
+      <title>¿A qué hora sale GTA 6? Hora exacta de lanzamiento y precio en cada país</title>
+      <link>https://gtavivicecity.com/noticias/gta-6-hora-lanzamiento-por-pais</link>
+      <guid isPermaLink="true">https://gtavivicecity.com/noticias/gta-6-hora-lanzamiento-por-pais</guid>
+      <pubDate>Fri, 23 Oct 2026 12:00:00 -0500</pubDate>
+      <category>Guía</category>
+      <dc:creator>Redacción GTA VI Vice City</dc:creator>
+      <description>Las fichas oficiales de PlayStation Store y Microsoft Store ya lo dicen: GTA VI se desbloquea a medianoche, hora local, del jueves 19 de noviembre. Te contamos la hora exacta en España y Latinoamérica y cuánto cuesta en cada país.</description>
+      <media:content url="https://gtavivicecity.com/images/news/redaccion/kayak-atardecer-1600.webp" medium="image" type="image/webp" width="1600" height="900"/>
+    </item>
     <item>
       <title>GTA 6 estrena su tráiler de lanzamiento: Jason, Lucia y una canción inédita de Justice con SZA y Tame Impala</title>
       <link>https://gtavivicecity.com/noticias/gta-6-trailer-lanzamiento</link>
