@@ -6,8 +6,58 @@
     <atom:link href="https://gtavivicecity.com/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Noticias, guías y análisis de GTA 6 (Grand Theft Auto VI) en español, con fuentes.</description>
     <language>es</language>
-    <lastBuildDate>Fri, 23 Oct 2026 12:00:00 -0500</lastBuildDate>
+    <lastBuildDate>Thu, 05 Nov 2026 14:30:00 -0500</lastBuildDate>
     <image><url>https://gtavivicecity.com/images/icon-512.png</url><title>GTA VI Vice City: noticias de GTA 6</title><link>https://gtavivicecity.com/noticias</link></image>
+    <item>
+      <title>GTA 6, a dos semanas del estreno: precarga adelantada, galería nueva y las fechas que vienen</title>
+      <link>https://gtavivicecity.com/noticias/gta-6-a-dos-semanas-del-lanzamiento</link>
+      <guid isPermaLink="true">https://gtavivicecity.com/noticias/gta-6-a-dos-semanas-del-lanzamiento</guid>
+      <pubDate>Thu, 05 Nov 2026 14:30:00 -0500</pubDate>
+      <category>Resumen</category>
+      <dc:creator>Redacción GTA VI Vice City</dc:creator>
+      <description>Quedan 14 días para el 19 de noviembre y Rockstar ha movido ficha: adelanta la precarga, abre una galería con capturas nuevas y prepara un póster con el mapa de Leonida. Este es el resumen, con lo oficial separado de lo que aún no está confirmado.</description>
+      <media:content url="https://gtavivicecity.com/images/news/redaccion/vice-city-canal-yate-1600.webp" medium="image" type="image/webp" width="1600" height="900"/>
+    </item>
+    <item>
+      <title>¿Cuándo salen las reseñas de GTA 6? El embargo sería el 18 de noviembre, según una filtración</title>
+      <link>https://gtavivicecity.com/noticias/gta-6-cuando-salen-las-resenas</link>
+      <guid isPermaLink="true">https://gtavivicecity.com/noticias/gta-6-cuando-salen-las-resenas</guid>
+      <pubDate>Thu, 05 Nov 2026 13:30:00 -0500</pubDate>
+      <category>Filtración</category>
+      <dc:creator>Redacción GTA VI Vice City</dc:creator>
+      <description>Según el filtrador NateTheHate, Rockstar ya ha enviado copias de GTA VI a la prensa y el embargo de reseñas termina el 18 de noviembre, un día antes del lanzamiento. Rockstar no lo ha confirmado: te explicamos qué se sabe, a qué hora sería en cada país y qué falta por aclarar.</description>
+      <media:content url="https://gtavivicecity.com/images/news/redaccion/lucia-luces-policia-1600.webp" medium="image" type="image/webp" width="1600" height="900"/>
+    </item>
+    <item>
+      <title>Launch Gallery de GTA 6: Rockstar publica más de 30 capturas nuevas</title>
+      <link>https://gtavivicecity.com/noticias/gta-6-launch-gallery-capturas-nuevas</link>
+      <guid isPermaLink="true">https://gtavivicecity.com/noticias/gta-6-launch-gallery-capturas-nuevas</guid>
+      <pubDate>Thu, 05 Nov 2026 12:00:00 -0500</pubDate>
+      <category>Última hora</category>
+      <dc:creator>Redacción GTA VI Vice City</dc:creator>
+      <description>A dos semanas del estreno, Rockstar ha abierto «The Launch Gallery»: una galería con más de 30 imágenes nuevas de GTA VI. Hemos revisado la web oficial y te enseñamos una selección, con lo que se ve en cada una.</description>
+      <media:content url="https://gtavivicecity.com/images/news/redaccion/launch-gallery-atardecer-1600.webp" medium="image" type="image/webp" width="1600" height="900"/>
+    </item>
+    <item>
+      <title>Precarga de GTA 6: cuándo empieza, a qué hora en cada país y cuánto ocupa</title>
+      <link>https://gtavivicecity.com/noticias/gta-6-precarga-fecha-hora-tamano</link>
+      <guid isPermaLink="true">https://gtavivicecity.com/noticias/gta-6-precarga-fecha-hora-tamano</guid>
+      <pubDate>Thu, 05 Nov 2026 11:00:00 -0500</pubDate>
+      <category>Guía</category>
+      <dc:creator>Redacción GTA VI Vice City</dc:creator>
+      <description>Rockstar adelantó dos días la precarga digital de GTA VI: empieza el martes 10 de noviembre y hay que dejar hasta 212 GB libres. Te contamos la hora exacta en España y Latinoamérica, qué pasa con la versión física y cómo preparar tu consola.</description>
+      <media:content url="https://gtavivicecity.com/images/news/redaccion/precarga-vice-city-bahia-1600.webp" medium="image" type="image/webp" width="1600" height="900"/>
+    </item>
+    <item>
+      <title>«Original Score» de Justice: la banda sonora adaptativa de GTA 6 llega el 11 de diciembre</title>
+      <link>https://gtavivicecity.com/noticias/gta-6-banda-sonora-justice-original-score</link>
+      <guid isPermaLink="true">https://gtavivicecity.com/noticias/gta-6-banda-sonora-justice-original-score</guid>
+      <pubDate>Thu, 05 Nov 2026 10:00:00 -0500</pubDate>
+      <category>Música</category>
+      <dc:creator>Redacción GTA VI Vice City</dc:creator>
+      <description>Rockstar ha anunciado que la banda sonora original de GTA VI es obra de Justice, el dúo francés formado por Gaspard Augé y Xavier de Rosnay. La música es adaptativa y el álbum, de 30 temas, sale el 11 de diciembre en streaming, CD y vinilo.</description>
+      <media:content url="https://gtavivicecity.com/images/news/redaccion/justice-original-score-1600.webp" medium="image" type="image/webp" width="1600" height="900"/>
+    </item>
     <item>
       <title>¿A qué hora sale GTA 6? Hora exacta de lanzamiento y precio en cada país</title>
       <link>https://gtavivicecity.com/noticias/gta-6-hora-lanzamiento-por-pais</link>

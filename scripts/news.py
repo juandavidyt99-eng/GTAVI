@@ -200,14 +200,14 @@ def relist(today_iso=None):
     arts = [article_data(s) for s in order]
     by_slug = {a['slug']: a for a in arts}
 
-    # every article: "Más de la redacción" (4) and "Sigue leyendo" (3)
+    # every article: "Más de la redacción" (the 4 newest others) and "Sigue leyendo" (the next 3), so no image repeats on a page
     for a in arts:
         others = [o for o in arts if o['slug'] != a['slug']]
         path = NEWS_DIR / f'{a["slug"]}.html'
         page = read(path)
         page = sub_once(r'<ul class="ar-side-list">.*?</ul>', '<ul class="ar-side-list">' + ''.join(side_item(o) for o in others[:4]) + '</ul>', page)
         page = sub_once(r'(<section class="block block-alt ar-related".*?<div class="ar-grid">\n).*?(\n    </div>\n  </div>\n</section>)',
-                        lambda m: m.group(1) + '\n'.join(ar_card(o) for o in others[:3]) + m.group(2), page)
+                        lambda m: m.group(1) + '\n'.join(ar_card(o) for o in others[4:7]) + m.group(2), page)
         write(path, page)
 
     # /noticias: lead + grid

@@ -283,3 +283,49 @@ if (document.querySelector('[data-nav-avatar], [data-nav-account]')) {
   };
   window.GTA_ME.then(data => window.GTANav.render(data && data.user, data ? Boolean(data.google) : true));
 }
+
+// Galerías de las noticias: toca una imagen para verla en grande (flechas y Esc funcionan en el teclado)
+(function () {
+  var list = Array.prototype.slice.call(document.querySelectorAll('.ar-gallery img[data-zoom]'));
+  if (!list.length || typeof HTMLDialogElement === 'undefined') return;
+  var dlg = null, big, cap, cur = 0;
+  function build() {
+    dlg = document.createElement('dialog');
+    dlg.className = 'ar-lightbox';
+    dlg.setAttribute('aria-label', 'Imagen ampliada');
+    dlg.innerHTML = '<button type="button" class="ar-lb-close" aria-label="Cerrar">&times;</button>' +
+      '<button type="button" class="ar-lb-nav ar-lb-prev" aria-label="Imagen anterior">&lsaquo;</button>' +
+      '<figure><img alt=""><figcaption></figcaption></figure>' +
+      '<button type="button" class="ar-lb-nav ar-lb-next" aria-label="Imagen siguiente">&rsaquo;</button>';
+    document.body.appendChild(dlg);
+    big = dlg.querySelector('img');
+    cap = dlg.querySelector('figcaption');
+    dlg.addEventListener('click', function (e) {
+      if (e.target === dlg || e.target.closest('.ar-lb-close')) dlg.close();
+      else if (e.target.closest('.ar-lb-prev')) show(cur - 1);
+      else if (e.target.closest('.ar-lb-next')) show(cur + 1);
+    });
+    dlg.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowLeft') show(cur - 1);
+      if (e.key === 'ArrowRight') show(cur + 1);
+    });
+  }
+  function show(n) {
+    cur = (n + list.length) % list.length;
+    var im = list[cur], fig = im.closest('figure'), fc = fig && fig.querySelector('figcaption');
+    big.src = im.getAttribute('data-zoom');
+    big.alt = im.alt;
+    cap.textContent = (fc ? fc.textContent : '') + '  (' + (cur + 1) + '/' + list.length + ')';
+  }
+  function open(n) {
+    if (!dlg) build();
+    show(n);
+    if (!dlg.open) dlg.showModal();
+  }
+  list.forEach(function (im, n) {
+    im.tabIndex = 0;
+    im.setAttribute('role', 'button');
+    im.addEventListener('click', function () { open(n); });
+    im.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(n); } });
+  });
+})();

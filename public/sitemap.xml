@@ -2,56 +2,105 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://gtavivicecity.com/</loc>
-    <lastmod>2026-10-23</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/og-gtavi.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://gtavivicecity.com/cuando-sale-gta-6</loc>
-    <lastmod>2026-10-23</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/og-trailers.jpg</image:loc></image:image>
   </url>
   <url>
     <loc>https://gtavivicecity.com/noticias</loc>
-    <lastmod>2026-10-23</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/og-noticias.jpg</image:loc></image:image>
   </url>
   <url>
+    <loc>https://gtavivicecity.com/noticias/gta-6-a-dos-semanas-del-lanzamiento</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/vice-city-canal-yate-1600.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://gtavivicecity.com/noticias/gta-6-cuando-salen-las-resenas</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/lucia-luces-policia-1600.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://gtavivicecity.com/noticias/gta-6-launch-gallery-capturas-nuevas</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/launch-gallery-atardecer-1600.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/grassrivers-caiman-noche-1280.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/grassrivers-hoguera-serpiente-1280.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/cayos-leonida-buceador-1280.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/vice-city-marina-yates-1280.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/vice-city-skyline-noche-1280.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/vice-city-piscina-aerea-1280.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/vice-city-encuentro-coches-1280.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/vice-city-gasolinera-neon-1280.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/vice-city-fiesta-neon-1280.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/jason-moto-patrulla-1280.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/persecucion-policial-descapotable-1280.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/jason-lucia-descapotable-noche-1280.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/lucia-apuntando-atardecer-1280.webp</image:loc></image:image>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/jason-rifle-helicopteros-1280.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://gtavivicecity.com/noticias/gta-6-precarga-fecha-hora-tamano</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/precarga-vice-city-bahia-1600.webp</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://gtavivicecity.com/noticias/gta-6-banda-sonora-justice-original-score</loc>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/justice-original-score-1600.webp</image:loc></image:image>
+  </url>
+  <url>
     <loc>https://gtavivicecity.com/noticias/gta-6-hora-lanzamiento-por-pais</loc>
-    <lastmod>2026-10-23</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/kayak-atardecer-1600.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://gtavivicecity.com/noticias/gta-6-trailer-lanzamiento</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/hidroavion-grassrivers-1600.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://gtavivicecity.com/noticias/gta-6-desarrollo-bloomberg-retraso</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/salon-leonida-1600.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://gtavivicecity.com/noticias/gta-6-ropa-oficial-rockstar-store</loc>
-    <lastmod>2026-10-18</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/coleccion-rockstar-store-1600.webp</image:loc></image:image>
   </url>
   <url>
     <loc>https://gtavivicecity.com/noticias/gta-6-nuevas-imagenes-emisoras-radio</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/deportivo-neon-noche-1600.webp</image:loc></image:image>
@@ -60,7 +109,7 @@
   </url>
   <url>
     <loc>https://gtavivicecity.com/noticias/gta-6-pc</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/rideout-customs-1600.webp</image:loc></image:image>
@@ -68,7 +117,7 @@
   </url>
   <url>
     <loc>https://gtavivicecity.com/noticias/gta-6-ps4-xbox-one</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/stock-305-1600.webp</image:loc></image:image>
@@ -76,7 +125,7 @@
   </url>
   <url>
     <loc>https://gtavivicecity.com/noticias/gta-6-gratis-apk-estafas</loc>
-    <lastmod>2026-10-08</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/electric-fang-silla-1600.webp</image:loc></image:image>
@@ -84,7 +133,7 @@
   </url>
   <url>
     <loc>https://gtavivicecity.com/noticias/gta-6-caja-coleccionista-goodtime-state</loc>
-    <lastmod>2026-10-06</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/goodtime-gear-1600.webp</image:loc></image:image>
@@ -92,7 +141,7 @@
   </url>
   <url>
     <loc>https://gtavivicecity.com/noticias/gta-6-calendario-lanzamiento</loc>
-    <lastmod>2026-10-06</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/piscina-vice-city-1600.webp</image:loc></image:image>
@@ -100,7 +149,7 @@
   </url>
   <url>
     <loc>https://gtavivicecity.com/noticias/gta-6-the-album-banda-sonora</loc>
-    <lastmod>2026-10-06</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/discoteca-vice-city-1600.webp</image:loc></image:image>
@@ -108,7 +157,7 @@
   </url>
   <url>
     <loc>https://gtavivicecity.com/noticias/gta-6-ultimate-edition-que-incluye</loc>
-    <lastmod>2026-10-06</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/ultimate-atardecer-1600.webp</image:loc></image:image>
@@ -116,7 +165,7 @@
   </url>
   <url>
     <loc>https://gtavivicecity.com/noticias/gta-6-extended-look-claves</loc>
-    <lastmod>2026-10-06</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/ganado-costa-1600.webp</image:loc></image:image>
@@ -124,7 +173,7 @@
   </url>
   <url>
     <loc>https://gtavivicecity.com/noticias/vintage-vice-city-pack-gta-6</loc>
-    <lastmod>2026-10-06</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/news/redaccion/vapid-stanier-1600.webp</image:loc></image:image>
@@ -160,7 +209,7 @@
   </url>
   <url>
     <loc>https://gtavivicecity.com/preguntas-frecuentes</loc>
-    <lastmod>2026-10-23</lastmod>
+    <lastmod>2026-11-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
     <image:image><image:loc>https://gtavivicecity.com/images/og-noticias.jpg</image:loc></image:image>
