@@ -6,8 +6,48 @@
     <atom:link href="https://gtavivicecity.com/feed.xml" rel="self" type="application/rss+xml"/>
     <description>Noticias, guías y análisis de GTA 6 (Grand Theft Auto VI) en español, con fuentes.</description>
     <language>es</language>
-    <lastBuildDate>Thu, 05 Nov 2026 14:30:00 -0500</lastBuildDate>
+    <lastBuildDate>Wed, 25 Nov 2026 12:00:00 -0500</lastBuildDate>
     <image><url>https://gtavivicecity.com/images/icon-512.png</url><title>GTA VI Vice City: noticias de GTA 6</title><link>https://gtavivicecity.com/noticias</link></image>
+    <item>
+      <title>«GTA VI: The Album» ya está disponible, y llega una edición Deluxe con 23 temas más</title>
+      <link>https://gtavivicecity.com/noticias/gta-6-the-album-disponible-deluxe</link>
+      <guid isPermaLink="true">https://gtavivicecity.com/noticias/gta-6-the-album-disponible-deluxe</guid>
+      <pubDate>Wed, 25 Nov 2026 12:00:00 -0500</pubDate>
+      <category>Música</category>
+      <dc:creator>Redacción GTA VI Vice City</dc:creator>
+      <description>La banda sonora oficial de GTA VI ya se puede escuchar en todas las plataformas de streaming y comprar en vinilo y CD. Rockstar ha publicado además una edición Deluxe con 23 temas extra del juego.</description>
+      <media:content url="https://gtavivicecity.com/images/news/redaccion/the-album-cartel-artistas-1600.webp" medium="image" type="image/webp" width="1600" height="900"/>
+    </item>
+    <item>
+      <title>Reseñas de GTA 6: un 99 en Metacritic, una de las notas más altas de la historia</title>
+      <link>https://gtavivicecity.com/noticias/gta-6-resenas-metacritic-99</link>
+      <guid isPermaLink="true">https://gtavivicecity.com/noticias/gta-6-resenas-metacritic-99</guid>
+      <pubDate>Wed, 25 Nov 2026 11:00:00 -0500</pubDate>
+      <category>Reseñas</category>
+      <dc:creator>Redacción GTA VI Vice City</dc:creator>
+      <description>La crítica se ha rendido ante GTA VI: tiene un 99 sobre 100 en Metacritic, con más de 150 reseñas. Los usuarios, en cambio, le dan una nota mucho más baja. Esto es lo que dicen los números.</description>
+      <media:content url="https://gtavivicecity.com/images/news/redaccion/lucia-neon-lluvia-1600.webp" medium="image" type="image/webp" width="1600" height="900"/>
+    </item>
+    <item>
+      <title>GTA 6 bate récords: 3.790 millones de dólares el primer día y 32,5 millones de copias antes del estreno</title>
+      <link>https://gtavivicecity.com/noticias/gta-6-ventas-record-3790-millones</link>
+      <guid isPermaLink="true">https://gtavivicecity.com/noticias/gta-6-ventas-record-3790-millones</guid>
+      <pubDate>Wed, 25 Nov 2026 10:00:00 -0500</pubDate>
+      <category>Negocio</category>
+      <dc:creator>Redacción GTA VI Vice City</dc:creator>
+      <description>Según Take-Two, la matriz de Rockstar, GTA VI facturó 3.790 millones de dólares en su primer día a la venta y había vendido 32,5 millones de unidades antes del lanzamiento. Es, dicen, el mayor estreno de la historia del entretenimiento.</description>
+      <media:content url="https://gtavivicecity.com/images/news/redaccion/vice-city-coche-revolver-1600.webp" medium="image" type="image/webp" width="1600" height="900"/>
+    </item>
+    <item>
+      <title>GTA 6 ya está disponible: precio, consolas, tamaño y todo lo que debes saber</title>
+      <link>https://gtavivicecity.com/noticias/gta-6-ya-disponible-guia-lanzamiento</link>
+      <guid isPermaLink="true">https://gtavivicecity.com/noticias/gta-6-ya-disponible-guia-lanzamiento</guid>
+      <pubDate>Wed, 25 Nov 2026 09:00:00 -0500</pubDate>
+      <category>Guía</category>
+      <dc:creator>Redacción GTA VI Vice City</dc:creator>
+      <description>Grand Theft Auto VI está a la venta desde el 19 de noviembre de 2026 en PlayStation 5 y Xbox Series X|S. Reunimos en una sola página lo que necesitas saber para jugarlo: precio, espacio, rendimiento, dónde se puede jugar y qué viene ahora.</description>
+      <media:content url="https://gtavivicecity.com/images/news/redaccion/jason-lucia-ventanilla-1600.webp" medium="image" type="image/webp" width="1600" height="900"/>
+    </item>
     <item>
       <title>GTA 6, a dos semanas del estreno: precarga adelantada, galería nueva y las fechas que vienen</title>
       <link>https://gtavivicecity.com/noticias/gta-6-a-dos-semanas-del-lanzamiento</link>

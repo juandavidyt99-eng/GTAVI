@@ -10,15 +10,8 @@ if (countdownEl) {
   function pad(n) { return String(n).padStart(2, '0'); }
 
   function updateCountdown() {
-    const diff = target - Date.now();
-    if (diff <= 0) {
-      daysEl.textContent = '00';
-      hoursEl.textContent = '00';
-      minutesEl.textContent = '00';
-      secondsEl.textContent = '00';
-      clearInterval(countdownTimer);
-      return;
-    }
+    // before launch it counts down; after launch it counts the time GTA VI has been on sale
+    const diff = Math.abs(target - Date.now());
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
     const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
     const minutes = Math.floor((diff / (1000 * 60)) % 60);
@@ -30,7 +23,7 @@ if (countdownEl) {
   }
 
   updateCountdown();
-  const countdownTimer = setInterval(updateCountdown, 1000);
+  setInterval(updateCountdown, 1000);
 }
 
 // Transparent navbar that solidifies on scroll

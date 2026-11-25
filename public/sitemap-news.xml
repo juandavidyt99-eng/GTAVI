@@ -1,43 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
   <url>
-    <loc>https://gtavivicecity.com/noticias/gta-6-a-dos-semanas-del-lanzamiento</loc>
+    <loc>https://gtavivicecity.com/noticias/gta-6-the-album-disponible-deluxe</loc>
     <news:news>
       <news:publication><news:name>GTA VI Vice City</news:name><news:language>es</news:language></news:publication>
-      <news:publication_date>2026-11-05T14:30:00-05:00</news:publication_date>
-      <news:title>GTA 6, a dos semanas del estreno: precarga adelantada, galería nueva y las fechas que vienen</news:title>
+      <news:publication_date>2026-11-25T12:00:00-05:00</news:publication_date>
+      <news:title>«GTA VI: The Album» ya está disponible, y llega una edición Deluxe con 23 temas más</news:title>
     </news:news>
   </url>
   <url>
-    <loc>https://gtavivicecity.com/noticias/gta-6-cuando-salen-las-resenas</loc>
+    <loc>https://gtavivicecity.com/noticias/gta-6-resenas-metacritic-99</loc>
     <news:news>
       <news:publication><news:name>GTA VI Vice City</news:name><news:language>es</news:language></news:publication>
-      <news:publication_date>2026-11-05T13:30:00-05:00</news:publication_date>
-      <news:title>¿Cuándo salen las reseñas de GTA 6? El embargo sería el 18 de noviembre, según una filtración</news:title>
+      <news:publication_date>2026-11-25T11:00:00-05:00</news:publication_date>
+      <news:title>Reseñas de GTA 6: un 99 en Metacritic, una de las notas más altas de la historia</news:title>
     </news:news>
   </url>
   <url>
-    <loc>https://gtavivicecity.com/noticias/gta-6-launch-gallery-capturas-nuevas</loc>
+    <loc>https://gtavivicecity.com/noticias/gta-6-ventas-record-3790-millones</loc>
     <news:news>
       <news:publication><news:name>GTA VI Vice City</news:name><news:language>es</news:language></news:publication>
-      <news:publication_date>2026-11-05T12:00:00-05:00</news:publication_date>
-      <news:title>Launch Gallery de GTA 6: Rockstar publica más de 30 capturas nuevas</news:title>
+      <news:publication_date>2026-11-25T10:00:00-05:00</news:publication_date>
+      <news:title>GTA 6 bate récords: 3.790 millones de dólares el primer día y 32,5 millones de copias antes del estreno</news:title>
     </news:news>
   </url>
   <url>
-    <loc>https://gtavivicecity.com/noticias/gta-6-precarga-fecha-hora-tamano</loc>
+    <loc>https://gtavivicecity.com/noticias/gta-6-ya-disponible-guia-lanzamiento</loc>
     <news:news>
       <news:publication><news:name>GTA VI Vice City</news:name><news:language>es</news:language></news:publication>
-      <news:publication_date>2026-11-05T11:00:00-05:00</news:publication_date>
-      <news:title>Precarga de GTA 6: cuándo empieza, a qué hora en cada país y cuánto ocupa</news:title>
-    </news:news>
-  </url>
-  <url>
-    <loc>https://gtavivicecity.com/noticias/gta-6-banda-sonora-justice-original-score</loc>
-    <news:news>
-      <news:publication><news:name>GTA VI Vice City</news:name><news:language>es</news:language></news:publication>
-      <news:publication_date>2026-11-05T10:00:00-05:00</news:publication_date>
-      <news:title>«Original Score» de Justice: la banda sonora adaptativa de GTA 6 llega el 11 de diciembre</news:title>
+      <news:publication_date>2026-11-25T09:00:00-05:00</news:publication_date>
+      <news:title>GTA 6 ya está disponible: precio, consolas, tamaño y todo lo que debes saber</news:title>
     </news:news>
   </url>
 </urlset>
